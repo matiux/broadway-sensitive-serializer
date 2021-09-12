@@ -1,0 +1,52 @@
+version: '3.8'
+
+volumes:
+#  app_memcached: {}
+  app_database: {}
+
+networks:
+  sensitized_es_dbal_network:
+    name: sensitized_es_dbal_network
+    driver: bridge
+
+services:
+
+  php_broadway_sensitized_es_dbal:
+    build: php
+    hostname: sensitized_es_dbal
+    volumes:
+      - ../:/var/www/app:delegated
+      - ./data/shell_history:/home/utente/shell_history
+    networks:
+      - sensitized_es_dbal_network
+    environment:
+      - HISTFILE=/home/utente/shell_history/.x_history
+    secrets:
+      - source: id_rsa
+        target: /home/utente/.ssh/id_rsa
+      - source: id_rsa.pub
+        target: /home/utente/.ssh/id_rsa.pub
+      - source: known_hosts
+        target: /home/utente/.ssh/known_hosts
+
+  nodejs:
+    build: nodejs
+    working_dir: /var/www/app
+    #command: "commitlint -e --from=HEAD"
+    volumes:
+      - ../:/var/www/app
+    networks:
+      - sensitized_es_dbal_network
+
+  servicedb:
+    image: mariadb:10.3.22
+    volumes:
+      - app_database:/var/lib/mysql
+      - ./mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./data/db:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gestore_utenti
+    #command: mysqld --sql_mode="" #Per mysql, non serve per mariadb
+    networks:
+      - sensitized_es_dbal_network

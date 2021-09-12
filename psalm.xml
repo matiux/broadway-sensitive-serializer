@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="1"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        phpVersion="7.4"
+>
+    <projectFiles>
+        <directory name="src"/>
+        <directory name="tests"/>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <ParamNameMismatch errorLevel="suppress"/>
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+                <directory name="src"/>
+            </errorLevel>
+        </MissingConstructor>
+    </issueHandlers>
+    
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+<!--        <pluginClass class="Psalm\MockeryPlugin\Plugin"/>-->
+<!--        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>-->
+<!--        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>-->
+    </plugins>
+</psalm>

@@ -1,0 +1,37 @@
+{
+    "name": "matiux/broadway-sensitized-es-dbal",
+    "description": "Event store implementation using doctrine/dbal with support for data sensitization",
+    "keywords": ["cqrs", "event sourcing", "domain-driven design", "ddd", "event store", "dbal", "sensitization"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matteo Galacci",
+            "email": "m.galacci@gmail.com"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "require": {
+        "php": "^7.4|^8",
+        "broadway/event-store-dbal": "^0.6.0",
+        "symfony/polyfill-php80": "^1.23"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.1",
+        "psalm/plugin-phpunit": "^0.16.1",
+        "vimeo/psalm": "^4.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matiux\\Broadway\\SensitizedEventStore\\Dbal\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Matiux\\Unit\\Broadway\\SensitizedEventStore\\Dbal\\": "test/Unit/Broadway/SensitizedEventStore/Dbal"
+        }
+    }
+}

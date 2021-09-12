@@ -1,0 +1,15 @@
+version: '3.7'
+
+secrets:
+  id_rsa:
+    file:
+  id_rsa.pub:
+    file:
+  known_hosts:
+    file:
+
+services:
+
+  servicedb:
+    ports:
+      - 3307:3306
