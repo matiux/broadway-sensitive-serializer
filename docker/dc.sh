@@ -3,7 +3,7 @@
 WORKDIR=/var/www/app
 PROJECT_NAME=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]')
 COMPOSE_OVERRIDE=
-PHP_CONTAINER=php_broadway_sensitized_es_dbal
+PHP_CONTAINER=php_broadway_sensitised_es_dbal
 
 if [[ -f "./docker/docker-compose.override.yml" ]]; then
   COMPOSE_OVERRIDE="--file ./docker/docker-compose.override.yml"
@@ -13,14 +13,6 @@ DC_BASE_COMMAND="docker-compose
     --file docker/docker-compose.yml
     -p ${PROJECT_NAME}
     ${COMPOSE_OVERRIDE}"
-
-#DC_RUN="${DC_BASE_COMMAND}
-#    run
-#    --rm
-#    -u utente
-#    -v ${PWD}:${WORKDIR}
-#    -w ${WORKDIR}
-#    ${PHP_CONTAINER}"
 
   DC_EXEC="${DC_BASE_COMMAND}
     exec
@@ -94,6 +86,14 @@ elif [[ "$1" == "badge" ]]; then
       --without-gui "public/$3.svg" \
         &>/dev/null
 
+elif [[ "$1" == "deptrac" ]]; then
+
+  shift 1
+  #imgFileName=$(echo $1 | tr "/" "\n" | tail -1 | sed 's/\.yaml/\.png/')
+
+  ${DC_EXEC} \
+    php deptrac.phar analyse "$1"
+
 elif [[ "$1" == "up" ]]; then
 
   shift 1
@@ -103,7 +103,7 @@ elif [[ "$1" == "up" ]]; then
 elif [[ "$1" == "build" ]] && [[ "$2" == "php" ]]; then
 
   ${DC_BASE_COMMAND} \
-    build ${PHP_CONTAINER}
+    build --force ${PHP_CONTAINER}
 
 elif [[ "$1" == "enter-root" ]]; then
 

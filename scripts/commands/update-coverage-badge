@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+source ~/.zshrc
+
+app
+xon && xmode.coverage
+test-all --coverage-clover public/coverage-clover.xml
+vendor/bin/php-coverage-badger public/coverage-clover.xml public/coverage-badge.svg
+xmode.debug && xoff
+
+echo "Generating coverage badge..."
+inkscape --export-png=public/coverage-badge.png --export-dpi=200 --export-background-opacity=0 --without-gui public/coverage-badge.svg &>/dev/null
+echo "done"

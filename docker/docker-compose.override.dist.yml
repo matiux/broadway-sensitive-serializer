@@ -10,6 +10,10 @@ secrets:
 
 services:
 
+  php_broadway_sensitised_es_dbal:
+    environment:
+      - AGGREGATE_MASTER_KEY="SS3kr3tK31"
+
   servicedb:
     ports:
       - 3307:3306

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Lista dei file php modifica
+PHP_STAGED_FILES=$(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
+
+# Se ci sono file php modificati...
+# -n True if string is not empty
+# -z True if string is empty
+if [[ -z "$PHP_STAGED_FILES" ]]; then
+    echo -e "\e[42mNo PHP staged files.\e[m"
+    exit 0
+fi
+
+source ./scripts/git-hooks/pre-commit-functions.sh
+
+if ! check_code_style; then exit 1; fi
+if ! check_psalm; then exit 1; fi;
+if ! check_phpunit; then exit 1; fi;
+#if ! check_deptrac; then exit 1; fi;

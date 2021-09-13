@@ -9,7 +9,7 @@
 >
     <projectFiles>
         <directory name="src"/>
-        <directory name="tests"/>
+        <directory name="test"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
@@ -19,7 +19,7 @@
         <ParamNameMismatch errorLevel="suppress"/>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <directory name="tests"/>
+                <directory name="test"/>
                 <directory name="src"/>
             </errorLevel>
         </MissingConstructor>
@@ -27,8 +27,7 @@
     
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
-<!--        <pluginClass class="Psalm\MockeryPlugin\Plugin"/>-->
-<!--        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>-->
+        <pluginClass class="Psalm\MockeryPlugin\Plugin"/>
 <!--        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>-->
     </plugins>
 </psalm>

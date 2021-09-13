@@ -16,22 +16,31 @@
     },
     "require": {
         "php": "^7.4|^8",
+        "ext-openssl": "*",
+        "ext-json": "*",
         "broadway/event-store-dbal": "^0.6.0",
+        "ramsey/uuid": "^4.2",
         "symfony/polyfill-php80": "^1.23"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.1",
+        "mockery/mockery": "^1.4",
+        "phpunit/phpunit": "^9.5",
+        "psalm/plugin-mockery": "^0.9.0",
         "psalm/plugin-phpunit": "^0.16.1",
         "vimeo/psalm": "^4.10"
     },
     "autoload": {
         "psr-4": {
-            "Matiux\\Broadway\\SensitizedEventStore\\Dbal\\": "src/"
+            "SensitizedEventStore\\Dbal\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Matiux\\Unit\\Broadway\\SensitizedEventStore\\Dbal\\": "test/Unit/Broadway/SensitizedEventStore/Dbal"
+            "Test\\Unit\\SensitizedEventStore\\Dbal\\": "test/Unit",
+            "Test\\Integration\\SensitizedEventStore\\Dbal\\": "test/Integration",
+            "Test\\Util\\": "test/Util",
+            "Test\\Support\\": "test/Support"
         }
     }
 }

@@ -1,5 +1,5 @@
-alias test="bin/phpunit --exclude-group slow,learning --testdox -vvv"
-alias test-all="bin/phpunit --exclude-group learning --testdox -vvv"
+alias test="vendor/bin/phpunit --exclude-group slow,learning --testdox -vvv"
+alias test-all="vendor/bin/phpunit --exclude-group learning --testdox -vvv"
 alias sfcc="rm -Rf var/cache/*"
 alias psalm="vendor/bin/psalm --no-cache"
 alias cs-fix="vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php $(git diff --name-only --cached --diff-filter=ACMR -- '*.php') --show-progress=dots"
