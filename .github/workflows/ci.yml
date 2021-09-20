@@ -1,0 +1,93 @@
+name: "Continuous Integration"
+
+#on:
+#  push:
+#    branches:
+#      - 'develop'
+#      - 'master'
+
+on: ["pull_request", "push"]
+
+jobs:
+  check-dependencies:
+    name: "Check dependencies"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+  run-tests:
+    name: "Run tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run test suite
+        run: "./vendor/bin/phpunit --exclude-group learning --colors=always --testdox -vvv"
+
+  code-coverage:
+    name: "Code coverage"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "latest"
+          extensions: bcmath, ctype, gmp
+          coverage: "pcov"
+          ini-values: "memory_limit=-1"
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: "Run unit tests (PHPUnit)"
+        run: "./vendor/bin/phpunit --verbose --colors=always --coverage-text --coverage-clover ./coverage.xml"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+
+  run-static-analysis:
+    name: "Static analysis"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: "Statically analyze code (Psalm)"
+        run: "vendor/bin/psalm --threads=2 --output-format=github --shepherd"
+
+#      - name: Run Psalm
+#        uses: docker://vimeo/psalm-github-actions
+#        with:
+#          composer_require_dev: true
