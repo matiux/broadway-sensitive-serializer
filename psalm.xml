@@ -10,7 +10,7 @@
 >
     <projectFiles>
         <directory name="src"/>
-        <directory name="test"/>
+        <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
@@ -20,7 +20,7 @@
         <ParamNameMismatch errorLevel="suppress"/>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <directory name="test"/>
+                <directory name="tests"/>
                 <directory name="src"/>
             </errorLevel>
         </MissingConstructor>

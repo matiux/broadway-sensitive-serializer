@@ -49,7 +49,7 @@ check_psalm() {
 
 check_phpunit() {
 
-  # Esecuzione dei test con phpunit
+  # Esecuzione dei tests con phpunit
   ./dc phpunit --testdox --exclude-group learning -vvv
   STATUS=$?
 

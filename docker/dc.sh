@@ -3,7 +3,7 @@
 WORKDIR=/var/www/app
 PROJECT_NAME=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]')
 COMPOSE_OVERRIDE=
-PHP_CONTAINER=php_broadway_sensitised_es_dbal
+PHP_CONTAINER=php_broadway_sensitive_serializer
 
 if [[ -f "./docker/docker-compose.override.yml" ]]; then
   COMPOSE_OVERRIDE="--file ./docker/docker-compose.override.yml"
@@ -49,7 +49,7 @@ elif [[ "$1" == "phpunit" ]]; then
 
   shift 1
   ${DC_EXEC} \
-    vendor/bin/simple-phpunit "$@"
+    vendor/bin/phpunit "$@"
 
 elif [[ "$1" == "coverage-badge" ]]; then
 

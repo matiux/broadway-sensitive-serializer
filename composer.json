@@ -1,7 +1,7 @@
 {
     "name": "matiux/broadway-sensitized-es-dbal",
-    "description": "Event store implementation using doctrine/dbal with support for data sensitization",
-    "keywords": ["cqrs", "event sourcing", "domain-driven design", "ddd", "event store", "dbal", "sensitization"],
+    "description": "Serializer implementation with support for data sensitization",
+    "keywords": ["cqrs", "event sourcing", "domain-driven design", "ddd", "event store", "dbal", "sensitization", "serializer"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -23,24 +23,27 @@
         "symfony/polyfill-php80": "^1.23"
     },
     "require-dev": {
+        "bmitch/churn-php": "^1.5",
         "friendsofphp/php-cs-fixer": "^3.1",
         "mockery/mockery": "^1.4",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-mockery": "^0.9.0",
         "psalm/plugin-phpunit": "^0.16.1",
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "^5.3",
         "vimeo/psalm": "^4.10"
     },
     "autoload": {
         "psr-4": {
-            "SensitizedEventStore\\Dbal\\": "src/"
+            "Matiux\\Broadway\\SensitiveSerializer\\": "src/SensitiveSerializer/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Test\\Unit\\SensitizedEventStore\\Dbal\\": "test/Unit",
-            "Test\\Integration\\SensitizedEventStore\\Dbal\\": "test/Integration",
-            "Test\\Util\\": "test/Util",
-            "Test\\Support\\": "test/Support"
+            "Tests\\Unit\\SensitiveSerializer\\": "tests/Unit/SensitiveSerializer/",
+            "Tests\\Integration\\SensitiveSerializer\\": "tests/Integration/SensitiveSerializer/",
+            "Tests\\Util\\": "tests/Util/",
+            "Tests\\Support\\": "tests/Support/"
         }
     }
 }

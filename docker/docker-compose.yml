@@ -5,20 +5,20 @@ volumes:
   app_database: {}
 
 networks:
-  sensitised_es_dbal_network:
-    name: sensitised_es_dbal_network
+  sensitive_serializer_network:
+    name: sensitive_serializer_network
     driver: bridge
 
 services:
 
-  php_broadway_sensitised_es_dbal:
+  php_broadway_sensitive_serializer:
     build: php
-    hostname: sensitised_es_dbal
+    hostname: sensitive_serializer
     volumes:
       - ../:/var/www/app:delegated
       - ./data/shell_history:/home/utente/shell_history
     networks:
-      - sensitised_es_dbal_network
+      - sensitive_serializer_network
     environment:
       - HISTFILE=/home/utente/shell_history/.x_history
     secrets:
@@ -36,7 +36,7 @@ services:
     volumes:
       - ../:/var/www/app
     networks:
-      - sensitised_es_dbal_network
+      - sensitive_serializer_network
 
   servicedb:
     image: mariadb:10.3.22
@@ -49,4 +49,4 @@ services:
       - MYSQL_DATABASE=gestore_utenti
     #command: mysqld --sql_mode="" #Per mysql, non serve per mariadb
     networks:
-      - sensitised_es_dbal_network
+      - sensitive_serializer_network

@@ -4,7 +4,9 @@ USER root
 
 ###> Dipendenze sviluppo
 RUN apt-get update \
-    && apt-get -y upgrade
+    && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends \
+    graphviz #Per deptrac
 ###> Fine dipendenze sviluppo
 
 COPY conf/xdebug-starter.sh /usr/local/bin/xdebug-starter

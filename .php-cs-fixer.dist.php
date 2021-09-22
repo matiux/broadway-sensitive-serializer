@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    //->exclude(['var', 'src/App', 'test/Support'])
+    //->exclude(['var', 'src/App', 'tests/Support'])
     ->depth(0);
 
 $config = new PhpCsFixer\Config();
 $rules = [
-    '@PHP80Migration' => true,
+    '@PHP74Migration' => true,
     'declare_strict_types' => true,
     '@PhpCsFixer' => true,
     'php_unit_test_class_requires_covers' => false,
