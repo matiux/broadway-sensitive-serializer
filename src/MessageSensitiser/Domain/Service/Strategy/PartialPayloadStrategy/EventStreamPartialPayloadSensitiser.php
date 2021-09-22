@@ -61,6 +61,6 @@ class EventStreamPartialPayloadSensitiser implements EventStreamSensitiserStrate
     public function desensitise(DomainEventStream $eventStream): DomainEventStream
     {
         // TODO
-        return new DomainEventStream([]);
+        return $eventStream;
     }
 }

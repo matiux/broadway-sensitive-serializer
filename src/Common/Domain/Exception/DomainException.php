@@ -18,16 +18,16 @@ abstract class DomainException extends Exception
         parent::__construct($message, $code, $previous);
     }
 
-    public function toJson(): string
-    {
-        return json_encode($this->toArray());
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'code' => $this->getCode(),
-            'message' => $this->getMessage(),
-        ];
-    }
+//    public function toJson(): string
+//    {
+//        return json_encode($this->toArray());
+//    }
+//
+//    public function toArray(): array
+//    {
+//        return [
+//            'code' => $this->getCode(),
+//            'message' => $this->getMessage(),
+//        ];
+//    }
 }
