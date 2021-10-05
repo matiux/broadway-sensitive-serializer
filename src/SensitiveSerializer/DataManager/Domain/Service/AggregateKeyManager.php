@@ -51,6 +51,8 @@ class AggregateKeyManager
     }
 
     /**
+     * Reveals the decrypted aggregate_key.
+     *
      * @param UuidInterface $aggregateId
      *
      * @throws AggregateKeyException
@@ -69,6 +71,8 @@ class AggregateKeyManager
     }
 
     /**
+     * Returns the AggregateKey for a specific id or throw an exception if aggregate not found.
+     *
      * @param UuidInterface $aggregateId
      *
      * @throws AggregateKeyException

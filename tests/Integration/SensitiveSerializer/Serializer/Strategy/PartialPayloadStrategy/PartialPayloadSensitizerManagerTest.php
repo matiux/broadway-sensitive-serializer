@@ -6,6 +6,7 @@ namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialPaylo
 
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
@@ -26,6 +27,7 @@ class PartialPayloadSensitizerManagerTest extends TestCase
 
     private array $ingoingPayload;
     private AES256SensitiveDataManager $sensitiveDataManager;
+    private InMemoryAggregateKeys $aggregateKeys;
     private AggregateKeyManager $aggregateKeyManager;
 
     protected function setUp(): void
@@ -38,10 +40,11 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         ];
 
         $this->sensitiveDataManager = new AES256SensitiveDataManager();
+        $this->aggregateKeys = new InMemoryAggregateKeys();
 
         $this->aggregateKeyManager = new AggregateKeyManager(
             new OpenSSLKeyGenerator(),
-            new InMemoryAggregateKeys(),
+            $this->aggregateKeys,
             $this->sensitiveDataManager,
             Key::AGGREGATE_MASTER_KEY
         );
@@ -57,6 +60,39 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         $outgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
 
         self::assertSame($outgoingPayload, $this->ingoingPayload);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_return_original_array_if_aggregate_key_does_not_exist(): void
+    {
+        /**
+         * First let's create an AggregateKey for specific Aggregate.
+         */
+        $aggregateKey = $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
+
+        /**
+         * Then let's sensitize message.
+         *
+         * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
+         */
+        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $sensitizedOutgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
+
+        /**
+         * Remove aggregate key.
+         */
+        $aggregateKey->delete();
+        $this->aggregateKeys->update($aggregateKey);
+
+        /**
+         * Finally we desensitize data but since there is no aggregate key,
+         * they will be the same as the sensitized data.
+         */
+        $desensitizedOutgoingPayload = $sensitizerManager->desensitize($sensitizedOutgoingPayload);
+
+        self::assertEquals($desensitizedOutgoingPayload, $sensitizedOutgoingPayload);
     }
 
     /**
@@ -88,6 +124,34 @@ class PartialPayloadSensitizerManagerTest extends TestCase
 
         self::assertSame('Galacci', $this->sensitiveDataManager->decrypt($payload['surname'], $decryptedAggregateKey));
         self::assertSame('m.galacci@gmail.com', $this->sensitiveDataManager->decrypt($payload['email'], $decryptedAggregateKey));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
+    {
+        self::expectException(AggregateKeyException::class);
+        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
+
+        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $sensitizerManager->sensitize($this->ingoingPayload);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_if_aggregate_key_does_not_have_the_key_during_encryption(): void
+    {
+        self::expectException(AggregateKeyException::class);
+        self::expectExceptionMessage(sprintf('Aggregate key is required to encrypt data for aggregate %s', (string) $this->aggregateId));
+
+        $aggregateKey = $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
+        $aggregateKey->delete();
+        $this->aggregateKeys->update($aggregateKey);
+
+        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $sensitizerManager->sensitize($this->ingoingPayload);
     }
 
     /**

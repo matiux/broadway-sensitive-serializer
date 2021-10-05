@@ -14,4 +14,9 @@ class AggregateKeyException extends DomainException
     {
         return new self(sprintf('AggregateKey not found for aggregate %s', (string) $aggregateId), 0, $previous);
     }
+
+    public static function keyRequired(UuidInterface $aggregateId, Throwable $previous = null): self
+    {
+        return new self(sprintf('Aggregate key is required to encrypt data for aggregate %s', (string) $aggregateId), 0, $previous);
+    }
 }

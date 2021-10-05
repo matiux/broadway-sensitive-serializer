@@ -3,3 +3,5 @@ docker-compose.override.yml
 .idea
 .php-cs-fixer.cache
 .phpunit.result.cache
+.coverage-clover.xml
+.coverage/

@@ -77,18 +77,20 @@ class AES256SensitiveDataManager implements SensitiveDataManager
 
         switch (count($parts)) {
             case 1:
+                // The IV is not inside the encrypted data, we use the default one
                 return [
                     'encrypted_data' => $this->stripIsSensitizedIndicator($encryptedSensitiveData),
                     'iv' => $this->iv,
                 ];
             case 2:
+                // The VI is inside the encrypted data
                 return [
                     'encrypted_data' => $this->stripIsSensitizedIndicator($parts[0]),
                     'iv' => base64_decode($parts[1]),
                 ];
             default:
                 // TODO
-                throw new LogicException();
+                throw new LogicException('Problems in IV recognizing');
         }
     }
 

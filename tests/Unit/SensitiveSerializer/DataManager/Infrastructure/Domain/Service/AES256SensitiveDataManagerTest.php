@@ -22,7 +22,7 @@ class AES256SensitiveDataManagerTest extends TestCase
     /**
      * @test
      */
-    public function crypt_e_decrypt_di_un_dato_sensibile_senza_esplicitare_iv(): void
+    public function it_should_crypt_and_decrypt_sensible_data_without_making_explicit_the_iv(): void
     {
         $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY);
 
@@ -38,7 +38,7 @@ class AES256SensitiveDataManagerTest extends TestCase
     /**
      * @test
      */
-    public function crypt_e_decrypt_di_un_dato_sensibile_senza_encoding_iv(): void
+    public function it_should_encrypt_and_decrypt_sensitive_data_without_encoding_iv(): void
     {
         $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY, null, false);
 
@@ -76,5 +76,18 @@ class AES256SensitiveDataManagerTest extends TestCase
 
         $encryptedData = $sensitiveDataManager->encrypt($this->emailAddress, 'foo');
         $sensitiveDataManager->decrypt($encryptedData, 'bar');
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_if_iv_is_invalid(): void
+    {
+        self::expectException(LogicException::class);
+        self::expectExceptionMessage('Problems in IV recognizing');
+
+        $sensitiveDataManager = new AES256SensitiveDataManager();
+
+        $sensitiveDataManager->decrypt(':foo:foo');
     }
 }

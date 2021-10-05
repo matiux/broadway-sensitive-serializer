@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service;
 
-trait SensitiveTool
+class SensitiveTool
 {
     public static function isSensitized(string $data): bool
     {

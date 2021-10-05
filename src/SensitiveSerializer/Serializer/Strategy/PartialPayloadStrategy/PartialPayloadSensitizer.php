@@ -35,13 +35,29 @@ abstract class PartialPayloadSensitizer
         $this->payload = $serializedObject['payload'];
         $aggregateId = $serializedObject['payload']['id'];
 
-        if (!$decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey(Uuid::fromString($aggregateId))) {
-            return $serializedObject;
-        }
+        $decryptedAggregateKey = $this->obtainDecryptedAggregateKeyOrError($aggregateId);
 
         $serializedObject['payload'] = $this->generateSensitizedPayload($decryptedAggregateKey);
 
         return $serializedObject;
+    }
+
+    /**
+     * @param string $aggregateId
+     *
+     * @throws AggregateKeyException
+     *
+     * @return string
+     */
+    private function obtainDecryptedAggregateKeyOrError(string $aggregateId): string
+    {
+        $id = Uuid::fromString($aggregateId);
+
+        if (!$decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey($id)) {
+            throw AggregateKeyException::keyRequired($id);
+        }
+
+        return $decryptedAggregateKey;
     }
 
     /**
