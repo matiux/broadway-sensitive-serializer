@@ -6,6 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayload
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
@@ -25,7 +26,9 @@ class PartialPayloadSensitizerManager implements SensitizerStrategy
      */
     public function sensitize(array $serializedObject): array
     {
-        /** @var PartialPayloadSensitizer $sensitizer */
+        Validator::validateSerializedObject($serializedObject);
+
+        /** @var PayloadSensitizer $sensitizer */
         if ($sensitizer = $this->partialPayloadSensitizerRegistry->resolveItemFor($serializedObject)) {
             $serializedObject = $sensitizer->sensitize($serializedObject);
             Validator::validateSerializedObject($serializedObject);
@@ -39,14 +42,16 @@ class PartialPayloadSensitizerManager implements SensitizerStrategy
      *
      * @throws AggregateKeyException|AssertionFailedException
      */
-    public function desensitize(array $serializedObject): array
+    public function desensitize(array $sensitiveSerializedObject): array
     {
-        /** @var PartialPayloadSensitizer $sensitizer */
-        if ($sensitizer = $this->partialPayloadSensitizerRegistry->resolveItemFor($serializedObject)) {
-            $serializedObject = $sensitizer->desensitize($serializedObject);
-            Validator::validateSerializedObject($serializedObject);
+        Validator::validateSerializedObject($sensitiveSerializedObject);
+
+        /** @var PayloadSensitizer $sensitizer */
+        if ($sensitizer = $this->partialPayloadSensitizerRegistry->resolveItemFor($sensitiveSerializedObject)) {
+            $sensitiveSerializedObject = $sensitizer->desensitize($sensitiveSerializedObject);
+            Validator::validateSerializedObject($sensitiveSerializedObject);
         }
 
-        return $serializedObject;
+        return $sensitiveSerializedObject;
     }
 }

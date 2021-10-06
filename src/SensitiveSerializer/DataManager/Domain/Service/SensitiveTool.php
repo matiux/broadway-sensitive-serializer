@@ -8,6 +8,6 @@ class SensitiveTool
 {
     public static function isSensitized(string $data): bool
     {
-        return str_starts_with($data, SensitiveDataManager::IS_SENSITISED_INDICATOR);
+        return str_starts_with($data, SensitiveDataManager::IS_SENSITIZED_INDICATOR);
     }
 }

@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+
+PHP_STAGED_FILES=$(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
+TOOLS_PATH='./tools'
+CMD=$1
+shift 1
+
+php_staged_files() {
+  echo "$PHP_STAGED_FILES"
+}
+
+install_dependencies() {
+  composer install --prefer-dist --no-progress
+}
+
+schema_create() {
+    vendor/bin/doctrine \
+    orm:schema-tool:create \
+    --no-interaction
+}
+
+setup() {
+  install_dependencies
+  schema_create
+}
+
+phpunit() {
+  ./vendor/bin/phpunit \
+    --configuration "$TOOLS_PATH"/phpunit/phpunit.xml.dist \
+    --exclude-group learning \
+    --colors=always \
+    --testdox \
+    --verbose \
+    "$@"
+}
+
+coverage() {
+  export XDEBUG_MODE=coverage
+
+  phpunit --coverage-text \
+    --coverage-clover=.coverage/coverage-clover.xml \
+    --coverage-html .coverage/html
+
+  TEST_STATUS=$?
+
+  export XDEBUG_MODE=off
+
+  return $TEST_STATUS
+}
+
+psalm() {
+  ./vendor/bin/psalm -c "$TOOLS_PATH"/psalm/psalm.xml --show-info=true --no-cache "$@"
+}
+
+coding_standard_fix() {
+
+  #--stop-on-violation \
+
+  ./vendor/bin/php-cs-fixer \
+    fix \
+    --verbose \
+    --show-progress=dots \
+    --cache-file="$TOOLS_PATH"/php-cs-fixer/.php-cs-fixer.cache \
+    --config="$TOOLS_PATH"/php-cs-fixer/.php-cs-fixer.dist.php "$@"
+
+  STATUS=$?
+
+  return $STATUS
+}
+
+while :; do
+  case $CMD in
+  install_dependencies)
+    install_dependencies
+    break
+    ;;
+  php_staged_files)
+    php_staged_files
+    break
+    ;;
+  setup-test)
+    APP_RUNTIME_ENV='test' setup
+    break
+    ;;
+  setup-dev)
+    APP_RUNTIME_ENV='dev' setup
+    break
+    ;;
+  schema-create)
+    schema_create
+    break;
+    ;;
+  phpunit)
+    phpunit "$@"
+    exit $?
+    ;;
+  coverage)
+    coverage
+    exit $?
+    ;;
+  psalm)
+    psalm "$@"
+    exit $?
+    ;;
+  security-analysis)
+    psalm --taint-analysis
+    exit $?
+    ;;
+  type-coverage)
+    psalm --shepherd
+    exit $?
+    ;;
+  coding-standard-fix)
+    coding_standard_fix "$@"
+    exit $?
+    ;;
+  coding-standard-check)
+    coding_standard_fix --dry-run "$@"
+    exit $?
+    ;;
+  coding-standard-fix-all)
+    coding_standard_fix ./src ./tests
+    exit $?
+    ;;
+  coding-standard-fix-staged)
+    coding_standard_fix $(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
+    exit $?
+    ;;
+  coding-standard-check-staged)
+    coding_standard_fix --dry-run $(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
+    exit $?
+    ;;
+  coding-standard-check-all)
+    coding_standard_fix --dry-run ./src ./tests
+    exit $?
+    ;;
+  shortlist)
+    echo \
+      install_dependencies \
+      php_staged_files \
+      setup-test \
+      setup-dev \
+      schema-create \
+      phpunit \
+      coverage \
+      psalm \
+      security-analysis \
+      type-coverage \
+      coding-standard-fix \
+      coding-standard-fix-all \
+      coding-standard-fix-staged \
+      coding-standard-check-staged \
+      coding-standard-check-all
+    break
+    ;;
+  esac
+done

@@ -14,9 +14,9 @@ interface SensitizerStrategy
     public function sensitize(array $serializedObject): array;
 
     /**
-     * @param array $serializedObject
+     * @param array $sensitiveSerializedObject
      *
      * @return array
      */
-    public function desensitize(array $serializedObject): array;
+    public function desensitize(array $sensitiveSerializedObject): array;
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer;
 
-use Assert\AssertionFailedException;
 use Broadway\Serializer\Serializable;
 use Broadway\Serializer\Serializer;
 use Broadway\Serializer\SimpleInterfaceSerializer;
@@ -26,8 +25,6 @@ class SensitiveSerializer implements Serializer
 
     /**
      * {@inheritDoc}
-     *
-     * @throws AssertionFailedException
      */
     public function serialize($object): array
     {
@@ -35,20 +32,14 @@ class SensitiveSerializer implements Serializer
 
         $serialized = $this->serializer->serialize($object);
 
-        Validator::validateSerializedObject($serialized);
-
         return $this->sensitizer->sensitize($serialized);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws AssertionFailedException
      */
     public function deserialize(array $serializedObject): Serializable
     {
-        Validator::validateSerializedObject($serializedObject);
-
         $desensitezedSerializedObject = $this->sensitizer->desensitize($serializedObject);
 
         $deserialized = $this->serializer->deserialize($desensitezedSerializedObject);
