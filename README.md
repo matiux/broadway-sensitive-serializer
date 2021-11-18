@@ -1,4 +1,4 @@
-Sensitization support for [broadway/event-store-dbal](https://github.com/broadway/event-store-dbal)
+Sensitization support for [broadway/broadway](https://github.com/broadway/broadway)
 ===
 
 ![check dependencies](https://github.com/matiux/broadway-sensitive-serializer/actions/workflows/check-dependencies.yml/badge.svg)

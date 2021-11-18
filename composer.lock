@@ -4,75 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "517a8ce645a55d20ad6cf8f3717a8ee3",
+    "content-hash": "17260d3d6159364749e901c7e749bec2",
     "packages": [
-        {
-            "name": "beberlei/assert",
-            "version": "v3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beberlei/assert.git",
-                "reference": "5e721d7e937ca3ba2cdec1e1adf195f9e5188372"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/5e721d7e937ca3ba2cdec1e1adf195f9e5188372",
-                "reference": "5e721d7e937ca3ba2cdec1e1adf195f9e5188372",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "ext-simplexml": "*",
-                "php": "^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "*",
-                "phpstan/phpstan": "*",
-                "phpunit/phpunit": ">=6.0.0",
-                "yoast/phpunit-polyfills": "^0.1.0"
-            },
-            "suggest": {
-                "ext-intl": "Needed to allow Assertion::count(), Assertion::isCountable(), Assertion::minCount(), and Assertion::maxCount() to operate on ResourceBundles"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Assert\\": "lib/Assert"
-                },
-                "files": [
-                    "lib/Assert/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Richard Quadling",
-                    "email": "rquadling@gmail.com",
-                    "role": "Collaborator"
-                }
-            ],
-            "description": "Thin assertion library for input validation in business models.",
-            "keywords": [
-                "assert",
-                "assertion",
-                "validation"
-            ],
-            "support": {
-                "issues": "https://github.com/beberlei/assert/issues",
-                "source": "https://github.com/beberlei/assert/tree/v3.3.1"
-            },
-            "time": "2021-04-18T20:11:03+00:00"
-        },
         {
             "name": "brick/math",
             "version": "0.9.3",
@@ -132,633 +65,6 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
-        },
-        {
-            "name": "broadway/broadway",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/broadway/broadway.git",
-                "reference": "d2e54aec3c01cf4025f93a85c7176e990bd67a5d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/broadway/broadway/zipball/d2e54aec3c01cf4025f93a85c7176e990bd67a5d",
-                "reference": "d2e54aec3c01cf4025f93a85c7176e990bd67a5d",
-                "shasum": ""
-            },
-            "require": {
-                "beberlei/assert": "^3.0",
-                "broadway/uuid-generator": "^1.0",
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "broadway/coding-standard": "^1.0",
-                "monolog/monolog": "~2.0",
-                "phpstan/phpstan": "@stable",
-                "phpunit/phpunit": "^8.0",
-                "ramsey/uuid": "^4.0"
-            },
-            "suggest": {
-                "broadway/broadway-bundle": "Symfony bundle for broadway/broadway",
-                "broadway/broadway-saga": "Saga component for Broadway",
-                "broadway/event-store-dbal": "Event store implementation using doctrine/dbal",
-                "broadway/read-model-elasticsearch": "Elasticsearch read model implementation",
-                "psr/log-implementation": "Implementation for PSR3, LoggerInterface"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Broadway\\": "src/Broadway/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexander",
-                    "email": "iam.asm89@gmail.com"
-                },
-                {
-                    "name": "Emil",
-                    "email": "emil@broekmeulen.com"
-                },
-                {
-                    "name": "Fritsjan",
-                    "email": "fritsjan@qandidate.com"
-                },
-                {
-                    "name": "othillo",
-                    "email": "othillo@othillo.nl"
-                },
-                {
-                    "name": "Willem-Jan",
-                    "email": "wjzijderveld@gmail.com"
-                },
-                {
-                    "name": "Qandidate.com",
-                    "homepage": "http://labs.qandidate.com/"
-                }
-            ],
-            "description": "Infrastructure and testing helpers for creating CQRS and event sourced applications.",
-            "keywords": [
-                "cqrs",
-                "ddd",
-                "domain-driven design",
-                "event sourcing"
-            ],
-            "support": {
-                "issues": "https://github.com/broadway/broadway/issues",
-                "source": "https://github.com/broadway/broadway/tree/2.4.0"
-            },
-            "time": "2020-12-29T11:52:48+00:00"
-        },
-        {
-            "name": "broadway/event-store-dbal",
-            "version": "0.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/broadway/event-store-dbal.git",
-                "reference": "7cc0b51cdd8312c4f8919d3b2f6688d85b65cc58"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/broadway/event-store-dbal/zipball/7cc0b51cdd8312c4f8919d3b2f6688d85b65cc58",
-                "reference": "7cc0b51cdd8312c4f8919d3b2f6688d85b65cc58",
-                "shasum": ""
-            },
-            "require": {
-                "broadway/broadway": "^2.3.1",
-                "doctrine/dbal": "^3.1",
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "broadway/coding-standard": "^1.2",
-                "ext-pdo_sqlite": "*",
-                "phpstan/phpstan": "@stable",
-                "phpunit/phpunit": "^9.5",
-                "ramsey/uuid": "^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Broadway\\EventStore\\Dbal\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexander",
-                    "email": "iam.asm89@gmail.com"
-                },
-                {
-                    "name": "Emil",
-                    "email": "emil@broekmeulen.com"
-                },
-                {
-                    "name": "Fritsjan",
-                    "email": "fritsjan@qandidate.com"
-                },
-                {
-                    "name": "othillo",
-                    "email": "othillo@othillo.nl"
-                },
-                {
-                    "name": "Willem-Jan",
-                    "email": "wjzijderveld@gmail.com"
-                },
-                {
-                    "name": "Qandidate.com",
-                    "homepage": "http://labs.qandidate.com/"
-                }
-            ],
-            "description": "Event store implementation using doctrine/dbal",
-            "support": {
-                "issues": "https://github.com/broadway/event-store-dbal/issues",
-                "source": "https://github.com/broadway/event-store-dbal/tree/0.6.0"
-            },
-            "time": "2021-06-24T09:42:53+00:00"
-        },
-        {
-            "name": "broadway/uuid-generator",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/broadway/broadway-uuid-generator.git",
-                "reference": "908de6999cdb77f1b323abd3e64e8ce6f86db3e5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/broadway/broadway-uuid-generator/zipball/908de6999cdb77f1b323abd3e64e8ce6f86db3e5",
-                "reference": "908de6999cdb77f1b323abd3e64e8ce6f86db3e5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "broadway/coding-standard": "^1.0",
-                "phpstan/phpstan": "@stable",
-                "phpunit/phpunit": "^8.0",
-                "ramsey/uuid": "^3.0"
-            },
-            "suggest": {
-                "ramsey/uuid": "Allows creating UUIDs"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Broadway\\UuidGenerator\\": "src/Broadway/UuidGenerator"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "UUID generator for broadway/broadway.",
-            "support": {
-                "issues": "https://github.com/broadway/broadway-uuid-generator/issues",
-                "source": "https://github.com/broadway/broadway-uuid-generator/tree/master"
-            },
-            "time": "2020-03-06T10:09:30+00:00"
-        },
-        {
-            "name": "composer/package-versions-deprecated",
-            "version": "1.11.99.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/package-versions-deprecated.git",
-                "reference": "b174585d1fe49ceed21928a945138948cb394600"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/b174585d1fe49ceed21928a945138948cb394600",
-                "reference": "b174585d1fe49ceed21928a945138948cb394600",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1.0 || ^2.0",
-                "php": "^7 || ^8"
-            },
-            "replace": {
-                "ocramius/package-versions": "1.11.99"
-            },
-            "require-dev": {
-                "composer/composer": "^1.9.3 || ^2.0@dev",
-                "ext-zip": "^1.13",
-                "phpunit/phpunit": "^6.5 || ^7"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PackageVersions\\Installer",
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PackageVersions\\": "src/PackageVersions"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com"
-                },
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be"
-                }
-            ],
-            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "support": {
-                "issues": "https://github.com/composer/package-versions-deprecated/issues",
-                "source": "https://github.com/composer/package-versions-deprecated/tree/1.11.99.4"
-            },
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-09-13T08:41:34+00:00"
-        },
-        {
-            "name": "doctrine/cache",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/cache.git",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/331b4d5dbaeab3827976273e9356b3b453c300ce",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce",
-                "shasum": ""
-            },
-            "require": {
-                "php": "~7.1 || ^8.0"
-            },
-            "conflict": {
-                "doctrine/common": ">2.2,<2.4"
-            },
-            "require-dev": {
-                "alcaeus/mongo-php-adapter": "^1.1",
-                "cache/integration-tests": "dev-master",
-                "doctrine/coding-standard": "^8.0",
-                "mongodb/mongodb": "^1.1",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-                "predis/predis": "~1.0",
-                "psr/cache": "^1.0 || ^2.0 || ^3.0",
-                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
-                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
-            },
-            "suggest": {
-                "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Cache\\": "lib/Doctrine/Common/Cache"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com"
-                }
-            ],
-            "description": "PHP Doctrine Cache library is a popular cache implementation that supports many different drivers such as redis, memcache, apc, mongodb and others.",
-            "homepage": "https://www.doctrine-project.org/projects/cache.html",
-            "keywords": [
-                "abstraction",
-                "apcu",
-                "cache",
-                "caching",
-                "couchdb",
-                "memcached",
-                "php",
-                "redis",
-                "xcache"
-            ],
-            "support": {
-                "issues": "https://github.com/doctrine/cache/issues",
-                "source": "https://github.com/doctrine/cache/tree/2.1.1"
-            },
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcache",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-07-17T14:49:29+00:00"
-        },
-        {
-            "name": "doctrine/dbal",
-            "version": "3.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/dbal.git",
-                "reference": "821b4f01a36ce63ed36c090ea74767b72db367e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/821b4f01a36ce63ed36c090ea74767b72db367e9",
-                "reference": "821b4f01a36ce63ed36c090ea74767b72db367e9",
-                "shasum": ""
-            },
-            "require": {
-                "composer/package-versions-deprecated": "^1.11.99",
-                "doctrine/cache": "^1.0|^2.0",
-                "doctrine/deprecations": "^0.5.3",
-                "doctrine/event-manager": "^1.0",
-                "php": "^7.3 || ^8.0"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "9.0.0",
-                "jetbrains/phpstorm-stubs": "2021.1",
-                "phpstan/phpstan": "1.1.1",
-                "phpstan/phpstan-strict-rules": "^1",
-                "phpunit/phpunit": "9.5.10",
-                "psalm/plugin-phpunit": "0.16.1",
-                "squizlabs/php_codesniffer": "3.6.1",
-                "symfony/cache": "^5.2|^6.0",
-                "symfony/console": "^2.0.5|^3.0|^4.0|^5.0|^6.0",
-                "vimeo/psalm": "4.12.0"
-            },
-            "suggest": {
-                "symfony/console": "For helpful console commands such as SQL execution and import of files."
-            },
-            "bin": [
-                "bin/doctrine-dbal"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\DBAL\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                }
-            ],
-            "description": "Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.",
-            "homepage": "https://www.doctrine-project.org/projects/dbal.html",
-            "keywords": [
-                "abstraction",
-                "database",
-                "db2",
-                "dbal",
-                "mariadb",
-                "mssql",
-                "mysql",
-                "oci8",
-                "oracle",
-                "pdo",
-                "pgsql",
-                "postgresql",
-                "queryobject",
-                "sasql",
-                "sql",
-                "sqlite",
-                "sqlserver",
-                "sqlsrv"
-            ],
-            "support": {
-                "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.1.4"
-            },
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fdbal",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-11-15T16:44:33+00:00"
-        },
-        {
-            "name": "doctrine/deprecations",
-            "version": "v0.5.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "9504165960a1f83cc1480e2be1dd0a0478561314"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/9504165960a1f83cc1480e2be1dd0a0478561314",
-                "reference": "9504165960a1f83cc1480e2be1dd0a0478561314",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1|^8.0"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "^6.0|^7.0|^8.0",
-                "phpunit/phpunit": "^7.0|^8.0|^9.0",
-                "psr/log": "^1.0"
-            },
-            "suggest": {
-                "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\Deprecations\\": "lib/Doctrine/Deprecations"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
-            "homepage": "https://www.doctrine-project.org/",
-            "support": {
-                "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/v0.5.3"
-            },
-            "time": "2021-03-21T12:59:47+00:00"
-        },
-        {
-            "name": "doctrine/event-manager",
-            "version": "1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/event-manager.git",
-                "reference": "41370af6a30faa9dc0368c4a6814d596e81aba7f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/41370af6a30faa9dc0368c4a6814d596e81aba7f",
-                "reference": "41370af6a30faa9dc0368c4a6814d596e81aba7f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1 || ^8.0"
-            },
-            "conflict": {
-                "doctrine/common": "<2.9@dev"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "^6.0",
-                "phpunit/phpunit": "^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\": "lib/Doctrine/Common"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com"
-                },
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com"
-                }
-            ],
-            "description": "The Doctrine Event Manager is a simple PHP event system that was built to be used with the various Doctrine projects.",
-            "homepage": "https://www.doctrine-project.org/projects/event-manager.html",
-            "keywords": [
-                "event",
-                "event dispatcher",
-                "event manager",
-                "event system",
-                "events"
-            ],
-            "support": {
-                "issues": "https://github.com/doctrine/event-manager/issues",
-                "source": "https://github.com/doctrine/event-manager/tree/1.1.x"
-            },
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fevent-manager",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-05-29T18:28:51+00:00"
         },
         {
             "name": "ramsey/collection",
@@ -1347,6 +653,73 @@
             "time": "2021-03-30T17:13:30+00:00"
         },
         {
+            "name": "beberlei/assert",
+            "version": "v3.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/assert.git",
+                "reference": "5e721d7e937ca3ba2cdec1e1adf195f9e5188372"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/5e721d7e937ca3ba2cdec1e1adf195f9e5188372",
+                "reference": "5e721d7e937ca3ba2cdec1e1adf195f9e5188372",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-simplexml": "*",
+                "php": "^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "*",
+                "phpstan/phpstan": "*",
+                "phpunit/phpunit": ">=6.0.0",
+                "yoast/phpunit-polyfills": "^0.1.0"
+            },
+            "suggest": {
+                "ext-intl": "Needed to allow Assertion::count(), Assertion::isCountable(), Assertion::minCount(), and Assertion::maxCount() to operate on ResourceBundles"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Assert\\": "lib/Assert"
+                },
+                "files": [
+                    "lib/Assert/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Richard Quadling",
+                    "email": "rquadling@gmail.com",
+                    "role": "Collaborator"
+                }
+            ],
+            "description": "Thin assertion library for input validation in business models.",
+            "keywords": [
+                "assert",
+                "assertion",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/beberlei/assert/issues",
+                "source": "https://github.com/beberlei/assert/tree/v3.3.1"
+            },
+            "time": "2021-04-18T20:11:03+00:00"
+        },
+        {
             "name": "bmitch/churn-php",
             "version": "1.5.0",
             "source": {
@@ -1406,6 +779,214 @@
                 "source": "https://github.com/bmitch/churn-php/tree/1.5.0"
             },
             "time": "2021-02-18T21:33:51+00:00"
+        },
+        {
+            "name": "broadway/broadway",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/broadway/broadway.git",
+                "reference": "d2e54aec3c01cf4025f93a85c7176e990bd67a5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/broadway/broadway/zipball/d2e54aec3c01cf4025f93a85c7176e990bd67a5d",
+                "reference": "d2e54aec3c01cf4025f93a85c7176e990bd67a5d",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^3.0",
+                "broadway/uuid-generator": "^1.0",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "broadway/coding-standard": "^1.0",
+                "monolog/monolog": "~2.0",
+                "phpstan/phpstan": "@stable",
+                "phpunit/phpunit": "^8.0",
+                "ramsey/uuid": "^4.0"
+            },
+            "suggest": {
+                "broadway/broadway-bundle": "Symfony bundle for broadway/broadway",
+                "broadway/broadway-saga": "Saga component for Broadway",
+                "broadway/event-store-dbal": "Event store implementation using doctrine/dbal",
+                "broadway/read-model-elasticsearch": "Elasticsearch read model implementation",
+                "psr/log-implementation": "Implementation for PSR3, LoggerInterface"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Broadway\\": "src/Broadway/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander",
+                    "email": "iam.asm89@gmail.com"
+                },
+                {
+                    "name": "Emil",
+                    "email": "emil@broekmeulen.com"
+                },
+                {
+                    "name": "Fritsjan",
+                    "email": "fritsjan@qandidate.com"
+                },
+                {
+                    "name": "othillo",
+                    "email": "othillo@othillo.nl"
+                },
+                {
+                    "name": "Willem-Jan",
+                    "email": "wjzijderveld@gmail.com"
+                },
+                {
+                    "name": "Qandidate.com",
+                    "homepage": "http://labs.qandidate.com/"
+                }
+            ],
+            "description": "Infrastructure and testing helpers for creating CQRS and event sourced applications.",
+            "keywords": [
+                "cqrs",
+                "ddd",
+                "domain-driven design",
+                "event sourcing"
+            ],
+            "support": {
+                "issues": "https://github.com/broadway/broadway/issues",
+                "source": "https://github.com/broadway/broadway/tree/2.4.0"
+            },
+            "time": "2020-12-29T11:52:48+00:00"
+        },
+        {
+            "name": "broadway/uuid-generator",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/broadway/broadway-uuid-generator.git",
+                "reference": "908de6999cdb77f1b323abd3e64e8ce6f86db3e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/broadway/broadway-uuid-generator/zipball/908de6999cdb77f1b323abd3e64e8ce6f86db3e5",
+                "reference": "908de6999cdb77f1b323abd3e64e8ce6f86db3e5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "broadway/coding-standard": "^1.0",
+                "phpstan/phpstan": "@stable",
+                "phpunit/phpunit": "^8.0",
+                "ramsey/uuid": "^3.0"
+            },
+            "suggest": {
+                "ramsey/uuid": "Allows creating UUIDs"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Broadway\\UuidGenerator\\": "src/Broadway/UuidGenerator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "UUID generator for broadway/broadway.",
+            "support": {
+                "issues": "https://github.com/broadway/broadway-uuid-generator/issues",
+                "source": "https://github.com/broadway/broadway-uuid-generator/tree/master"
+            },
+            "time": "2020-03-06T10:09:30+00:00"
+        },
+        {
+            "name": "composer/package-versions-deprecated",
+            "version": "1.11.99.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/package-versions-deprecated.git",
+                "reference": "b174585d1fe49ceed21928a945138948cb394600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/b174585d1fe49ceed21928a945138948cb394600",
+                "reference": "b174585d1fe49ceed21928a945138948cb394600",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1.0 || ^2.0",
+                "php": "^7 || ^8"
+            },
+            "replace": {
+                "ocramius/package-versions": "1.11.99"
+            },
+            "require-dev": {
+                "composer/composer": "^1.9.3 || ^2.0@dev",
+                "ext-zip": "^1.13",
+                "phpunit/phpunit": "^6.5 || ^7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "support": {
+                "issues": "https://github.com/composer/package-versions-deprecated/issues",
+                "source": "https://github.com/composer/package-versions-deprecated/tree/1.11.99.4"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-09-13T08:41:34+00:00"
         },
         {
             "name": "composer/semver",
@@ -3470,12 +3051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f08ee6ef799891738c410ebf80bf54aeddc24120"
+                "reference": "dd62a7ab9fe822143aaaba5764d916d10f23e527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f08ee6ef799891738c410ebf80bf54aeddc24120",
-                "reference": "f08ee6ef799891738c410ebf80bf54aeddc24120",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/dd62a7ab9fe822143aaaba5764d916d10f23e527",
+                "reference": "dd62a7ab9fe822143aaaba5764d916d10f23e527",
                 "shasum": ""
             },
             "conflict": {
@@ -3594,7 +3175,7 @@
                 "icecoder/icecoder": "<=8",
                 "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
                 "illuminate/cookie": ">=4,<=4.0.11|>=4.1,<=4.1.99999|>=4.2,<=4.2.99999|>=5,<=5.0.99999|>=5.1,<=5.1.99999|>=5.2,<=5.2.99999|>=5.3,<=5.3.99999|>=5.4,<=5.4.99999|>=5.5,<=5.5.49|>=5.6,<=5.6.99999|>=5.7,<=5.7.99999|>=5.8,<=5.8.99999|>=6,<6.18.31|>=7,<7.22.4",
-                "illuminate/database": "<6.20.26|>=7,<8.40",
+                "illuminate/database": "<6.20.26|>=7,<7.30.5|>=8,<8.40",
                 "illuminate/encryption": ">=4,<=4.0.11|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.40|>=5.6,<5.6.15",
                 "illuminate/view": ">=7,<7.1.2",
                 "impresscms/impresscms": "<=1.4.2",
@@ -3885,7 +3466,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-17T00:48:00+00:00"
+            "time": "2021-11-17T16:24:54+00:00"
         },
         {
             "name": "sebastian/cli-parser",

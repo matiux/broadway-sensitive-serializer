@@ -1,49 +1,61 @@
 {
-    "name": "matiux/broadway-sensitized-es-dbal",
-    "description": "Serializer implementation with support for data sensitization",
-    "keywords": ["cqrs", "event sourcing", "domain-driven design", "ddd", "event store", "dbal", "sensitization", "serializer"],
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Matteo Galacci",
-            "email": "m.galacci@gmail.com"
-        }
-    ],
-    "config": {
-        "optimize-autoloader": true,
-        "sort-packages": true
-    },
-    "require": {
-        "php": "^7.4|^8",
-        "ext-openssl": "*",
-        "ext-json": "*",
-        "broadway/event-store-dbal": "^0.6.0",
-        "ramsey/uuid": "^4.2",
-        "symfony/polyfill-php80": "^1.23"
-    },
-    "require-dev": {
-        "bmitch/churn-php": "^1.5",
-        "friendsofphp/php-cs-fixer": "^3.1",
-        "mockery/mockery": "^1.4",
-        "phpunit/phpunit": "^9.5",
-        "psalm/plugin-mockery": "^0.9.0",
-        "psalm/plugin-phpunit": "^0.16.1",
-        "roave/security-advisories": "dev-latest",
-        "symfony/var-dumper": "^5.3",
-        "vimeo/psalm": "^4.10"
-    },
-    "autoload": {
-        "psr-4": {
-            "Matiux\\Broadway\\SensitiveSerializer\\": "src/SensitiveSerializer/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\Unit\\SensitiveSerializer\\": "tests/Unit/SensitiveSerializer/",
-            "Tests\\Integration\\SensitiveSerializer\\": "tests/Integration/SensitiveSerializer/",
-            "Tests\\Util\\": "tests/Util/",
-            "Tests\\Support\\": "tests/Support/"
-        }
+  "name": "matiux/broadway-sensitized-serializer",
+  "description": "Serializer implementation with support for data sensitization",
+  "keywords": [
+    "cqrs",
+    "event sourcing",
+    "domain-driven design",
+    "ddd",
+    "event store",
+    "sensitization",
+    "serializer"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Matteo Galacci",
+      "email": "m.galacci@gmail.com"
     }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "require": {
+    "php": "^7.4|^8",
+    "ext-openssl": "*",
+    "ext-json": "*",
+    "ramsey/uuid": "^4.2",
+    "symfony/polyfill-php80": "^1.23"
+  },
+  "require-dev": {
+    "bmitch/churn-php": "^1.5",
+    "broadway/broadway": "^2.4",
+    "friendsofphp/php-cs-fixer": "^3.1",
+    "mockery/mockery": "^1.4",
+    "phpunit/phpunit": "^9.5",
+    "psalm/plugin-mockery": "^0.9.0",
+    "psalm/plugin-phpunit": "^0.16.1",
+    "roave/security-advisories": "dev-latest",
+    "symfony/var-dumper": "^5.3",
+    "vimeo/psalm": "^4.10"
+  },
+  "suggest": {
+    "broadway/broadway-bundle": "Symfony bundle for broadway/broadway",
+    "broadway/event-store-dbal": "Event store implementation using doctrine/dbal"
+  },
+  "autoload": {
+    "psr-4": {
+      "Matiux\\Broadway\\SensitiveSerializer\\": "src/SensitiveSerializer/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Unit\\SensitiveSerializer\\": "tests/Unit/SensitiveSerializer/",
+      "Tests\\Integration\\SensitiveSerializer\\": "tests/Integration/SensitiveSerializer/",
+      "Tests\\Util\\": "tests/Util/",
+      "Tests\\Support\\": "tests/Support/"
+    }
+  }
 }
