@@ -1,0 +1,54 @@
+name: "Test"
+
+on:
+  pull_request: ~
+  push: ~
+  workflow_dispatch: ~
+
+jobs:
+
+  run-tests:
+    name: Run tests
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:32574/ddd_sp_test?serverVersion=5
+    runs-on: "ubuntu-latest"
+
+#    services:
+#
+#      servicedb:
+#        image: mariadb:10.3.22
+#        env:
+#          MYSQL_ROOT_PASSWORD: root
+#          MYSQL_DATABASE: ddd_sp_test
+#        ports:
+#          - 32574:3306
+#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+#      - name: Verify MySQL connection from container
+#        run: mysql --host 127.0.0.1 --port 32574 -uroot -proot -e "SHOW DATABASES"
+
+      - name: Checkout code
+        uses: "actions/checkout@v2"
+
+      - name: Install dependencies
+        run: ./scripts/project/bin/project install_dependencies
+
+      - name: Create Schema
+        run: ./scripts/project/bin/project schema-create
+
+      - name: "Run unit tests (PHPUnit)"
+        env:
+          XDEBUG_MODE: coverage
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_SQS_QUEUE_NAME: ${{ secrets.AWS_SQS_QUEUE_NAME }}
+          AWS_SNS_TOPIC_ARN: ${{ secrets.AWS_SNS_TOPIC_ARN }}
+        run: ./scripts/project/bin/project coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./.coverage/coverage-clover.xml

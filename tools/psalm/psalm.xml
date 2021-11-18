@@ -4,15 +4,15 @@
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
-        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-        autoloader="./vendor/autoload.php"
+        xsi:schemaLocation="https://getpsalm.org/schema/config ../../vendor/vimeo/psalm/config.xsd"
+        autoloader="../../vendor/autoload.php"
         phpVersion="7.4"
 >
     <projectFiles>
-        <directory name="src"/>
-        <directory name="tests"/>
+        <directory name="../../src"/>
+        <directory name="../../tests"/>
         <ignoreFiles>
-            <directory name="vendor"/>
+            <directory name="../../vendor"/>
         </ignoreFiles>
     </projectFiles>
 
@@ -20,8 +20,8 @@
         <ParamNameMismatch errorLevel="suppress"/>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <directory name="tests"/>
-                <directory name="src"/>
+                <directory name="../../tests"/>
+                <directory name="../../src"/>
             </errorLevel>
         </MissingConstructor>
     </issueHandlers>

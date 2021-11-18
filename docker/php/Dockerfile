@@ -16,9 +16,9 @@ RUN /usr/local/bin/xdebug-starter
 USER utente
 
 ###> Bashrc con alias
-COPY conf/shell-alias.rc /tmp/shell-alias.rc
-RUN cat /tmp/shell-alias.rc >> /home/utente/.zshrc \
-    && cat /tmp/shell-alias.rc >> /home/utente/.bashrc
+COPY conf/shell-custom.rc /tmp/shell-custom.rc
+RUN cat /tmp/shell-custom.rc >> /home/utente/.zshrc \
+    && cat /tmp/shell-custom.rc >> /home/utente/.bashrc
 ###> Fine bashrc con alias
 
 USER www-data

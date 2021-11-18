@@ -38,13 +38,14 @@ class AggregateKeyManager
      */
     public function createAggregateKey(UuidInterface $aggregateId): AggregateKey
     {
-        // Aggregate key (AGGREGATE_KEY) encrypted with the AGGREGATE_MASTER_KEY
-        $encryptedAggregateKey = $this->sensitiveDataManager->encrypt(
+        // Key for Aggregate (AGGREGATE_KEY) encrypted with the AGGREGATE_MASTER_KEY
+        $encryptedKeyForAggregate = $this->sensitiveDataManager->encrypt(
             $this->keyGenerator->generate(),
             $this->aggregateMasterKey
         );
 
-        $aggregateKey = AggregateKey::create($aggregateId, $encryptedAggregateKey);
+        // AggregateKey Aggregate
+        $aggregateKey = AggregateKey::create($aggregateId, $encryptedKeyForAggregate);
         $this->aggregateKeys->add($aggregateKey);
 
         return $aggregateKey;

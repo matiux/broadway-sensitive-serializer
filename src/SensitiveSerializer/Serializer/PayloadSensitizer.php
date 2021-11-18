@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer;
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 use Ramsey\Uuid\Uuid;
 
-abstract class PartialPayloadSensitizer
+abstract class PayloadSensitizer
 {
     protected SensitiveDataManager $sensitiveDataManager;
     private AggregateKeyManager $aggregateKeyManager;
@@ -60,6 +59,8 @@ abstract class PartialPayloadSensitizer
         return $decryptedAggregateKey;
     }
 
+    abstract protected function generateSensitizedPayload(string $decryptedAggregateKey): array;
+
     /**
      * @throws AggregateKeyException|AssertionFailedException
      */
@@ -78,8 +79,6 @@ abstract class PartialPayloadSensitizer
 
         return $serializedObject;
     }
-
-    abstract protected function generateSensitizedPayload(string $decryptedAggregateKey): array;
 
     abstract protected function generateDesensitizedPayload(string $decryptedAggregateKey): array;
 

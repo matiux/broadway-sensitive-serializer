@@ -6,7 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service;
 
 interface SensitiveDataManager
 {
-    public const IS_SENSITISED_INDICATOR = '#-#';
+    public const IS_SENSITIZED_INDICATOR = '#-#';
 
     public function encrypt(string $sensitiveData, string $secretKey = null): string;
 

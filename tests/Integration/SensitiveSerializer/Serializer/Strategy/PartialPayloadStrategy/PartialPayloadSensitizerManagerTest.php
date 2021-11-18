@@ -10,7 +10,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKe
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
@@ -55,9 +55,9 @@ class PartialPayloadSensitizerManagerTest extends TestCase
      */
     public function it_should_return_original_array_if_specific_sensitizer_does_not_exist(): void
     {
-        $sensitizerManager = new PartialPayloadSensitizerManager(new PartialPayloadSensitizerRegistry([]));
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager(new PartialPayloadSensitizerRegistry([]));
 
-        $outgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
+        $outgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
 
         self::assertSame($outgoingPayload, $this->ingoingPayload);
     }
@@ -77,8 +77,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          *
          * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
          */
-        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $sensitizedOutgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
 
         /**
          * Remove aggregate key.
@@ -90,7 +90,7 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          * Finally we desensitize data but since there is no aggregate key,
          * they will be the same as the sensitized data.
          */
-        $desensitizedOutgoingPayload = $sensitizerManager->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $partialPayloadSensitizerManager->desensitize($sensitizedOutgoingPayload);
 
         self::assertEquals($desensitizedOutgoingPayload, $sensitizedOutgoingPayload);
     }
@@ -105,17 +105,16 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
 
         /**
          * Then let's sensitize message.
          *
          * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
 
         $payload = $sensitizedOutgoingPayload['payload'];
-        self::assertArrayHasKey('surname', $payload);
 
         /**
          * Finally we reveal the aggregate key and decrypt the sensitized data.
@@ -134,8 +133,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         self::expectException(AggregateKeyException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
 
-        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $sensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
     }
 
     /**
@@ -150,8 +149,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         $aggregateKey->delete();
         $this->aggregateKeys->update($aggregateKey);
 
-        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $sensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
     }
 
     /**
@@ -164,14 +163,14 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $sensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
 
         /**
          * Then let's sensitize message.
          */
-        $sensitizedOutgoingPayload = $sensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
 
-        $desensitizedOutgoingPayload = $sensitizerManager->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $partialPayloadSensitizerManager->desensitize($sensitizedOutgoingPayload);
 
         self::assertSame($this->ingoingPayload, $desensitizedOutgoingPayload);
     }
@@ -187,7 +186,7 @@ class PartialPayloadSensitizerManagerTest extends TestCase
 /**
  * @psalm-type MyEvent = array{id: string, surname: string, email: string}
  */
-class MyEventSensitizer extends PartialPayloadSensitizer
+class MyEventSensitizer extends PayloadSensitizer
 {
     /**
      * @param string $decryptedAggregateKey

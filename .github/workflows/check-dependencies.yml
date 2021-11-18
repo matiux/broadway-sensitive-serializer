@@ -1,0 +1,30 @@
+name: "Check dependencies"
+
+on:
+  pull_request: ~
+  push: ~
+  workflow_dispatch: ~
+
+jobs:
+  check-dependencies:
+    name: "Check dependencies"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: ./scripts/project/bin/project install_dependencies

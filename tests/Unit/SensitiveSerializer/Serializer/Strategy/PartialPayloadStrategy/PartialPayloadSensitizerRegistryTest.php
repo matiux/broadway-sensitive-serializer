@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
 
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
     /**
      * @test
      */
-    public function should_return_null_if_no_sensitizer_found_for_a_subject(): void
+    public function it_should_return_null_if_no_sensitizer_found_for_a_subject(): void
     {
         $event = MyEventBuilder::create()->build();
         $sensitizers = [];
@@ -29,10 +29,10 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
     /**
      * @test
      */
-    public function should_return_sensitizer_if_subject_is_supported(): void
+    public function it_should_return_sensitizer_if_subject_is_supported(): void
     {
         $event = MyEventBuilder::create()->build();
-        $sensitizer = Mockery::mock(PartialPayloadSensitizer::class)
+        $sensitizer = Mockery::mock(PayloadSensitizer::class)
             ->shouldReceive('supports')->andReturn(true)
             ->getMock();
 
@@ -41,6 +41,6 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
         $sensitizer = $registry->resolveItemFor($event);
 
         self::assertNotNull($sensitizer);
-        self::assertInstanceOf(PartialPayloadSensitizer::class, $sensitizer);
+        self::assertInstanceOf(PayloadSensitizer::class, $sensitizer);
     }
 }

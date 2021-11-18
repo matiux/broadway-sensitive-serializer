@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
 
+use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
+
 class PartialPayloadSensitizerRegistry
 {
-    /** @var array<class-string, PartialPayloadSensitizer> */
+    /** @var array<class-string, PayloadSensitizer> */
     private array $items = [];
 
     /**
-     * @param PartialPayloadSensitizer[] $items
+     * @param PayloadSensitizer[] $items
      */
     public function __construct(iterable $items)
     {
@@ -28,9 +30,9 @@ class PartialPayloadSensitizerRegistry
      *
      * @param array|T $subject
      *
-     * @return null|PartialPayloadSensitizer
+     * @return null|PayloadSensitizer
      */
-    public function resolveItemFor($subject): ?PartialPayloadSensitizer
+    public function resolveItemFor($subject): ?PayloadSensitizer
     {
         foreach ($this->items as $item) {
             if ($item->supports($subject)) {

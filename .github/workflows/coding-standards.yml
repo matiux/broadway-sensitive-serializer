@@ -1,0 +1,27 @@
+name: "Coding standards"
+
+on:
+  pull_request: ~
+  push: ~
+
+jobs:
+  coding-standards:
+    name: "coding standards"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "installing PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.0"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+          extensions: bcmath, mbstring, intl, sodium, json
+
+      - name: Install dependencies
+        run: ./scripts/project/bin/project install_dependencies
+
+      - name: "coding-standard-check"
+        run: ./scripts/project/bin/project coding-standard-fix-all

@@ -39,7 +39,7 @@ class AES256SensitiveDataManager implements SensitiveDataManager
 
         return sprintf(
             '%s%s%s%s',
-            self::IS_SENSITISED_INDICATOR,
+            self::IS_SENSITIZED_INDICATOR,
             $encrypted,
             self::IV_SEPARATOR,
             base64_encode($this->iv)
@@ -96,7 +96,7 @@ class AES256SensitiveDataManager implements SensitiveDataManager
 
     protected function stripIsSensitizedIndicator(string $encryptedData): string
     {
-        return (string) preg_replace('/^'.preg_quote(self::IS_SENSITISED_INDICATOR, '/').'/', '', $encryptedData);
+        return (string) preg_replace('/^'.preg_quote(self::IS_SENSITIZED_INDICATOR, '/').'/', '', $encryptedData);
     }
 
     /**
