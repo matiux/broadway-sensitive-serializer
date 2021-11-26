@@ -37,16 +37,3 @@ services:
       - ../:/var/www/app
     networks:
       - sensitive_serializer_network
-
-  servicedb:
-    image: mariadb:10.3.22
-    volumes:
-      - app_database:/var/lib/mysql
-      - ./mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf
-      - ./data/db:/docker-entrypoint-initdb.d
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=gestore_utenti
-    #command: mysqld --sql_mode="" #Per mysql, non serve per mariadb
-    networks:
-      - sensitive_serializer_network
