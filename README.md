@@ -20,8 +20,6 @@ rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 
 ## TODO
 
-* Whole payload strategy
 * Documentazione
   * Check test names
-* Coverage
 * Badge PHP version

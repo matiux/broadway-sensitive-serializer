@@ -13,7 +13,3 @@ services:
   php_broadway_sensitive_serializer:
     environment:
       - AGGREGATE_MASTER_KEY="SS3kr3tK31"
-
-  servicedb:
-    ports:
-      - 3307:3306

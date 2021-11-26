@@ -11,8 +11,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyM
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerStrategy;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -21,7 +21,7 @@ use Tests\Support\MyEvent;
 use Tests\Support\MyEventBuilder;
 use Tests\Util\Key;
 
-class PartialPayloadSensitizerManagerTest extends TestCase
+class PartialPayloadSensitizerStrategyTest extends TestCase
 {
     private UuidInterface $aggregateId;
 
@@ -55,9 +55,9 @@ class PartialPayloadSensitizerManagerTest extends TestCase
      */
     public function it_should_return_original_array_if_specific_sensitizer_does_not_exist(): void
     {
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager(new PartialPayloadSensitizerRegistry([]));
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy(new PartialPayloadSensitizerRegistry([]));
 
-        $outgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $outgoingPayload = $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         self::assertSame($outgoingPayload, $this->ingoingPayload);
     }
@@ -77,8 +77,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          *
          * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
          */
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         /**
          * Remove aggregate key.
@@ -90,7 +90,7 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          * Finally we desensitize data but since there is no aggregate key,
          * they will be the same as the sensitized data.
          */
-        $desensitizedOutgoingPayload = $partialPayloadSensitizerManager->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->desensitize($sensitizedOutgoingPayload);
 
         self::assertEquals($desensitizedOutgoingPayload, $sensitizedOutgoingPayload);
     }
@@ -105,14 +105,14 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
 
         /**
          * Then let's sensitize message.
          *
          * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         $payload = $sensitizedOutgoingPayload['payload'];
 
@@ -133,8 +133,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         self::expectException(AggregateKeyException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
 
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
     }
 
     /**
@@ -149,8 +149,8 @@ class PartialPayloadSensitizerManagerTest extends TestCase
         $aggregateKey->delete();
         $this->aggregateKeys->update($aggregateKey);
 
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
-        $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
     }
 
     /**
@@ -163,14 +163,14 @@ class PartialPayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $partialPayloadSensitizerManager = new PartialPayloadSensitizerManager($this->createRegistryWithSensitizer());
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
 
         /**
          * Then let's sensitize message.
          */
-        $sensitizedOutgoingPayload = $partialPayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
-        $desensitizedOutgoingPayload = $partialPayloadSensitizerManager->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->desensitize($sensitizedOutgoingPayload);
 
         self::assertSame($this->ingoingPayload, $desensitizedOutgoingPayload);
     }

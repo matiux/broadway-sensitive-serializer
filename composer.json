@@ -6,9 +6,9 @@
     "event sourcing",
     "domain-driven design",
     "ddd",
-    "event store",
     "sensitization",
-    "serializer"
+    "serializer",
+    "gdpr"
   ],
   "type": "library",
   "license": "MIT",

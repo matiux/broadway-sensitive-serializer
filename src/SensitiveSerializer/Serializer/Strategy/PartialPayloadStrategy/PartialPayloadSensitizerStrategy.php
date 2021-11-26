@@ -10,7 +10,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
-class PartialPayloadSensitizerManager implements SensitizerStrategy
+class PartialPayloadSensitizerStrategy implements SensitizerStrategy
 {
     private PartialPayloadSensitizerRegistry $partialPayloadSensitizerRegistry;
 

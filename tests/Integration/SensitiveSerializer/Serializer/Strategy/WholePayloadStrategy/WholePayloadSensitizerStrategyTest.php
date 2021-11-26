@@ -8,8 +8,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyM
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizer;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerStrategy;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -18,7 +18,7 @@ use Tests\Support\MyEvent;
 use Tests\Support\MyEventBuilder;
 use Tests\Util\Key;
 
-class WholePayloadSensitizerManagerTest extends TestCase
+class WholePayloadSensitizerStrategyTest extends TestCase
 {
     use WholePayloadSensitizerTestUtil;
 
@@ -60,12 +60,12 @@ class WholePayloadSensitizerManagerTest extends TestCase
      */
     public function it_should_return_original_payload_if_registry_does_not_support_event_type(): void
     {
-        $wholePayloadSensitizerManager = new WholePayloadSensitizerManager(
+        $wholePayloadSensitizerStrategy = new WholePayloadSensitizerStrategy(
             new WholePayloadSensitizerRegistry([]),
             $this->wholePayloadSensitizer
         );
 
-        $sensitizedOutgoingPayload = $wholePayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         self::assertSame($this->ingoingPayload, $sensitizedOutgoingPayload);
     }
@@ -80,7 +80,7 @@ class WholePayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $wholePayloadSensitizerManager = new WholePayloadSensitizerManager(
+        $wholePayloadSensitizerStrategy = new WholePayloadSensitizerStrategy(
             new WholePayloadSensitizerRegistry([MyEvent::class]),
             $this->wholePayloadSensitizer
         );
@@ -90,7 +90,7 @@ class WholePayloadSensitizerManagerTest extends TestCase
          *
          * @var array{class: class-string, payload: array{id: string, sensible_data: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $wholePayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         self::assertObjectIsSensitized($sensitizedOutgoingPayload);
         $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
@@ -106,7 +106,7 @@ class WholePayloadSensitizerManagerTest extends TestCase
          */
         $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
 
-        $wholePayloadSensitizerManager = new WholePayloadSensitizerManager(
+        $wholePayloadSensitizerStrategy = new WholePayloadSensitizerStrategy(
             new WholePayloadSensitizerRegistry([MyEvent::class]),
             $this->wholePayloadSensitizer
         );
@@ -116,11 +116,11 @@ class WholePayloadSensitizerManagerTest extends TestCase
          *
          * @var array{class: class-string, payload: array{id: string, sensible_data: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $wholePayloadSensitizerManager->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         self::assertObjectIsSensitized($sensitizedOutgoingPayload);
 
-        $desensitizedOutgoingPayload = $wholePayloadSensitizerManager->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->desensitize($sensitizedOutgoingPayload);
 
         self::assertSame($this->ingoingPayload, $desensitizedOutgoingPayload);
     }
