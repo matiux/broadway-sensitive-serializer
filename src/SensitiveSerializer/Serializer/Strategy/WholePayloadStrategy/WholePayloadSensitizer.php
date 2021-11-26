@@ -25,12 +25,12 @@ class WholePayloadSensitizer extends PayloadSensitizer
         $this->validatePayload($toSensitize);
         unset($toSensitize['id']);
 
-        $toSensitize = (string) json_encode($toSensitize);
+        /** @var array<array-key, string> $toSensitize */
+        foreach ($toSensitize as $key => $value) {
+            $toSensitize[$key] = $this->sensitiveDataManager->encrypt($value, $decryptedAggregateKey);
+        }
 
-        return [
-            'id' => $this->payload['id'],
-            'sensible_data' => $this->sensitiveDataManager->encrypt($toSensitize, $decryptedAggregateKey),
-        ];
+        return ['id' => $this->payload['id']] + $toSensitize;
     }
 
     /**
@@ -42,15 +42,17 @@ class WholePayloadSensitizer extends PayloadSensitizer
      */
     protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
     {
-        $this->validateSensitizedPayload($this->payload);
+        $sensibleData = $this->payload;
 
-        $sensibleData = $this->payload['sensible_data'];
+        $this->validatePayload($sensibleData);
+        unset($sensibleData['id']);
 
-        $desensitized = $this->sensitiveDataManager->decrypt($sensibleData, $decryptedAggregateKey);
+        /** @var array<array-key, string> $sensibleData */
+        foreach ($sensibleData as $key => $value) {
+            $sensibleData[$key] = $this->sensitiveDataManager->decrypt($value, $decryptedAggregateKey);
+        }
 
-        return [
-            'id' => $this->payload['id'],
-        ] + (array) json_decode($desensitized, true);
+        return ['id' => $this->payload['id']] + $sensibleData;
     }
 
     public function supports($subject): bool
@@ -66,17 +68,5 @@ class WholePayloadSensitizer extends PayloadSensitizer
     private function validatePayload(array $payload): void
     {
         Assert::keyExists($payload, 'id', "Key 'id' should be set in payload when using `WholePayloadSensitizer` strategy.");
-    }
-
-    /**
-     * @psalm-assert array{id: string, sensible_data: string} $payload
-     *
-     * @throws AssertionFailedException
-     */
-    private function validateSensitizedPayload(array $payload): void
-    {
-        $this->validatePayload($payload);
-
-        Assert::keyExists($this->payload, 'sensible_data', "Key 'sensible_data' should be set for desensitize payload with `WholePayloadSensitizer` strategy.");
     }
 }

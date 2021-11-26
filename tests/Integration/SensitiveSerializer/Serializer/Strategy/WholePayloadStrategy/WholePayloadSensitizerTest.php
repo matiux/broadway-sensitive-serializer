@@ -79,7 +79,7 @@ class WholePayloadSensitizerTest extends TestCase
     /**
      * @test
      */
-    public function it_should_return_sensitized_array(): void
+    public function it_should_return_whole_sensitized_array(): void
     {
         /**
          * First let's create an AggregateKey for specific Aggregate.
