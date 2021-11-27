@@ -60,7 +60,13 @@ class AES256SensitiveDataManager implements SensitiveDataManager
         $key = $this->getKeyOrFail($secretKey);
 
         if (!$decrypted = openssl_decrypt($data['encrypted_data'], self::CIPHER_METHOD, $key, 0, $data['iv'])) {
-            throw new Exception('Decrypt error');
+            $errors = [];
+
+            while ($msg = openssl_error_string()) {
+                $errors[] = $msg;
+            }
+
+            throw new Exception('Decrypt error: '.implode(' + ', $errors));
         }
 
         return $decrypted;
