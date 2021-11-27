@@ -25,10 +25,9 @@ class WholePayloadSensitizerTest extends TestCase
     private UuidInterface $aggregateId;
     private array $ingoingPayload;
 
-    private AES256SensitiveDataManager $sensitiveDataManager;
     private InMemoryAggregateKeys $aggregateKeys;
+    private AES256SensitiveDataManager $sensitiveDataManager;
     private AggregateKeyManager $aggregateKeyManager;
-    private WholePayloadSensitizer $wholePayloadSensitizer;
 
     protected function setUp(): void
     {
@@ -39,19 +38,14 @@ class WholePayloadSensitizerTest extends TestCase
             'payload' => MyEventBuilder::create((string) $this->aggregateId)->build()->serialize(),
         ];
 
-        $this->sensitiveDataManager = new AES256SensitiveDataManager();
         $this->aggregateKeys = new InMemoryAggregateKeys();
+        $this->sensitiveDataManager = new AES256SensitiveDataManager();
 
         $this->aggregateKeyManager = new AggregateKeyManager(
             new OpenSSLKeyGenerator(),
             $this->aggregateKeys,
             $this->sensitiveDataManager,
             Key::AGGREGATE_MASTER_KEY
-        );
-
-        $this->wholePayloadSensitizer = new WholePayloadSensitizer(
-            $this->sensitiveDataManager,
-            $this->aggregateKeyManager
         );
     }
 
@@ -62,7 +56,12 @@ class WholePayloadSensitizerTest extends TestCase
     {
         self::expectException(BadMethodCallException::class);
 
-        $this->wholePayloadSensitizer->supports([]);
+        $wholePayloadSensitizer = new WholePayloadSensitizer(
+            $this->sensitiveDataManager,
+            $this->aggregateKeyManager
+        );
+
+        $wholePayloadSensitizer->supports([]);
     }
 
     /**
@@ -73,7 +72,13 @@ class WholePayloadSensitizerTest extends TestCase
         self::expectException(AggregateKeyException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
 
-        $this->wholePayloadSensitizer->sensitize($this->ingoingPayload);
+        $wholePayloadSensitizer = new WholePayloadSensitizer(
+            $this->sensitiveDataManager,
+            $this->aggregateKeyManager,
+            false
+        );
+
+        $wholePayloadSensitizer->sensitize($this->ingoingPayload);
     }
 
     /**
@@ -81,17 +86,17 @@ class WholePayloadSensitizerTest extends TestCase
      */
     public function it_should_return_whole_sensitized_array(): void
     {
-        /**
-         * First let's create an AggregateKey for specific Aggregate.
-         */
-        $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
+        $wholePayloadSensitizer = new WholePayloadSensitizer(
+            $this->sensitiveDataManager,
+            $this->aggregateKeyManager
+        );
 
         /**
-         * Then let's sensitize message.
+         * First let's sensitize message.
          *
          * @var array{class: class-string, payload: array{id: string, sensible_data: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $this->wholePayloadSensitizer->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->ingoingPayload);
 
         self::assertObjectIsSensitized($sensitizedOutgoingPayload);
         $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
@@ -102,21 +107,21 @@ class WholePayloadSensitizerTest extends TestCase
      */
     public function it_should_return_desensitized_array(): void
     {
-        /**
-         * First let's create an AggregateKey for specific Aggregate.
-         */
-        $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
+        $wholePayloadSensitizer = new WholePayloadSensitizer(
+            $this->sensitiveDataManager,
+            $this->aggregateKeyManager
+        );
 
         /**
-         * Then let's sensitize message.
+         * First let's sensitize message.
          *
          * @var array{class: class-string, payload: array{id: string, sensible_data: string}} $sensitizedOutgoingPayload
          */
-        $sensitizedOutgoingPayload = $this->wholePayloadSensitizer->sensitize($this->ingoingPayload);
+        $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->ingoingPayload);
 
         self::assertObjectIsSensitized($sensitizedOutgoingPayload);
 
-        $desensitizedOutgoingPayload = $this->wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
+        $desensitizedOutgoingPayload = $wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
 
         self::assertSame($this->ingoingPayload, $desensitizedOutgoingPayload);
     }
