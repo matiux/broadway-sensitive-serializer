@@ -7,7 +7,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadSt
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
 use BadMethodCallException;
-use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 
 class WholePayloadSensitizer extends PayloadSensitizer
 {

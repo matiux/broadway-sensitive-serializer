@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy;
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 use Ramsey\Uuid\Uuid;
 
 abstract class PayloadSensitizer
