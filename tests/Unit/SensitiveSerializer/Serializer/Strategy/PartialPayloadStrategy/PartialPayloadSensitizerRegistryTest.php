@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
 
-use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\MyEventBuilder;

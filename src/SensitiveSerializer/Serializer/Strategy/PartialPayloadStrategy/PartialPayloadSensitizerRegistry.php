@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
 
-use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 
 class PartialPayloadSensitizerRegistry
 {

@@ -6,20 +6,19 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer;
 
 use Broadway\Serializer\Serializable;
 use Broadway\Serializer\Serializer;
-use Broadway\Serializer\SimpleInterfaceSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Webmozart\Assert\Assert;
 
-class SensitiveSerializer implements Serializer
+class SensitiveSerializer extends BroadwaySerializerDecorator
 {
-    private SimpleInterfaceSerializer $serializer;
     private SensitizerStrategy $sensitizer;
 
     public function __construct(
-        SimpleInterfaceSerializer $serializer,
+        Serializer $serializer,
         SensitizerStrategy $sensitizer
     ) {
-        $this->serializer = $serializer;
+        parent::__construct($serializer);
+
         $this->sensitizer = $sensitizer;
     }
 
@@ -30,7 +29,7 @@ class SensitiveSerializer implements Serializer
     {
         Assert::isInstanceOf($object, Serializable::class);
 
-        $serialized = $this->serializer->serialize($object);
+        $serialized = parent::serialize($object);
 
         return $this->sensitizer->sensitize($serialized);
     }
@@ -42,7 +41,7 @@ class SensitiveSerializer implements Serializer
     {
         $desensitezedSerializedObject = $this->sensitizer->desensitize($serializedObject);
 
-        $deserialized = $this->serializer->deserialize($desensitezedSerializedObject);
+        $deserialized = parent::deserialize($desensitezedSerializedObject);
 
         Assert::isInstanceOf($deserialized, Serializable::class);
 

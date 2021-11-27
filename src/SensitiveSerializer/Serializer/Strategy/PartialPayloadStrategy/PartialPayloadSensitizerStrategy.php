@@ -6,7 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayload
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
-use Matiux\Broadway\SensitiveSerializer\Serializer\PayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
