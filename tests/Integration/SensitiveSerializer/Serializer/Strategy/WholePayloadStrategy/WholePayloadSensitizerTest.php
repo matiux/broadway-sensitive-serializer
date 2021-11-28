@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy;
 
 use BadMethodCallException;
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
@@ -69,7 +69,7 @@ class WholePayloadSensitizerTest extends TestCase
      */
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
-        self::expectException(AggregateKeyException::class);
+        self::expectException(AggregateKeyNotFoundException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
 
         $wholePayloadSensitizer = new WholePayloadSensitizer(

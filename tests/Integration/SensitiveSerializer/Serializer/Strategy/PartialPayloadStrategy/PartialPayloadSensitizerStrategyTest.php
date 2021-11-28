@@ -6,7 +6,8 @@ namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialPaylo
 
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
@@ -67,12 +68,13 @@ class PartialPayloadSensitizerStrategyTest extends TestCase
      */
     public function it_should_return_original_array_if_aggregate_key_does_not_exist(): void
     {
+        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
+
         /**
          * First let's sensitize message.
          *
          * @var array{class: class-string, payload: array{id: string}&array{surname: string, email: string}} $sensitizedOutgoingPayload
          */
-        $partialPayloadSensitizerStrategy = new PartialPayloadSensitizerStrategy($this->createRegistryWithSensitizer());
         $sensitizedOutgoingPayload = $partialPayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
         /**
@@ -121,7 +123,7 @@ class PartialPayloadSensitizerStrategyTest extends TestCase
      */
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
-        self::expectException(AggregateKeyException::class);
+        self::expectException(AggregateKeyNotFoundException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->aggregateId));
 
         $registry = new PartialPayloadSensitizerRegistry([
@@ -137,8 +139,8 @@ class PartialPayloadSensitizerStrategyTest extends TestCase
      */
     public function it_should_throw_exception_if_aggregate_key_does_not_have_the_key_during_encryption(): void
     {
-        self::expectException(AggregateKeyException::class);
-        self::expectExceptionMessage(sprintf('Aggregate key is required to encrypt data for aggregate %s', (string) $this->aggregateId));
+        self::expectException(AggregateKeyEmptyException::class);
+        self::expectExceptionMessage(sprintf('Aggregate key is empty but it is required to encrypt data for aggregate %s', (string) $this->aggregateId));
 
         $aggregateKey = $this->aggregateKeyManager->createAggregateKey($this->aggregateId);
         $aggregateKey->delete();

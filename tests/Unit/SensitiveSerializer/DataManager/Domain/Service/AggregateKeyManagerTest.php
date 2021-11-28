@@ -6,7 +6,7 @@ namespace Tests\Unit\SensitiveSerializer\DataManager\Domain\Service;
 
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKey;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\KeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
@@ -61,7 +61,7 @@ class AggregateKeyManagerTest extends TestCase
     public function it_should_throw_an_exception_trying_to_get_a_non_existing_aggregate_key(): void
     {
         $aggregateId = Uuid::uuid4();
-        self::expectException(AggregateKeyException::class);
+        self::expectException(AggregateKeyNotFoundException::class);
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $aggregateId));
 
         $this->aggregateKeyManager->revealAggregateKey($aggregateId);

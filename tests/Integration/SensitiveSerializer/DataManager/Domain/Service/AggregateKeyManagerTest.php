@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\DataManager\Domain\Service;
 
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
@@ -41,5 +42,19 @@ class AggregateKeyManagerTest extends TestCase
         $aggregateKey = $this->aggregateKeyManager->revealAggregateKey($aggregateId);
 
         self::assertNull($aggregateKey);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_an_exception_trying_to_create_a_duplicated_key(): void
+    {
+        $aggregateId = Uuid::uuid4();
+
+        self::expectException(DuplicatedAggregateKeyException::class);
+        self::expectExceptionMessage(sprintf('Duplicated aggregateKey with id %s', (string) $aggregateId));
+
+        $this->aggregateKeyManager->createAggregateKey($aggregateId);
+        $this->aggregateKeyManager->createAggregateKey($aggregateId);
     }
 }
