@@ -6,7 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadSt
 
 use Assert\AssertionFailedException;
 use Exception;
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
@@ -26,7 +26,7 @@ class WholePayloadSensitizerStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AggregateKeyException|AssertionFailedException|Exception
+     * @throws AggregateKeyEmptyException|AssertionFailedException|Exception
      */
     public function sensitize(array $serializedObject): array
     {
@@ -43,7 +43,7 @@ class WholePayloadSensitizerStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AggregateKeyException|AssertionFailedException|Exception
+     * @throws AssertionFailedException|Exception
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {

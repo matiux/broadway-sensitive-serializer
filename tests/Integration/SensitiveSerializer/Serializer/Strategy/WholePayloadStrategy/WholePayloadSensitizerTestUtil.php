@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy;
 
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool;
 
 trait WholePayloadSensitizerTestUtil
@@ -29,7 +29,7 @@ trait WholePayloadSensitizerTestUtil
     /**
      * @param array{class: class-string, payload: array{id: string, sensible_data: string}} $sensitizedOutgoingPayload
      *
-     * @throws AggregateKeyException
+     * @throws AggregateKeyNotFoundException
      */
     private function assertSensitizedEqualToExpected(array $sensitizedOutgoingPayload): void
     {
