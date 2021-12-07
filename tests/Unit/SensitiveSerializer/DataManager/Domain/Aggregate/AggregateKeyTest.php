@@ -34,4 +34,56 @@ class AggregateKeyTest extends TestCase
         self::assertNotNull($aggregateKey->cancellationDate());
         self::assertGreaterThan($aggregateKey->cancellationDate(), new DateTimeImmutable());
     }
+
+    /**
+     * @test
+     */
+    public function should_serialize_aggregate_key(): void
+    {
+        $id = Uuid::uuid4();
+
+        $aggregateKey = AggregateKey::create($id, 's3cr3tK31');
+
+        $expectedSerializedKey = [
+            'aggregate_uuid' => (string) $id,
+            'encrypted_key' => 's3cr3tK31',
+            'cancellation_date' => null,
+        ];
+
+        self::assertSame($expectedSerializedKey, $aggregateKey->serialize());
+    }
+
+    /**
+     * @test
+     */
+    public function should_deserialize_not_canceled_aggregate_key(): void
+    {
+        $id = Uuid::uuid4();
+
+        $serializedAggregateKey = AggregateKey::create($id, 's3cr3tK31')->serialize();
+
+        $aggregateKey = AggregateKey::deserialize($serializedAggregateKey);
+
+        self::assertNull($aggregateKey->cancellationDate());
+        self::assertSame('s3cr3tK31', (string) $aggregateKey);
+        self::assertTrue($aggregateKey->aggregateId()->equals($id));
+    }
+
+    /**
+     * @test
+     */
+    public function should_deserialize_canceled_aggregate_key(): void
+    {
+        $id = Uuid::uuid4();
+
+        $aggregateKey = AggregateKey::create($id, 's3cr3tK31');
+        $aggregateKey->delete();
+        $serializedAggregateKey = $aggregateKey->serialize();
+
+        $aggregateKey = AggregateKey::deserialize($serializedAggregateKey);
+
+        self::assertNotNull($aggregateKey->cancellationDate());
+        self::assertSame('', (string) $aggregateKey);
+        self::assertTrue($aggregateKey->aggregateId()->equals($id));
+    }
 }
