@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKey;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Tests\Util\SensitiveSerializer\Key;
 
 class AggregateKeyTest extends TestCase
 {
@@ -60,12 +61,12 @@ class AggregateKeyTest extends TestCase
     {
         $id = Uuid::uuid4();
 
-        $serializedAggregateKey = AggregateKey::create($id, 's3cr3tK31')->serialize();
+        $serializedAggregateKey = AggregateKey::create($id, Key::ENCRYPTED_AGGREGATE_KEY)->serialize();
 
         $aggregateKey = AggregateKey::deserialize($serializedAggregateKey);
 
         self::assertNull($aggregateKey->cancellationDate());
-        self::assertSame('s3cr3tK31', (string) $aggregateKey);
+        self::assertSame(Key::ENCRYPTED_AGGREGATE_KEY, (string) $aggregateKey);
         self::assertTrue($aggregateKey->aggregateId()->equals($id));
     }
 
@@ -76,7 +77,7 @@ class AggregateKeyTest extends TestCase
     {
         $id = Uuid::uuid4();
 
-        $aggregateKey = AggregateKey::create($id, 's3cr3tK31');
+        $aggregateKey = AggregateKey::create($id, Key::ENCRYPTED_AGGREGATE_KEY);
         $aggregateKey->delete();
         $serializedAggregateKey = $aggregateKey->serialize();
 

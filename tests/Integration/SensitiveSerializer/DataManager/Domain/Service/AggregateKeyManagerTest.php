@@ -10,8 +10,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Servic
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Tests\Support\InMemoryAggregateKeys;
-use Tests\Util\Key;
+use Tests\Support\SensitiveSerializer\InMemoryAggregateKeys;
+use Tests\Util\SensitiveSerializer\Key;
 
 class AggregateKeyManagerTest extends TestCase
 {

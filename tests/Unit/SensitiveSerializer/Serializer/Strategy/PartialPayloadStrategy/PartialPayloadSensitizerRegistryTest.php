@@ -8,7 +8,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrate
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Tests\Support\MyEventBuilder;
+use Tests\Support\SensitiveSerializer\MyEventBuilder;
 
 class PartialPayloadSensitizerRegistryTest extends TestCase
 {

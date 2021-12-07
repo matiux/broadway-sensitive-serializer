@@ -8,8 +8,8 @@ use Broadway\Serializer\SimpleInterfaceSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use PHPUnit\Framework\TestCase;
-use Tests\Support\MyEvent;
-use Tests\Support\MyEventBuilder;
+use Tests\Support\SensitiveSerializer\MyEvent;
+use Tests\Support\SensitiveSerializer\MyEventBuilder;
 
 class SensitiveSerializerTest extends TestCase
 {

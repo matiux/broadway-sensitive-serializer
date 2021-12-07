@@ -54,8 +54,8 @@
     "psr-4": {
       "Tests\\Unit\\SensitiveSerializer\\": "tests/Unit/SensitiveSerializer/",
       "Tests\\Integration\\SensitiveSerializer\\": "tests/Integration/SensitiveSerializer/",
-      "Tests\\Util\\": "tests/Util/",
-      "Tests\\Support\\": "tests/Support/"
+      "Tests\\Util\\SensitiveSerializer\\": "tests/Util/",
+      "Tests\\Support\\SensitiveSerializer\\": "tests/Support/"
     }
   }
 }
