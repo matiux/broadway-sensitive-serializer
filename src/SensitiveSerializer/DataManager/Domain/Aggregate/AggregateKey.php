@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate;
 
+use Broadway\Domain\DateTime;
 use DateTimeImmutable;
+use Exception;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+/**
+ * @psalm-type SerializedAKey = array{aggregate_uuid: string, encrypted_key: string, cancellation_date: ?string}
+ */
 class AggregateKey
 {
     private ?DateTimeImmutable  $cancellationDate = null;
@@ -50,5 +56,41 @@ class AggregateKey
     public function __toString()
     {
         return $this->aggregateKey;
+    }
+
+    /**
+     * @return SerializedAKey
+     */
+    public function serialize(): array
+    {
+        $cancellationDate = is_null($this->cancellationDate) ? null :
+            $this->cancellationDate->format(DateTime::FORMAT_STRING);
+
+        return [
+            'aggregate_uuid' => (string) $this->aggregateId,
+            'encrypted_key' => $this->aggregateKey,
+            'cancellation_date' => $cancellationDate,
+        ];
+    }
+
+    /**
+     * @param SerializedAKey $data
+     *
+     * @throws Exception
+     *
+     * @return self
+     */
+    public static function deserialize(array $data): self
+    {
+        $aggregateKey = new self(
+            Uuid::fromString($data['aggregate_uuid']),
+            $data['encrypted_key'],
+        );
+
+        $aggregateKey->cancellationDate = is_null($data['cancellation_date'])
+            ? null
+            : new DateTimeImmutable($data['cancellation_date']);
+
+        return $aggregateKey;
     }
 }
