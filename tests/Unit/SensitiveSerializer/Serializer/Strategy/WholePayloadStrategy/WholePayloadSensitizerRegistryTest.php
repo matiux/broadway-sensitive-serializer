@@ -8,7 +8,7 @@ use Exception;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Support\MyEvent;
+use Tests\Support\SensitiveSerializer\MyEvent;
 
 class WholePayloadSensitizerRegistryTest extends TestCase
 {

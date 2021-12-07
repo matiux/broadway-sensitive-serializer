@@ -13,7 +13,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveData
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Tests\Util\Key;
+use Tests\Util\SensitiveSerializer\Key;
 
 class AggregateKeyManagerTest extends TestCase
 {

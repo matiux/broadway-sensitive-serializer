@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Util;
+namespace Tests\Util\SensitiveSerializer;
 
 class Key
 {

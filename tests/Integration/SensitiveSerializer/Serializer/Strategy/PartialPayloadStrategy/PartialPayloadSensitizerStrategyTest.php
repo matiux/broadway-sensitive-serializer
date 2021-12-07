@@ -17,10 +17,10 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Tests\Support\InMemoryAggregateKeys;
-use Tests\Support\MyEvent;
-use Tests\Support\MyEventBuilder;
-use Tests\Util\Key;
+use Tests\Support\SensitiveSerializer\InMemoryAggregateKeys;
+use Tests\Support\SensitiveSerializer\MyEvent;
+use Tests\Support\SensitiveSerializer\MyEventBuilder;
+use Tests\Util\SensitiveSerializer\Key;
 
 class PartialPayloadSensitizerStrategyTest extends TestCase
 {
