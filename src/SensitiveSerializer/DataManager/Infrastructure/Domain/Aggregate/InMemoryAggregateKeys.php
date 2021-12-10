@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Support\SensitiveSerializer;
+namespace Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate;
 
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKey;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy;
 
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizer;
@@ -13,7 +14,6 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Tests\Support\SensitiveSerializer\InMemoryAggregateKeys;
 use Tests\Support\SensitiveSerializer\MyEvent;
 use Tests\Support\SensitiveSerializer\MyEventBuilder;
 use Tests\Util\SensitiveSerializer\Key;
