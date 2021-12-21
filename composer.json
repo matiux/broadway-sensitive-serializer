@@ -1,5 +1,5 @@
 {
-  "name": "matiux/broadway-sensitized-serializer",
+  "name": "matiux/broadway-sensitive-serializer",
   "description": "Serializer implementation with support for data sensitization",
   "keywords": [
     "cqrs",
