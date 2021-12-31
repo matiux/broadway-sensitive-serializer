@@ -92,7 +92,7 @@ class WholePayloadSensitizerStrategyTest extends TestCase
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
-        self::assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
         $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
     }
 
@@ -118,7 +118,7 @@ class WholePayloadSensitizerStrategyTest extends TestCase
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->sensitize($this->ingoingPayload);
 
-        self::assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
 
         $desensitizedOutgoingPayload = $wholePayloadSensitizerStrategy->desensitize($sensitizedOutgoingPayload);
 

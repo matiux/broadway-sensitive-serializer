@@ -7,6 +7,7 @@ namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholePayload
 use BadMethodCallException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
@@ -17,6 +18,7 @@ use Ramsey\Uuid\UuidInterface;
 use Tests\Support\SensitiveSerializer\MyEvent;
 use Tests\Support\SensitiveSerializer\MyEventBuilder;
 use Tests\Util\SensitiveSerializer\Key;
+use Webmozart\Assert\Assert;
 
 class WholePayloadSensitizerTest extends TestCase
 {
@@ -98,7 +100,7 @@ class WholePayloadSensitizerTest extends TestCase
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->ingoingPayload);
 
-        self::assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
         $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
     }
 
@@ -119,7 +121,35 @@ class WholePayloadSensitizerTest extends TestCase
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->ingoingPayload);
 
-        self::assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
+
+        $desensitizedOutgoingPayload = $wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
+
+        self::assertSame($this->ingoingPayload, $desensitizedOutgoingPayload);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_exclude_specific_keys_from_sensitization(): void
+    {
+        $wholePayloadSensitizer = new WholePayloadSensitizer(
+            $this->sensitiveDataManager,
+            $this->aggregateKeyManager,
+            true,
+            ['name']
+        );
+
+        /**
+         * First let's sensitize message.
+         *
+         * @var array{class: class-string, payload: array{id: string, sensible_data: string, name: string}} $sensitizedOutgoingPayload
+         */
+        $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->ingoingPayload);
+
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, $wholePayloadSensitizer->excludedKeys());
+
+        self::assertFalse(SensitiveTool::isSensitized($sensitizedOutgoingPayload['payload']['name']));
 
         $desensitizedOutgoingPayload = $wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
 

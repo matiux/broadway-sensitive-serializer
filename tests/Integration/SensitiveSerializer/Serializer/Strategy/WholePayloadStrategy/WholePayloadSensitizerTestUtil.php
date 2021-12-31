@@ -11,15 +11,20 @@ trait WholePayloadSensitizerTestUtil
 {
     /**
      * @param array{class: class-string, payload: array<string, string>} $sensitizedOutgoingPayload
+     * @param string[]                                                   $excludedKeys
      */
-    private static function assertObjectIsSensitized(array $sensitizedOutgoingPayload): void
+    private function assertObjectIsSensitized(array $sensitizedOutgoingPayload, array $excludedKeys = []): void
     {
         self::assertArrayHasKey('class', $sensitizedOutgoingPayload);
         self::assertArrayHasKey('payload', $sensitizedOutgoingPayload);
         self::assertArrayHasKey('id', $sensitizedOutgoingPayload['payload']);
 
         $sensitizedData = $sensitizedOutgoingPayload['payload'];
+
         unset($sensitizedData['id']);
+        foreach ($excludedKeys as $excludedKey) {
+            unset($sensitizedData[$excludedKey]);
+        }
 
         foreach ($sensitizedData as $sensitizedValue) {
             self::assertTrue(SensitiveTool::isSensitized($sensitizedValue));
