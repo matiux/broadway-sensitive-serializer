@@ -37,10 +37,10 @@ class MyEvent implements Serializable
     public function serialize(): array
     {
         return [
+            'email' => $this->email,
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
-            'email' => $this->email,
         ];
     }
 }
