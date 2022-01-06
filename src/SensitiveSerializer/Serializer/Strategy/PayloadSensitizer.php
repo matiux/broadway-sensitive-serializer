@@ -93,6 +93,11 @@ abstract class PayloadSensitizer
         return $decryptedAggregateKey;
     }
 
+    /**
+     * @param string $decryptedAggregateKey
+     *
+     * @return array
+     */
     abstract protected function generateSensitizedPayload(string $decryptedAggregateKey): array;
 
     /**

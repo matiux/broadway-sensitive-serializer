@@ -47,11 +47,9 @@ class WholePayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @param string $decryptedAggregateKey
+     * {@inheritDoc}
      *
      * @throws AssertionFailedException
-     *
-     * @return array
      */
     protected function generateSensitizedPayload(string $decryptedAggregateKey): array
     {
