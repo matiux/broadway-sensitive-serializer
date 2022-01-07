@@ -10,7 +10,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKe
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
 use Ramsey\Uuid\UuidInterface;
 
-class AggregateKeyManager
+final class AggregateKeyManager
 {
     private KeyGenerator $keyGenerator;
     private AggregateKeys $aggregateKeys;

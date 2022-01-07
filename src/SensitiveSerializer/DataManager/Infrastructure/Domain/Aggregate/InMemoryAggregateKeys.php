@@ -14,11 +14,17 @@ class InMemoryAggregateKeys implements AggregateKeys
     /** @var array<string, AggregateKey> */
     private array $aggregateKeys = [];
 
+    /**
+     * {@inheritDoc}
+     */
     public function add(AggregateKey $aggregateKey): void
     {
         $this->aggregateKeys[(string) $aggregateKey->aggregateId()] = $aggregateKey;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function withAggregateId(UuidInterface $aggregateId): ?AggregateKey
     {
         foreach ($this->aggregateKeys as $storedAggregateId => $aggregateKey) {

@@ -6,7 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayload
 
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 
-class PartialPayloadSensitizerRegistry
+final class PartialPayloadSensitizerRegistry
 {
     /** @var array<class-string, PayloadSensitizer> */
     private array $items = [];

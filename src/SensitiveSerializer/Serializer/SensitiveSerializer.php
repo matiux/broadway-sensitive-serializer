@@ -9,7 +9,7 @@ use Broadway\Serializer\Serializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Webmozart\Assert\Assert;
 
-class SensitiveSerializer extends BroadwaySerializerDecorator
+final class SensitiveSerializer extends BroadwaySerializerDecorator
 {
     private SensitizerStrategy $sensitizer;
 

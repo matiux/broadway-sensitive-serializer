@@ -8,7 +8,7 @@ use Exception;
 use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 
-class AES256SensitiveDataManager implements SensitiveDataManager
+final class AES256SensitiveDataManager implements SensitiveDataManager
 {
     private const IV_SEPARATOR = ':';
 
@@ -100,7 +100,7 @@ class AES256SensitiveDataManager implements SensitiveDataManager
         }
     }
 
-    protected function stripIsSensitizedIndicator(string $encryptedData): string
+    private function stripIsSensitizedIndicator(string $encryptedData): string
     {
         return (string) preg_replace('/^'.preg_quote(self::IS_SENSITIZED_INDICATOR, '/').'/', '', $encryptedData);
     }

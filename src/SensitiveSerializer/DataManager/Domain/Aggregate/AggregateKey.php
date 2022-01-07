@@ -13,7 +13,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @psalm-type SerializedAKey = array{aggregate_uuid: string, encrypted_key: string, cancellation_date: ?string}
  */
-class AggregateKey
+final class AggregateKey
 {
     private ?DateTimeImmutable  $cancellationDate = null;
     private UuidInterface $aggregateId;

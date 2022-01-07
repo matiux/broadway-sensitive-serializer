@@ -57,7 +57,7 @@ abstract class PayloadSensitizer
     /**
      * @param string $aggregateId
      *
-     *@throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
      *
      * @return string
      */

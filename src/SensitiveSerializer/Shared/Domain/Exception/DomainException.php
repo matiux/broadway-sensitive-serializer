@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Common\Domain\Exception;
+namespace Matiux\Broadway\SensitiveSerializer\Shared\Domain\Exception;
 
 use Exception;
 use Throwable;
