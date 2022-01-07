@@ -11,7 +11,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyM
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 
-class WholePayloadSensitizer extends PayloadSensitizer
+final class WholePayloadSensitizer extends PayloadSensitizer
 {
     private string $payloadIdKey;
 
@@ -47,11 +47,9 @@ class WholePayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @param string $decryptedAggregateKey
+     * {@inheritDoc}
      *
      * @throws AssertionFailedException
-     *
-     * @return array
      */
     protected function generateSensitizedPayload(string $decryptedAggregateKey): array
     {

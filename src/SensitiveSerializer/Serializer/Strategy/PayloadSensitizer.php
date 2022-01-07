@@ -57,7 +57,7 @@ abstract class PayloadSensitizer
     /**
      * @param string $aggregateId
      *
-     *@throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
      *
      * @return string
      */
@@ -93,6 +93,11 @@ abstract class PayloadSensitizer
         return $decryptedAggregateKey;
     }
 
+    /**
+     * @param string $decryptedAggregateKey
+     *
+     * @return array
+     */
     abstract protected function generateSensitizedPayload(string $decryptedAggregateKey): array;
 
     /**

@@ -10,7 +10,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKe
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
-class WholePayloadSensitizerStrategy implements SensitizerStrategy
+final class WholePayloadSensitizerStrategy implements SensitizerStrategy
 {
     private WholePayloadSensitizerRegistry $wholePayloadSensitizerRegistry;
     private WholePayloadSensitizer $wholePayloadSensitizer;
