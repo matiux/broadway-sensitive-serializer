@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception;
 
-use Matiux\Broadway\SensitiveSerializer\Common\Domain\Exception\DomainException;
+use Matiux\Broadway\SensitiveSerializer\Shared\Domain\Exception\DomainException;
 use Ramsey\Uuid\UuidInterface;
 use Throwable;
 

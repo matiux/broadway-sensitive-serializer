@@ -6,7 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadSt
 
 use Exception;
 
-class WholePayloadSensitizerRegistry
+final class WholePayloadSensitizerRegistry
 {
     /** @var class-string[] */
     private array $items = [];
