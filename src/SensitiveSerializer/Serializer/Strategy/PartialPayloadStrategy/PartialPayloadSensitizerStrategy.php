@@ -26,7 +26,7 @@ final class PartialPayloadSensitizerStrategy implements SensitizerStrategy
      *
      * @param array $serializedObject
      *
-     *@throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
      *
      * @return array
      */
