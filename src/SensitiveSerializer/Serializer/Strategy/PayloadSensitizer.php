@@ -34,7 +34,7 @@ abstract class PayloadSensitizer
     /**
      * @param array $serializedObject
      *
-     *@throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
      *
      * @return array
      */
@@ -78,7 +78,7 @@ abstract class PayloadSensitizer
     /**
      * @param string $aggregateId
      *
-     *@throws AggregateKeyEmptyException|AggregateKeyNotFoundException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException
      *
      * @return string
      */
