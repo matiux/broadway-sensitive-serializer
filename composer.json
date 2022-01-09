@@ -47,7 +47,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Matiux\\Broadway\\SensitiveSerializer\\": "src/SensitiveSerializer/"
+      "Matiux\\Broadway\\SensitiveSerializer\\": "src/SensitiveSerializer/",
+      "Matiux\\Broadway\\SensitiveSerializer\\Example\\": "example/"
     }
   },
   "autoload-dev": {

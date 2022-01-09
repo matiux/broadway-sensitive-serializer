@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKey;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Tests\Util\SensitiveSerializer\Key;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 
 class AggregateKeyTest extends TestCase
 {
