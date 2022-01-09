@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/bash
 
 PHP_STAGED_FILES=$(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
 TOOLS_PATH='./tools'

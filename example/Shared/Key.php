@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Util\SensitiveSerializer;
+namespace Matiux\Broadway\SensitiveSerializer\Example\Shared;
 
 class Key
 {

@@ -16,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Tests\Support\SensitiveSerializer\MyEvent;
 use Tests\Support\SensitiveSerializer\MyEventBuilder;
-use Tests\Util\SensitiveSerializer\Key;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 
 class WholePayloadSensitizerStrategyTest extends TestCase
 {

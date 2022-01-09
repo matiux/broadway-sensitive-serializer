@@ -15,10 +15,46 @@ in particular with the right to be forgotten.
 
 Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki) for more information.
 
-## Setup for development
+### Setup for development
 
 ```shell
 git clone https://github.com/matiux/broadway-sensitive-serializer.git && cd broadway-sensitive-serializer
 cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
+```
+
+### Install dependencies to run test or execute examples
+```shell
+./dc up -d
+./dc enter
+composer install
+```
+
+### Run test
+```shell
+./dc up -d
+./dc enter
+project phpunit
+```
+
+### Example code
+In this repository you can find two example, one for
+the [Partial Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy) and one
+for [Whole Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy).
+Of course, you will also find many ideas in the tests.
+
+#### Run Partial Sensitization Strategy example
+[example/PartialPayloadStrategy](example/PartialPayloadStrategy)
+```shell
+./dc up -d
+./dc enter
+php example/PartialPayloadStrategy/example.php
+```
+
+#### Run Whole Sensitization Strategy example
+[example/WholePayloadStrategy](example/WholePayloadStrategy)
+```shell
+./dc up -d
+./dc enter
+php example/WholePayloadStrategy/example.php
 ```

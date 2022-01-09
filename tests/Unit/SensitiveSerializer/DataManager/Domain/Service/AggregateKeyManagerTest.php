@@ -10,10 +10,10 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKe
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\KeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Tests\Util\SensitiveSerializer\Key;
 
 class AggregateKeyManagerTest extends TestCase
 {
