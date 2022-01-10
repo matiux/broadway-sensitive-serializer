@@ -5,24 +5,40 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Example\WholePayloadStrategy;
 
 require_once dirname(__DIR__).'/../vendor/autoload.php';
-require_once dirname(__DIR__).'/Shared/dependencies.php';
 
+use Broadway\EventHandling\SimpleEventBus;
+use Broadway\EventHandling\TraceableEventBus;
 use Broadway\EventStore\InMemoryEventStore;
 use Broadway\EventStore\TraceableEventStore;
 use Broadway\Serializer\SimpleInterfaceSerializer;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
+use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\User;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserRegistered;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\BroadwayUsers;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\SerializedInMemoryEventStore;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerStrategy;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
+
+/**
+ * Initialize generic dependencies.
+ */
+$dataManager = new AES256SensitiveDataManager();
+$keyGenerator = new OpenSSLKeyGenerator();
+$aggregateKeys = new InMemoryAggregateKeys();
+$aggregateKeyManager = new AggregateKeyManager($keyGenerator, $aggregateKeys, $dataManager, Key::AGGREGATE_MASTER_KEY);
+$eventBus = new TraceableEventBus(new SimpleEventBus());
+$eventBus->trace();
 
 /**
  * Initialize specific dependencies.
