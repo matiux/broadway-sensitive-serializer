@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy;
+namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
 use Exception;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Tests\Support\SensitiveSerializer\MyEvent;

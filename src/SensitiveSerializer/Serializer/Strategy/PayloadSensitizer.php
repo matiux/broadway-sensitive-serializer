@@ -16,9 +16,14 @@ use Webmozart\Assert\Assert;
 
 abstract class PayloadSensitizer
 {
-    protected SensitiveDataManager $sensitiveDataManager;
+    private SensitiveDataManager $sensitiveDataManager;
     private AggregateKeyManager $aggregateKeyManager;
-    protected array $payload = [];
+    private array $payload = [];
+    /**
+     * @var class-string
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
+    private string $type;
     private bool $automaticAggregateKeyCreation;
 
     public function __construct(
@@ -43,6 +48,8 @@ abstract class PayloadSensitizer
         Validator::validateSerializedObject($serializedObject);
 
         $this->payload = $serializedObject['payload'];
+        $this->type = $serializedObject['class'];
+
         $aggregateId = $serializedObject['payload']['id'];
 
         $decryptedAggregateKey = $this->automaticAggregateKeyCreation ?
@@ -129,4 +136,22 @@ abstract class PayloadSensitizer
      * @return bool
      */
     abstract public function supports($subject): bool;
+
+    protected function getPayload(): array
+    {
+        return $this->payload;
+    }
+
+    /**
+     * @return class-string
+     */
+    protected function getType(): string
+    {
+        return $this->type;
+    }
+
+    protected function getSensitiveDataManager(): SensitiveDataManager
+    {
+        return $this->sensitiveDataManager;
+    }
 }
