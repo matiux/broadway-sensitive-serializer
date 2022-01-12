@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy;
 
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 
-final class PartialPayloadSensitizerRegistry
+final class CustomPayloadSensitizerRegistry
 {
     /** @var array<class-string, PayloadSensitizer> */
     private array $items = [];

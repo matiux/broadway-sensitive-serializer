@@ -39,16 +39,16 @@ project phpunit
 
 ### Example code
 In this repository you can find two example, one for
-the [Partial Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy) and one
+the [Custom Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy) and one
 for [Whole Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy).
 Of course, you will also find many ideas in the tests.
 
-#### Run Partial Sensitization Strategy example
-[example/PartialPayloadStrategy](example/PartialPayloadStrategy)
+#### Run Custom Sensitization Strategy example
+[example/CustomPayloadStrategy](example/CustomPayloadStrategy)
 ```shell
 ./dc up -d
 ./dc enter
-php example/PartialPayloadStrategy/example.php
+php example/CustomPayloadStrategy/example.php
 ```
 
 #### Run Whole Sensitization Strategy example

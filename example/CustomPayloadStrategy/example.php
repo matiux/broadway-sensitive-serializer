@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Example\PartialPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Example\CustomPayloadStrategy;
 
 require_once dirname(__DIR__).'/../vendor/autoload.php';
 
@@ -24,8 +24,8 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Bro
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\SerializedInMemoryEventStore;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerStrategy;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy\CustomPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy\CustomPayloadSensitizerStrategy;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -46,13 +46,13 @@ $sensitizers = [
     new UserRegisteredSensitizer($dataManager, $aggregateKeyManager, true),
 ];
 
-$registry = new PartialPayloadSensitizerRegistry($sensitizers);
+$registry = new CustomPayloadSensitizerRegistry($sensitizers);
 
-$partialSensitizerStrategy = new PartialPayloadSensitizerStrategy($registry);
+$customSensitizerStrategy = new CustomPayloadSensitizerStrategy($registry);
 
 $serializer = new SensitiveSerializer(
     new SimpleInterfaceSerializer(),
-    $partialSensitizerStrategy
+    $customSensitizerStrategy
 );
 
 $inMemoryEventStore = new TraceableEventStore(new InMemoryEventStore());

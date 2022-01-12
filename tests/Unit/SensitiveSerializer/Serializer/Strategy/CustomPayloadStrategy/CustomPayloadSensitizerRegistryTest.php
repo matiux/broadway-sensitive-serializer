@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
+namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy;
 
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\SensitiveSerializer\MyEventBuilder;
 
-class PartialPayloadSensitizerRegistryTest extends TestCase
+class CustomPayloadSensitizerRegistryTest extends TestCase
 {
     /**
      * @test
@@ -20,7 +20,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
         $event = MyEventBuilder::create()->build();
         $sensitizers = [];
 
-        $registry = new PartialPayloadSensitizerRegistry($sensitizers);
+        $registry = new CustomPayloadSensitizerRegistry($sensitizers);
         $sensitizer = $registry->resolveItemFor($event);
 
         self::assertNull($sensitizer);
@@ -36,7 +36,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
             ->shouldReceive('supports')->andReturn(true)
             ->getMock();
 
-        $registry = new PartialPayloadSensitizerRegistry([$sensitizer]);
+        $registry = new CustomPayloadSensitizerRegistry([$sensitizer]);
 
         $sensitizer = $registry->resolveItemFor($event);
 
