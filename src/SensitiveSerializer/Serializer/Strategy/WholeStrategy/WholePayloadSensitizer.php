@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
@@ -53,18 +53,17 @@ final class WholePayloadSensitizer extends PayloadSensitizer
      */
     protected function generateSensitizedPayload(string $decryptedAggregateKey): array
     {
-        $toSensitize = $this->payload;
+        $toSensitize = $this->getPayload();
 
         $this->validatePayload($toSensitize);
-
         $this->removeNotSensitiveKeys($toSensitize);
 
         /** @var array<array-key, string> $toSensitize */
         foreach ($toSensitize as $key => $value) {
-            $toSensitize[$key] = $this->sensitiveDataManager->encrypt($value, $decryptedAggregateKey);
+            $toSensitize[$key] = $this->getSensitiveDataManager()->encrypt($value, $decryptedAggregateKey);
         }
 
-        $sensitizedPayload = $toSensitize + $this->payload;
+        $sensitizedPayload = $toSensitize + $this->getPayload();
 
         ksort($sensitizedPayload);
 
@@ -80,7 +79,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
      */
     protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
     {
-        $sensibleData = $this->payload;
+        $sensibleData = $this->getPayload();
 
         $this->validatePayload($sensibleData);
 
@@ -88,10 +87,10 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
         /** @var array<array-key, string> $sensibleData */
         foreach ($sensibleData as $key => $value) {
-            $sensibleData[$key] = $this->sensitiveDataManager->decrypt($value, $decryptedAggregateKey);
+            $sensibleData[$key] = $this->getSensitiveDataManager()->decrypt($value, $decryptedAggregateKey);
         }
 
-        $desensitizedPayload = $sensibleData + $this->payload;
+        $desensitizedPayload = $sensibleData + $this->getPayload();
 
         ksort($desensitizedPayload);
 

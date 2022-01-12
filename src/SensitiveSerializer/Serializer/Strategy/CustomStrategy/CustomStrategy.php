@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy;
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
@@ -12,7 +12,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
-final class CustomPayloadSensitizerStrategy implements SensitizerStrategy
+final class CustomStrategy implements SensitizerStrategy
 {
     private CustomPayloadSensitizerRegistry $customPayloadSensitizerRegistry;
 

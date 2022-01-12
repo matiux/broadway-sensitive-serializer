@@ -38,23 +38,33 @@ project phpunit
 ```
 
 ### Example code
-In this repository you can find two example, one for
-the [Custom Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy) and one
-for [Whole Sensitization Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy).
+In this repository you can find three example
+
+* [Custom Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy)
+* [Whole Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
+* [Partial Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
+
 Of course, you will also find many ideas in the tests.
 
-#### Run Custom Sensitization Strategy example
-[example/CustomPayloadStrategy](example/CustomPayloadStrategy)
+#### Run Whole Sensitization Strategy example
+[example/WholeStrategy](example/WholeStrategy)
 ```shell
 ./dc up -d
 ./dc enter
-php example/CustomPayloadStrategy/example.php
+php example/WholeStrategy/example.php
+```
+#### Run Partial Sensitization Strategy example
+[example/PartialStrategy](example/PartialStrategy)
+```shell
+./dc up -d
+./dc enter
+php example/PartialStrategy/example.php
 ```
 
-#### Run Whole Sensitization Strategy example
-[example/WholePayloadStrategy](example/WholePayloadStrategy)
+#### Run Custom Sensitization Strategy example
+[example/CustomStrategy](example/CustomStrategy)
 ```shell
 ./dc up -d
 ./dc enter
-php example/WholePayloadStrategy/example.php
+php example/CustomStrategy/example.php
 ```

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Example\WholePayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Example\PartialStrategy;
 
 require_once dirname(__DIR__).'/../vendor/autoload.php';
 
@@ -24,9 +24,9 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Bro
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\SerializedInMemoryEventStore;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizer;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerRegistry;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerStrategy;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialStrategy;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -44,24 +44,23 @@ $eventBus->trace();
  * Initialize specific dependencies.
  */
 $events = [
-    UserRegistered::class,
+    UserRegistered::class => ['surname', 'email'],
 ];
 
-$registry = new WholePayloadSensitizerRegistry($events);
+$registry = new PartialPayloadSensitizerRegistry($events);
 
-$wholePayloadSensitizer = new WholePayloadSensitizer(
+$partialPayloadSensitizer = new PartialPayloadSensitizer(
     $dataManager,
     $aggregateKeyManager,
+    $registry,
     true,
-    ['occurred_at'],
-    'id'
 );
 
-$wholeSensitizerStrategy = new WholePayloadSensitizerStrategy($registry, $wholePayloadSensitizer);
+$partialSensitizerStrategy = new PartialStrategy($registry, $partialPayloadSensitizer);
 
 $serializer = new SensitiveSerializer(
     new SimpleInterfaceSerializer(),
-    $wholeSensitizerStrategy
+    $partialSensitizerStrategy
 );
 
 $inMemoryEventStore = new TraceableEventStore(new InMemoryEventStore());
@@ -101,7 +100,7 @@ $serialized = $userRegistered->serialize();
 
 // All payload has been sensitized but `id` and `occurred_at`
 Assert::true(SensitiveTool::isSensitized($serialized['email']));
-Assert::true(SensitiveTool::isSensitized($serialized['name']));
+Assert::false(SensitiveTool::isSensitized($serialized['name']));
 Assert::true(SensitiveTool::isSensitized($serialized['surname']));
 Assert::false(SensitiveTool::isSensitized($serialized['id']));
 Assert::false(SensitiveTool::isSensitized($serialized['occurred_at']));

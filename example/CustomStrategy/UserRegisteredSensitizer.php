@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Example\CustomPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Example\CustomStrategy;
 
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
@@ -18,11 +18,11 @@ class UserRegisteredSensitizer extends PayloadSensitizer
      */
     protected function generateSensitizedPayload(string $decryptedAggregateKey): array
     {
-        $this->validatePayload($this->payload);
+        $this->validatePayload($this->getPayload());
 
-        $email = $this->sensitiveDataManager->encrypt($this->payload['email'], $decryptedAggregateKey);
+        $email = $this->getSensitiveDataManager()->encrypt($this->getPayload()['email'], $decryptedAggregateKey);
 
-        $payload = $this->payload;
+        $payload = $this->getPayload();
         $payload['email'] = $email;
 
         return $payload;
@@ -33,11 +33,11 @@ class UserRegisteredSensitizer extends PayloadSensitizer
      */
     protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
     {
-        $this->validatePayload($this->payload);
+        $this->validatePayload($this->getPayload());
 
-        $email = $this->sensitiveDataManager->decrypt($this->payload['email'], $decryptedAggregateKey);
+        $email = $this->getSensitiveDataManager()->decrypt($this->getPayload()['email'], $decryptedAggregateKey);
 
-        $payload = $this->payload;
+        $payload = $this->getPayload();
         $payload['email'] = $email;
 
         return $payload;

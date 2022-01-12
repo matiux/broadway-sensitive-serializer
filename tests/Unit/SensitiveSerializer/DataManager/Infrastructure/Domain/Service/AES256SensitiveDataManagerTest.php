@@ -7,8 +7,8 @@ namespace Tests\Unit\SensitiveSerializer\DataManager\Infrastructure\Domain\Servi
 use Exception;
 use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
-use PHPUnit\Framework\TestCase;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
+use PHPUnit\Framework\TestCase;
 
 class AES256SensitiveDataManagerTest extends TestCase
 {
