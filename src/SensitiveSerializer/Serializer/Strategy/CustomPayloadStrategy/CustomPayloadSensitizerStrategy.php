@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomPayloadStrategy;
 
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
@@ -12,13 +12,13 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 
-final class PartialPayloadSensitizerStrategy implements SensitizerStrategy
+final class CustomPayloadSensitizerStrategy implements SensitizerStrategy
 {
-    private PartialPayloadSensitizerRegistry $partialPayloadSensitizerRegistry;
+    private CustomPayloadSensitizerRegistry $customPayloadSensitizerRegistry;
 
-    public function __construct(PartialPayloadSensitizerRegistry $partialPayloadSensitizerRegistry)
+    public function __construct(CustomPayloadSensitizerRegistry $customPayloadSensitizerRegistry)
     {
-        $this->partialPayloadSensitizerRegistry = $partialPayloadSensitizerRegistry;
+        $this->customPayloadSensitizerRegistry = $customPayloadSensitizerRegistry;
     }
 
     /**
@@ -35,7 +35,7 @@ final class PartialPayloadSensitizerStrategy implements SensitizerStrategy
         Validator::validateSerializedObject($serializedObject);
 
         /** @var PayloadSensitizer $sensitizer */
-        if ($sensitizer = $this->partialPayloadSensitizerRegistry->resolveItemFor($serializedObject)) {
+        if ($sensitizer = $this->customPayloadSensitizerRegistry->resolveItemFor($serializedObject)) {
             $serializedObject = $sensitizer->sensitize($serializedObject);
             Validator::validateSerializedObject($serializedObject);
         }
@@ -53,7 +53,7 @@ final class PartialPayloadSensitizerStrategy implements SensitizerStrategy
         Validator::validateSerializedObject($sensitiveSerializedObject);
 
         /** @var PayloadSensitizer $sensitizer */
-        if ($sensitizer = $this->partialPayloadSensitizerRegistry->resolveItemFor($sensitiveSerializedObject)) {
+        if ($sensitizer = $this->customPayloadSensitizerRegistry->resolveItemFor($sensitiveSerializedObject)) {
             $sensitiveSerializedObject = $sensitizer->desensitize($sensitiveSerializedObject);
             Validator::validateSerializedObject($sensitiveSerializedObject);
         }

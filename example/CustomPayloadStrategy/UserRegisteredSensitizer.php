@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Example\PartialPayloadStrategy;
+namespace Matiux\Broadway\SensitiveSerializer\Example\CustomPayloadStrategy;
 
 use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
