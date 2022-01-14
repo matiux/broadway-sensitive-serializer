@@ -23,6 +23,20 @@ cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
 
+### Interact with the PHP container
+This is a bash script that wrap major docker-compose function. You can find it [here](./docker/dc.sh) and there is a symbolic link in project root.
+
+Some uses:
+```shell
+./dc up -d
+./dc enter
+./dc phpunit
+./dc psalm
+./dc coding-standard-fix-staged
+./dc build php --no-cache
+```
+Check out [here](./docker/dc.sh) for all the options.
+
 ### Install dependencies to run test or execute examples
 ```shell
 ./dc up -d
@@ -40,9 +54,9 @@ project phpunit
 ### Example code
 In this repository you can find three example
 
-* [Custom Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy)
 * [Whole Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
 * [Partial Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
+* [Custom Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy)
 
 Of course, you will also find many ideas in the tests.
 
