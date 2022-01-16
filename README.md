@@ -8,6 +8,7 @@ Sensitization support for [broadway/broadway](https://github.com/broadway/broadw
 [![psalm level](https://shepherd.dev/github/matiux/broadway-sensitive-serializer/level.svg)](https://shepherd.dev/github/matiux/broadway-sensitive-serializer)
 ![security analysis status](https://github.com/matiux/broadway-sensitive-serializer/actions/workflows/security-analysis.yml/badge.svg)
 ![coding standards status](https://github.com/matiux/broadway-sensitive-serializer/actions/workflows/coding-standards.yml/badge.svg)
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/matiux/broadway-sensitive-serializer?color=blue)
 
 The idea behind this project is to make a CQRS + ES system compliant, specifically implemented through
 the [Broadway](https://github.com/broadway/broadway) library, with the General Data Protection Regulation (GDPR),
@@ -52,33 +53,4 @@ project phpunit
 ```
 
 ### Example code
-In this repository you can find three example
-
-* [Whole Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
-* [Partial Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
-* [Custom Strategy](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy)
-
-Of course, you will also find many ideas in the tests.
-
-#### Run Whole Sensitization Strategy example
-[example/WholeStrategy](example/WholeStrategy)
-```shell
-./dc up -d
-./dc enter
-php example/WholeStrategy/example.php
-```
-#### Run Partial Sensitization Strategy example
-[example/PartialStrategy](example/PartialStrategy)
-```shell
-./dc up -d
-./dc enter
-php example/PartialStrategy/example.php
-```
-
-#### Run Custom Sensitization Strategy example
-[example/CustomStrategy](example/CustomStrategy)
-```shell
-./dc up -d
-./dc enter
-php example/CustomStrategy/example.php
-```
+Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki/04.Examples)
