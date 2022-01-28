@@ -27,19 +27,19 @@
     "ext-openssl": "*",
     "ext-json": "*",
     "ramsey/uuid": "^4.2",
-    "symfony/polyfill-php81": "^1.23"
+    "symfony/polyfill-php81": "^1.24"
   },
   "require-dev": {
     "bmitch/churn-php": "^1.5",
     "broadway/broadway": "^2.4",
-    "friendsofphp/php-cs-fixer": "^3.1",
-    "mockery/mockery": "^1.4",
+    "friendsofphp/php-cs-fixer": "^3.5",
+    "mockery/mockery": "^1.5",
     "phpunit/phpunit": "^9.5",
     "psalm/plugin-mockery": "^0.9.0",
     "psalm/plugin-phpunit": "^0.16.1",
     "roave/security-advisories": "dev-latest",
-    "symfony/var-dumper": "^5.3",
-    "vimeo/psalm": "^4.10"
+    "symfony/var-dumper": "^5.3|^6.0",
+    "vimeo/psalm": "^4.19"
   },
   "suggest": {
     "broadway/broadway-bundle": "Symfony bundle for broadway/broadway",
