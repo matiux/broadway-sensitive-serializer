@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Lista dei file php modifica
-PHP_STAGED_FILES=$(./scripts/project/bin/project php_staged_files)
+PHP_STAGED_FILES=$(git diff --name-only --cached --diff-filter=ACMR -- '*.php' | sed 's| |\\ |g')
 
 # Se ci sono file php modificati...
 # -n True if string is not empty

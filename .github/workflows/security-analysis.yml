@@ -2,8 +2,10 @@ name: "Security analysis"
 
 on:
   pull_request: ~
-  push: ~
   workflow_dispatch: ~
+  push:
+    branches:
+      - master
 
 jobs:
   security-analysis:
@@ -22,7 +24,7 @@ jobs:
           extensions: bcmath, mbstring, intl, sodium, json
 
       - name: Install dependencies
-        run: ./scripts/project/bin/project install_dependencies
+        run: ./tools/bin/project install_dependencies
 
       - name: "running security analysis ( psalm )"
-        run: ./scripts/project/bin/project security-analysis
+        run: ./tools/bin/project security-analysis

@@ -2,7 +2,10 @@ name: "Coding standards"
 
 on:
   pull_request: ~
-  push: ~
+  workflow_dispatch: ~
+  push:
+    branches:
+      - master
 
 jobs:
   coding-standards:
@@ -21,7 +24,7 @@ jobs:
           extensions: bcmath, mbstring, intl, sodium, json
 
       - name: Install dependencies
-        run: ./scripts/project/bin/project install_dependencies
+        run: ./tools/bin/project install_dependencies
 
       - name: "coding-standard-check"
-        run: ./scripts/project/bin/project coding-standard-fix-all
+        run: ./tools/bin/project coding-standard-fix-all

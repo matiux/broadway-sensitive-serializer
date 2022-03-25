@@ -4,7 +4,6 @@ check_code_style() {
 
   # Formattazione del codice con PHP CS Fixer
   ./dc coding-standard-check-staged
-
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then
@@ -28,7 +27,7 @@ check_code_style() {
       ;;
     [Ff]*)
       ./dc coding-standard-fix-staged
-      return 1
+      return $?
       ;;
     *) echo "Please answer y, n or f." ;;
     esac
@@ -38,11 +37,12 @@ check_code_style() {
 check_psalm() {
 
   # Analisi statica del codice con Psalm
-  ./dc psalm
+  ./dc psalm-no-pseudo-tty --no-cache
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then
     echo -e "\e[42mPHP Static Analysis is OK\e[m"
+    ./dc create-badge "static analysis" passed psalm
     return 0 # true
   fi
 
@@ -58,7 +58,6 @@ check_psalm() {
     *) echo "Please answer y or n." ;;
     esac
   done
-
 }
 
 check_phpunit() {

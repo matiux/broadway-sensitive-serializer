@@ -11,7 +11,7 @@ if [[ -f "./docker/docker-compose.override.yml" ]]; then
   COMPOSE_OVERRIDE="-f ./docker/docker-compose.override.yml"
 fi
 
-DC_BASE_COMMAND="docker-compose -f docker/docker-compose.yml ${COMPOSE_OVERRIDE} -p ${PROJECT_NAME}"
+DC_BASE_COMMAND="docker-compose --file docker/docker-compose.yml ${COMPOSE_OVERRIDE} -p ${PROJECT_NAME}"
 
 DC_RUN_BASE="${DC_BASE_COMMAND} run --rm"
 DC_RUN_NODEJS_NO_PSEUDO_TTY="${DC_RUN_BASE} -T nodejs"
@@ -32,12 +32,13 @@ elif [[ "$1" == "composer" ]]; then shift 1;                            ${DC_EXE
 elif [[ "$1" == "create-badge" ]]; then shift 1;                        ${DC_EXEC_PHP} $PROJECT_TOOL create-badge "$@"
 elif [[ "$1" == "coding-standard-fix" ]]; then shift 1;                 ${DC_EXEC_PHP} $PROJECT_TOOL coding-standard-fix "$@"
 elif [[ "$1" == "coding-standard-fix-no-pseudo-tty" ]]; then shift 1;   ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-fix "$@"
-elif [[ "$1" == "coding-standard-check-staged" ]]; then shift 1;        ${DC_EXEC_PHP} $PROJECT_TOOL coding-standard-check-staged
+elif [[ "$1" == "coding-standard-check-staged" ]]; then shift 1;        ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-check-staged
 elif [[ "$1" == "coding-standard-fix-staged" ]]; then shift 1;          ${DC_EXEC_PHP} $PROJECT_TOOL coding-standard-fix-staged
-elif [[ "$1" == "phpunit" ]]; then shift 1;                             ${DC_EXEC_PHP} $PROJECT_TOOL coverage
+elif [[ "$1" == "phpunit" ]]; then shift 1;                             ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coverage
 elif [[ "$1" == "psalm" ]]; then shift 1;                               ${DC_EXEC_PHP} $PROJECT_TOOL psalm "$@"
 elif [[ "$1" == "psalm-no-pseudo-tty" ]]; then shift 1;                 ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL psalm "$@"
 elif [[ "$1" == "deptrac-all" ]]; then shift 1;                         ${DC_EXEC_PHP} $PROJECT_TOOL deptrac-all
+elif [[ "$1" == "project" ]]; then shift 1;                             ${DC_EXEC_PHP} $PROJECT_TOOL "$@"
 
 elif [[ "$1" == "exec" ]]; then shift 1;                                ${DC_EXEC_PHP} "$@"
 elif [[ $# -gt 0 ]]; then                                               ${DC_BASE_COMMAND} "$@"

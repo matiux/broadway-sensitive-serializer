@@ -2,11 +2,12 @@ name: "Test"
 
 on:
   pull_request: ~
-  push: ~
   workflow_dispatch: ~
+  push:
+    branches:
+      - master
 
 jobs:
-
   run-tests:
     name: Run tests
     env:
@@ -28,14 +29,19 @@ jobs:
 #      - name: Verify MySQL connection from container
 #        run: mysql --host 127.0.0.1 --port 32574 -uroot -proot -e "SHOW DATABASES"
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
       - name: Checkout code
         uses: "actions/checkout@v2"
 
       - name: Install dependencies
-        run: ./scripts/project/bin/project install_dependencies
+        run: ./tools/bin/project install_dependencies
 
       - name: Create Schema
-        run: ./scripts/project/bin/project schema-create
+        run: ./tools/bin/project schema-create
 
       - name: "Run unit tests (PHPUnit)"
         env:
@@ -45,7 +51,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SQS_QUEUE_NAME: ${{ secrets.AWS_SQS_QUEUE_NAME }}
           AWS_SNS_TOPIC_ARN: ${{ secrets.AWS_SNS_TOPIC_ARN }}
-        run: ./scripts/project/bin/project coverage
+        run: ./tools/bin/project coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
