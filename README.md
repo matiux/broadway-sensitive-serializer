@@ -16,7 +16,11 @@ in particular with the right to be forgotten.
 
 Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki) for more information.
 
-### Setup for development
+## Install
+```shell
+composer require matiux/broadway-sensitive-serializer
+```
+## Setup for development
 
 ```shell
 git clone https://github.com/matiux/broadway-sensitive-serializer.git && cd broadway-sensitive-serializer
@@ -52,5 +56,5 @@ composer install
 project phpunit
 ```
 
-### Example code
+## Example code
 Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki/04.Examples)
