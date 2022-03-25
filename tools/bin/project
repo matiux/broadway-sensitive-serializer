@@ -63,9 +63,9 @@ coding_standard_fix() {
     --cache-file="$TOOLS_PATH"/php-cs-fixer/.php-cs-fixer.cache \
     --config="$TOOLS_PATH"/php-cs-fixer/.php-cs-fixer.dist.php "$@"
 
-  STATUS=$?
-
-  return $STATUS
+#  STATUS=$?
+#
+#  return $STATUS
 }
 
 while :; do

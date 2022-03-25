@@ -28,6 +28,13 @@ cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
 
+This repository uses github actions to perform some checks. If you want to test the actions locally you can use [act](https://github.com/nektos/act).
+For example if you want to check the action for static analysis
+```
+act -P ubuntu-latest=shivammathur/node:latest --job static-analysis
+```
+
+
 ### Interact with the PHP container
 This is a bash script that wrap major docker-compose function. You can find it [here](./docker/dc.sh) and there is a symbolic link in project root.
 
