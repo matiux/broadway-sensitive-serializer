@@ -110,4 +110,19 @@ final class AggregateKeyManager
 
         return $aggregateKey;
     }
+
+    /**
+     * @param UuidInterface $aggregateId
+     *
+     * @throws AggregateKeyNotFoundException
+     */
+    public function forget(UuidInterface $aggregateId): void
+    {
+        $aggregateKey = $this->obtainAggregateKeyOrFail($aggregateId);
+
+        if ($aggregateKey->exists()) {
+            $aggregateKey->delete();
+            $this->aggregateKeys->update($aggregateKey);
+        }
+    }
 }

@@ -57,4 +57,22 @@ class AggregateKeyManagerTest extends TestCase
         $this->aggregateKeyManager->createAggregateKey($aggregateId);
         $this->aggregateKeyManager->createAggregateKey($aggregateId);
     }
+
+    /**
+     * @test
+     */
+    public function it_should_forget_a_key(): void
+    {
+        $aggregateId = Uuid::uuid4();
+
+        $this->aggregateKeyManager->createAggregateKey($aggregateId);
+        $aggregateKey = $this->aggregateKeyManager->obtainAggregateKeyOrFail($aggregateId);
+
+        self::assertTrue($aggregateKey->exists());
+
+        $this->aggregateKeyManager->forget($aggregateId);
+
+        $aggregateKey = $this->aggregateKeyManager->obtainAggregateKeyOrFail($aggregateId);
+        self::assertFalse($aggregateKey->exists());
+    }
 }
