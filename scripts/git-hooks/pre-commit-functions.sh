@@ -42,7 +42,6 @@ check_psalm() {
 
   if [[ "$STATUS" -eq 0 ]]; then
     echo -e "\e[42mPHP Static Analysis is OK\e[m"
-    ./dc create-badge "static analysis" passed psalm
     return 0 # true
   fi
 
