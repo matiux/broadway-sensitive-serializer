@@ -115,6 +115,7 @@ abstract class PayloadSensitizer
         Validator::validateSerializedObject($serializedObject);
 
         $this->payload = $serializedObject['payload'];
+        $this->type = $serializedObject['class'];
         $aggregateId = $serializedObject['payload']['id'];
 
         if (!$decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey(Uuid::fromString($aggregateId))) {
