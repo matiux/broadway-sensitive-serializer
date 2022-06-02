@@ -10,6 +10,8 @@
          convertWarningsToExceptions="false"
          convertDeprecationsToExceptions="false"
          stopOnFailure="true"
+         executionOrder="random"
+         resolveDependencies="true"
 >
 
     <php>

@@ -1,0 +1,50 @@
+{
+  "source": {
+    "directories": [
+      "src"
+    ],
+    "excludes": [
+      ".coverage",
+      ".github",
+      "doc",
+      "example",
+      "scripts",
+      "tools"
+    ]
+  },
+  "timeout": 10,
+  "logs": {
+    "text": "/var/www/app/var/log/infection/infection.log",
+    "html": "/var/www/app/var/log/infection/infection.html",
+    "summary": "/var/www/app/var/log/infection/summary.log",
+    "json": "/var/www/app/var/log/infection/infection-log.json",
+    "perMutator": "/var/www/app/var/log/infection/per-mutator.md",
+    "github": true
+  },
+  "tmpDir": "/var/www/app/var/tmp",
+  "phpUnit": {
+    "configDir": "/var/www/app/tools/phpunit",
+    "customPath": "/var/www/app/vendor/bin/phpunit"
+  },
+  "mutators": {
+    "global-ignore": [
+      "FooClass::__construct",
+      "Matiux\\Broadway\\SensitiveSerializer\\*\\*Exception"
+    ],
+    "global-ignoreSourceCodeByRegex": [
+      "Assert::.*"
+    ],
+    "@default": true,
+    "@function_signature": false,
+    "TrueValue": {
+      "ignore": [
+        "NameSpace\\*\\Class::method"
+      ],
+      "ignoreSourceCodeByRegex": [
+        "\\$this->logger.*"
+      ]
+    }
+  },
+  "testFramework": "phpunit",
+  "testFrameworkOptions": "--configuration=/var/www/app/tools/phpunit/phpunit.xml.dist"
+}

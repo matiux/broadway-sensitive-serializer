@@ -68,6 +68,15 @@ coding_standard_fix() {
 #  return $STATUS
 }
 
+infection() {
+
+  ./vendor/bin/infection \
+      run \
+      --threads=4 \
+      --configuration="$TOOLS_PATH"/infection/infection.json \
+      "$@"
+}
+
 while :; do
   case $CMD in
   install_dependencies)
@@ -134,6 +143,10 @@ while :; do
     coding_standard_fix --dry-run ./src ./tests
     exit $?
     ;;
+  infection)
+    infection "$@"
+    exit $?
+    ;;
   shortlist)
     echo \
       install_dependencies \
@@ -150,7 +163,8 @@ while :; do
       coding-standard-fix-all \
       coding-standard-fix-staged \
       coding-standard-check-staged \
-      coding-standard-check-all
+      coding-standard-check-all \
+      infection
     break
     ;;
   esac
