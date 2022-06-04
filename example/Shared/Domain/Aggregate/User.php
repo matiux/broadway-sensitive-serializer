@@ -13,10 +13,10 @@ class User extends EventSourcedAggregateRoot
     private UserId $userId;
     private string $name;
     private string $surname;
-    private string $email;
+    private Email $email;
     private string $address;
 
-    public static function create(UserId $userId, string $name, string $surname, string $email, DateTimeRFC $registrationDate): self
+    public static function create(UserId $userId, string $name, string $surname, Email $email, DateTimeRFC $registrationDate): self
     {
         $user = new self();
         $user->apply(new UserRegistered($userId, $name, $surname, $email, $registrationDate));
@@ -37,7 +37,7 @@ class User extends EventSourcedAggregateRoot
         return (string) $this->userId;
     }
 
-    public function email(): string
+    public function email(): Email
     {
         return $this->email;
     }

@@ -16,6 +16,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\User;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserRegistered;
@@ -81,7 +82,7 @@ $user = User::create(
     $userId,
     'Matteo',
     'Galacci',
-    'm.galacci@gmail.com',
+    Email::createFromString('m.galacci@gmail.com'),
     new DateTimeRFC()
 );
 
@@ -118,7 +119,7 @@ Assert::true($aggregateKey->exists());
  */
 $user = $users->load($userId);
 
-Assert::false(SensitiveTool::isSensitized($user->email())); // Now the email is in clear
+Assert::false(SensitiveTool::isSensitized((string) $user->email())); // Now the email is in clear
 
 /**
  * If the key does not exist, the decryption will not work.
@@ -130,4 +131,4 @@ $aggregateKeys->update($aggregateKey);
 
 $user = $users->load($userId);
 
-Assert::true(SensitiveTool::isSensitized($user->email())); // Email is encrypted
+Assert::true(SensitiveTool::isSensitized((string) $user->email())); // Email is encrypted

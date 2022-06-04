@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event;
 
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 
@@ -14,13 +15,13 @@ class UserRegistered extends BasicEvent
 {
     private string $name;
     private string $surname;
-    private string $email;
+    private Email $email;
 
     public function __construct(
         UserId $userId,
         string $name,
         string $surname,
-        string $email,
+        Email $email,
         DateTimeRFC $occurredAt
     ) {
         parent::__construct($userId, $occurredAt);
@@ -34,7 +35,7 @@ class UserRegistered extends BasicEvent
         $serialized = [
             'name' => $this->name,
             'surname' => $this->surname,
-            'email' => $this->email,
+            'email' => (string) $this->email,
         ];
 
         return $this->basicSerialize() + $serialized;
@@ -46,7 +47,7 @@ class UserRegistered extends BasicEvent
             UserId::createFrom((string) $data[self::AGGREGATE_ID_KEY]),
             (string) $data['name'],
             (string) $data['surname'],
-            (string) $data['email'],
+            Email::createFromString((string) $data['email']),
             self::createOccurredAt((string) $data['occurred_at'])
         );
     }
@@ -66,7 +67,7 @@ class UserRegistered extends BasicEvent
         return $this->surname;
     }
 
-    public function email(): string
+    public function email(): Email
     {
         return $this->email;
     }
