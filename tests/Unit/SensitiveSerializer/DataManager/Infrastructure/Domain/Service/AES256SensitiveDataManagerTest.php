@@ -70,7 +70,7 @@ class AES256SensitiveDataManagerTest extends TestCase
     public function it_should_throw_exception_if_different_key(): void
     {
         self::expectException(Exception::class);
-        self::expectExceptionMessage('Decrypt error');
+        self::expectExceptionMessageMatches('/Decrypt error\: .+/');
 
         $sensitiveDataManager = new AES256SensitiveDataManager();
 
