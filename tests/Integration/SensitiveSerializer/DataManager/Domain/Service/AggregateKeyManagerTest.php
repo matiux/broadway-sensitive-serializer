@@ -61,7 +61,7 @@ class AggregateKeyManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_should_forget_a_key(): void
+    public function it_should_forget_a_key_with_in_memory_aggregate_keys(): void
     {
         $aggregateId = Uuid::uuid4();
 
