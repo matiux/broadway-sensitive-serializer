@@ -38,6 +38,6 @@ class InMemoryAggregateKeys implements AggregateKeys
 
     public function update(AggregateKey $aggregateKey): void
     {
-        $this->aggregateKeys[(string) $aggregateKey->aggregateId()] = $aggregateKey;
+        $this->aggregateKeys[$aggregateKey->aggregateId()->toString()] = $aggregateKey;
     }
 }
