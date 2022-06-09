@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
 use BadMethodCallException;
+use InvalidArgumentException;
 use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizer;
@@ -103,5 +104,47 @@ class PartialPayloadSensitizerTest extends StrategyTest
         );
 
         $sensitizer->sensitize($this->getIngoingPayload());
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_if_validation_fails_during_sensitize(): void
+    {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage("Key 'payload' should be set.");
+
+        $sensitizer = new PartialPayloadSensitizer(
+            $this->getSensitiveDataManager(),
+            $this->getAggregateKeyManager(),
+            new PartialPayloadSensitizerRegistry([]),
+        );
+
+        $invalidIngoingPayload = [
+            'class' => MyEvent::class,
+        ];
+
+        $sensitizer->sensitize($invalidIngoingPayload);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_throw_exception_if_validation_fails_during_desensitize(): void
+    {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage("Key 'payload' should be set.");
+
+        $sensitizer = new PartialPayloadSensitizer(
+            $this->getSensitiveDataManager(),
+            $this->getAggregateKeyManager(),
+            new PartialPayloadSensitizerRegistry([]),
+        );
+
+        $invalidOutgoingPayload = [
+            'class' => MyEvent::class,
+        ];
+
+        $sensitizer->desensitize($invalidOutgoingPayload);
     }
 }
