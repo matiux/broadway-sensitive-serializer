@@ -89,7 +89,7 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
                     'iv' => $this->iv,
                 ];
             case 2:
-                // The VI is inside the encrypted data
+                // The IV is inside the encrypted data
                 return [
                     'encrypted_data' => $this->stripIsSensitizedIndicator($parts[0]),
                     'iv' => base64_decode($parts[1]),
