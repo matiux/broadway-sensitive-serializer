@@ -151,8 +151,28 @@ abstract class PayloadSensitizer
         return $this->type;
     }
 
-    protected function getSensitiveDataManager(): SensitiveDataManager
+//    protected function getSensitiveDataManager(): SensitiveDataManager
+//    {
+//        return $this->sensitiveDataManager;
+//    }
+
+    /**
+     * @param null|array|scalar $value
+     *
+     * @return string
+     */
+    protected function encrypt($value): string
     {
-        return $this->sensitiveDataManager;
+        // Se $value è oggetto = errore
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return null|array|scalar
+     */
+    protected function decrypt(string $value)
+    {
+        // Se non è serializzabile = errore
     }
 }
