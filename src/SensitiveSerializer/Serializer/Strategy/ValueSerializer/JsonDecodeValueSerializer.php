@@ -19,11 +19,7 @@ class JsonDecodeValueSerializer implements ValueSerializer
 
         $encodedValue = json_encode($value, JSON_PRESERVE_ZERO_FRACTION);
 
-        if (false === $encodedValue) {
-            throw new InvalidArgumentException('Serialization failed');
-        }
-
-        if (json_last_error() === JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidArgumentException(json_last_error_msg());
         }
 
@@ -35,6 +31,14 @@ class JsonDecodeValueSerializer implements ValueSerializer
      */
     public function deserialize(string $value)
     {
-        // TODO: Implement deserialize() method.
+        $decodedValue = json_decode($value, true);
+
+        if (JSON_ERROR_NONE !== ($lastError = json_last_error())) {
+            $msg = sprintf('Error: %s - %s', $lastError, json_last_error_msg());
+
+            throw new InvalidArgumentException($msg);
+        }
+
+        return $decodedValue;
     }
 }

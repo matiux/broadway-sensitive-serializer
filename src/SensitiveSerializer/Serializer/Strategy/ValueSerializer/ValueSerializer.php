@@ -20,6 +20,8 @@ interface ValueSerializer
     /**
      * @param string $value
      *
+     * @throws InvalidArgumentException
+     *
      * @return null|array|scalar
      */
     public function deserialize(string $value);
