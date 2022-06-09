@@ -114,6 +114,7 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
      */
     private function getKeyOrFail(string $secretKey = null): string
     {
+        /** @infection-ignore-all */
         if (!$key = $secretKey ?? $this->secretKey) {
             throw new LogicException('Secret key not found');
         }
