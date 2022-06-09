@@ -22,7 +22,27 @@ class AES256SensitiveDataManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_should_crypt_and_decrypt_sensible_data_without_making_explicit_the_iv(): void
+    public function it_should_crypt_and_decrypt_sensitive_data_with_making_explicit_the_iv(): void
+    {
+        $iv = AES256SensitiveDataManager::generateIV();
+
+        $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY, $iv);
+
+        self::assertSame($iv, $sensitiveDataManager->iv());
+
+        $encryptedEmailAddress = $sensitiveDataManager->encrypt($this->emailAddress);
+
+        self::assertNotSame($encryptedEmailAddress, $this->emailAddress);
+
+        $decryptedEmailAddress = $sensitiveDataManager->decrypt($encryptedEmailAddress);
+
+        self::assertSame($this->emailAddress, $decryptedEmailAddress);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_crypt_and_decrypt_sensitive_data_without_making_explicit_the_iv(): void
     {
         $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY);
 

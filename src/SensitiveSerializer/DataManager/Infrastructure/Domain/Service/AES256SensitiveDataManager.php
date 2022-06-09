@@ -23,7 +23,7 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
         bool $ivEncoding = true
     ) {
         $this->secretKey = $secretKey;
-        $this->iv = $iv ?? openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
+        $this->iv = $iv ?? self::generateIV();
         $this->ivEncoding = $ivEncoding;
     }
 
@@ -119,5 +119,15 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
         }
 
         return $key;
+    }
+
+    public static function generateIV(): string
+    {
+        return openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
+    }
+
+    public function iv(): string
+    {
+        return $this->iv;
     }
 }
