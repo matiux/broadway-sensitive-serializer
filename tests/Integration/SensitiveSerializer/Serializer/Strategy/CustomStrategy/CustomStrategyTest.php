@@ -193,11 +193,9 @@ class MyEventSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @param string $decryptedAggregateKey
-     *
      * @return array
      */
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateDesensitizedPayload(): array
     {
         $payload = $this->getPayload();
         $this->validatePayload($payload);

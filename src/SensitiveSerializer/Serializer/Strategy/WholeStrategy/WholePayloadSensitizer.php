@@ -72,13 +72,11 @@ final class WholePayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @param string $decryptedAggregateKey
-     *
      * @throws AssertionFailedException
      *
      * @return array
      */
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateDesensitizedPayload(): array
     {
         $sensibleData = $this->getPayload();
 

@@ -13,7 +13,6 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveData
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 use Ramsey\Uuid\Uuid;
-use Webmozart\Assert\Assert;
 
 abstract class PayloadSensitizer
 {
@@ -66,7 +65,7 @@ abstract class PayloadSensitizer
 
         $this->decryptedAggregateKey = $this->automaticAggregateKeyCreation ?
             $this->createAggregateKeyIfDoesNotExist($aggregateId) :
-            $this->obtainDecryptedAggregateKeyOrError($aggregateId);
+            $this->obtainDecryptedAggregateKeyOrFail($aggregateId);
 
         $serializedObject['payload'] = $this->generateSensitizedPayload();
 
@@ -83,12 +82,11 @@ abstract class PayloadSensitizer
     private function createAggregateKeyIfDoesNotExist(string $aggregateId): string
     {
         try {
-            $decryptedAggregateKey = $this->obtainDecryptedAggregateKeyOrError($aggregateId);
+            $decryptedAggregateKey = $this->obtainDecryptedAggregateKeyOrFail($aggregateId);
         } catch (AggregateKeyNotFoundException $e) {
             $this->aggregateKeyManager->createAggregateKey(Uuid::fromString($aggregateId));
-            $decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey(Uuid::fromString($aggregateId));
 
-            Assert::string($decryptedAggregateKey);
+            $decryptedAggregateKey = $this->obtainDecryptedAggregateKeyOrFail($aggregateId);
         }
 
         return $decryptedAggregateKey;
@@ -101,7 +99,7 @@ abstract class PayloadSensitizer
      *
      * @return string
      */
-    private function obtainDecryptedAggregateKeyOrError(string $aggregateId): string
+    private function obtainDecryptedAggregateKeyOrFail(string $aggregateId): string
     {
         $id = Uuid::fromString($aggregateId);
 
@@ -125,16 +123,17 @@ abstract class PayloadSensitizer
         $this->type = $serializedObject['class'];
         $aggregateId = $serializedObject['payload']['id'];
 
-        if (!$decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey(Uuid::fromString($aggregateId))) {
+        try {
+            $this->decryptedAggregateKey = $this->obtainDecryptedAggregateKeyOrFail($aggregateId);
+            $serializedObject['payload'] = $this->generateDesensitizedPayload();
+
+            return $serializedObject;
+        } catch (AggregateKeyEmptyException|AggregateKeyNotFoundException $e) {
             return $serializedObject;
         }
-
-        $serializedObject['payload'] = $this->generateDesensitizedPayload($decryptedAggregateKey);
-
-        return $serializedObject;
     }
 
-    abstract protected function generateDesensitizedPayload(string $decryptedAggregateKey): array;
+    abstract protected function generateDesensitizedPayload(): array;
 
     /**
      * @template T of \Broadway\Serializer\Serializable
