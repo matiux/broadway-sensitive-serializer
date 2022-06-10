@@ -10,6 +10,7 @@ use BadMethodCallException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 
 final class WholePayloadSensitizer extends PayloadSensitizer
 {
@@ -21,6 +22,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
     /**
      * @param SensitiveDataManager $sensitiveDataManager
      * @param AggregateKeyManager  $aggregateKeyManager
+     * @param ValueSerializer      $valueSerializer
      * @param bool                 $automaticAggregateKeyCreation
      * @param string[]             $excludedKeys
      * @param string               $excludedIdKey
@@ -28,11 +30,12 @@ final class WholePayloadSensitizer extends PayloadSensitizer
     public function __construct(
         SensitiveDataManager $sensitiveDataManager,
         AggregateKeyManager $aggregateKeyManager,
+        ValueSerializer $valueSerializer,
         bool $automaticAggregateKeyCreation = true,
         array $excludedKeys = ['occurred_at'],
         string $excludedIdKey = 'id'
     ) {
-        parent::__construct($sensitiveDataManager, $aggregateKeyManager, $automaticAggregateKeyCreation);
+        parent::__construct($sensitiveDataManager, $aggregateKeyManager, $valueSerializer, $automaticAggregateKeyCreation);
 
         $this->payloadIdKey = $excludedIdKey;
         $this->excludedKeys = $excludedKeys;
@@ -47,11 +50,9 @@ final class WholePayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws AssertionFailedException
      */
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateSensitizedPayload(): array
     {
         $toSensitize = $this->getPayload();
 
@@ -60,7 +61,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
         /** @var array<array-key, string> $toSensitize */
         foreach ($toSensitize as $key => $value) {
-            $toSensitize[$key] = $this->getSensitiveDataManager()->encrypt($value, $decryptedAggregateKey);
+            $toSensitize[$key] = $this->encryptValue($value);
         }
 
         $sensitizedPayload = $toSensitize + $this->getPayload();
@@ -87,7 +88,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
         /** @var array<array-key, string> $sensibleData */
         foreach ($sensibleData as $key => $value) {
-            $sensibleData[$key] = $this->getSensitiveDataManager()->decrypt($value, $decryptedAggregateKey);
+            $sensibleData[$key] = $this->decryptValue($value);
         }
 
         $desensitizedPayload = $sensibleData + $this->getPayload();

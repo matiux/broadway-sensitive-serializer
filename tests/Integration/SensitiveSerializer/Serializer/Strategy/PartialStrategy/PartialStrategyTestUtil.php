@@ -18,13 +18,12 @@ trait PartialStrategyTestUtil
         );
     }
 
-    protected function buildPartialPayloadSensitizer(
-        PartialPayloadSensitizerRegistry $registry,
-        bool $automaticAggregateKeyCreation = true
-    ): PartialPayloadSensitizer {
+    protected function buildPartialPayloadSensitizer(PartialPayloadSensitizerRegistry $registry, bool $automaticAggregateKeyCreation = true): PartialPayloadSensitizer
+    {
         return new PartialPayloadSensitizer(
             $this->getSensitiveDataManager(),
             $this->getAggregateKeyManager(),
+            $this->getValueSerializer(),
             $registry,
             $automaticAggregateKeyCreation
         );

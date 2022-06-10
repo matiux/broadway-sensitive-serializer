@@ -21,7 +21,8 @@ class WholePayloadSensitizerTest extends StrategyTest
 
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
-            $this->getAggregateKeyManager()
+            $this->getAggregateKeyManager(),
+            $this->getValueSerializer()
         );
 
         $wholePayloadSensitizer->supports([]);
@@ -38,6 +39,7 @@ class WholePayloadSensitizerTest extends StrategyTest
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
             $this->getAggregateKeyManager(),
+            $this->getValueSerializer(),
             false
         );
 
@@ -51,7 +53,8 @@ class WholePayloadSensitizerTest extends StrategyTest
     {
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
-            $this->getAggregateKeyManager()
+            $this->getAggregateKeyManager(),
+            $this->getValueSerializer()
         );
 
         /**
@@ -62,7 +65,7 @@ class WholePayloadSensitizerTest extends StrategyTest
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->getIngoingPayload());
 
         $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
     }
 
     /**
@@ -72,7 +75,8 @@ class WholePayloadSensitizerTest extends StrategyTest
     {
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
-            $this->getAggregateKeyManager()
+            $this->getAggregateKeyManager(),
+            $this->getValueSerializer()
         );
 
         /**
@@ -97,6 +101,7 @@ class WholePayloadSensitizerTest extends StrategyTest
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
             $this->getAggregateKeyManager(),
+            $this->getValueSerializer(),
             true,
             ['name']
         );

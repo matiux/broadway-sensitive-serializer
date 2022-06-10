@@ -60,7 +60,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
         $sensitizedOutgoingPayload = $partialPayloadSensitizer->sensitize($this->getIngoingPayload());
 
         $this->assertObjectIsSensitized($sensitizedOutgoingPayload, ['id', 'name', 'occurred_at']);
-        $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload, ['id', 'name', 'occurred_at']);
+        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload, ['id', 'name', 'occurred_at']);
     }
 
     /**
@@ -99,6 +99,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
         $sensitizer = new PartialPayloadSensitizer(
             $this->getSensitiveDataManager(),
             $this->getAggregateKeyManager(),
+            $this->getValueSerializer(),
             new PartialPayloadSensitizerRegistry([]),
         );
 

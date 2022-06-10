@@ -13,6 +13,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggreg
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -27,6 +29,7 @@ abstract class StrategyTest extends TestCase
     private AES256SensitiveDataManager $sensitiveDataManager;
     private InMemoryAggregateKeys $aggregateKeys;
     private AggregateKeyManager $aggregateKeyManager;
+    private JsonDecodeValueSerializer $valueSerializer;
 
     protected function setUp(): void
     {
@@ -46,6 +49,8 @@ abstract class StrategyTest extends TestCase
             $this->sensitiveDataManager,
             Key::AGGREGATE_MASTER_KEY
         );
+
+        $this->valueSerializer = new JsonDecodeValueSerializer();
     }
 
     protected function getSensitiveDataManager(): SensitiveDataManager
@@ -56,6 +61,11 @@ abstract class StrategyTest extends TestCase
     protected function getAggregateKeyManager(): AggregateKeyManager
     {
         return $this->aggregateKeyManager;
+    }
+
+    protected function getValueSerializer(): ValueSerializer
+    {
+        return $this->valueSerializer;
     }
 
     protected function getIngoingPayload(): array
@@ -100,7 +110,7 @@ abstract class StrategyTest extends TestCase
      *
      * @throws AggregateKeyNotFoundException
      */
-    protected function assertSensitizedEqualToExpected(array $sensitizedOutgoingPayload, array $excludedKeys = ['id']): void
+    protected function assertSensitizedPayloadEqualToExpected(array $sensitizedOutgoingPayload, array $excludedKeys = ['id']): void
     {
         $decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey($this->aggregateId);
 
@@ -111,6 +121,19 @@ abstract class StrategyTest extends TestCase
         self::assertSame($expectedPayload, $sensitizedOutgoingPayload);
     }
 
+    protected function assertSensitizedValueSame(string $expected, string $sensitizedValue, string $decryptedAggregateKey): void
+    {
+        self::assertSame(
+            $expected,
+            $this->getValueSerializer()->deserialize(
+                $this->getSensitiveDataManager()->decrypt(
+                    $sensitizedValue,
+                    $decryptedAggregateKey
+                )
+            )
+        );
+    }
+
     private function buildExpectedPayload(array $excludedKeys, string $decryptedAggregateKey, array $sensitizedOutgoingPayload): array
     {
         /** @var string[] $expectedPayload */
@@ -118,7 +141,10 @@ abstract class StrategyTest extends TestCase
 
         foreach ($expectedPayload as $key => $value) {
             if (!in_array($key, $excludedKeys)) {
-                $expectedPayload[$key] = $this->getSensitiveDataManager()->encrypt($value, $decryptedAggregateKey);
+                $expectedPayload[$key] = $this->getSensitiveDataManager()->encrypt(
+                    $this->getValueSerializer()->serialize($value),
+                    $decryptedAggregateKey
+                );
             }
         }
 

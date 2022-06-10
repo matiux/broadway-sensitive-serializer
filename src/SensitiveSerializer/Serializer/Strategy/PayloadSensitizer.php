@@ -11,6 +11,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedA
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -18,21 +19,32 @@ abstract class PayloadSensitizer
 {
     private SensitiveDataManager $sensitiveDataManager;
     private AggregateKeyManager $aggregateKeyManager;
+    private ValueSerializer $valueSerializer;
+
+    /**
+     * @var array<array-key, null|array|scalar>
+     */
     private array $payload = [];
+
     /**
      * @var class-string
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private string $type;
+
     private bool $automaticAggregateKeyCreation;
+
+    private string $decryptedAggregateKey = '';
 
     public function __construct(
         SensitiveDataManager $sensitiveDataManager,
         AggregateKeyManager $aggregateKeyManager,
+        ValueSerializer $valueSerializer,
         bool $automaticAggregateKeyCreation = true
     ) {
         $this->sensitiveDataManager = $sensitiveDataManager;
         $this->aggregateKeyManager = $aggregateKeyManager;
+        $this->valueSerializer = $valueSerializer;
         $this->automaticAggregateKeyCreation = $automaticAggregateKeyCreation;
     }
 
@@ -52,11 +64,11 @@ abstract class PayloadSensitizer
 
         $aggregateId = $serializedObject['payload']['id'];
 
-        $decryptedAggregateKey = $this->automaticAggregateKeyCreation ?
+        $this->decryptedAggregateKey = $this->automaticAggregateKeyCreation ?
             $this->createAggregateKeyIfDoesNotExist($aggregateId) :
             $this->obtainDecryptedAggregateKeyOrError($aggregateId);
 
-        $serializedObject['payload'] = $this->generateSensitizedPayload($decryptedAggregateKey);
+        $serializedObject['payload'] = $this->generateSensitizedPayload();
 
         return $serializedObject;
     }
@@ -100,12 +112,7 @@ abstract class PayloadSensitizer
         return $decryptedAggregateKey;
     }
 
-    /**
-     * @param string $decryptedAggregateKey
-     *
-     * @return array
-     */
-    abstract protected function generateSensitizedPayload(string $decryptedAggregateKey): array;
+    abstract protected function generateSensitizedPayload(): array;
 
     /**
      * @throws AggregateKeyNotFoundException|AssertionFailedException
@@ -138,6 +145,9 @@ abstract class PayloadSensitizer
      */
     abstract public function supports($subject): bool;
 
+    /**
+     * @return array<array-key, null|array|scalar>
+     */
     protected function getPayload(): array
     {
         return $this->payload;
@@ -151,19 +161,17 @@ abstract class PayloadSensitizer
         return $this->type;
     }
 
-//    protected function getSensitiveDataManager(): SensitiveDataManager
-//    {
-//        return $this->sensitiveDataManager;
-//    }
-
     /**
      * @param null|array|scalar $value
      *
      * @return string
      */
-    protected function encrypt($value): string
+    protected function encryptValue($value): string
     {
-        // Se $value è oggetto = errore
+        return $this->sensitiveDataManager->encrypt(
+            $this->valueSerializer->serialize($value),
+            $this->decryptedAggregateKey
+        );
     }
 
     /**
@@ -171,8 +179,13 @@ abstract class PayloadSensitizer
      *
      * @return null|array|scalar
      */
-    protected function decrypt(string $value)
+    protected function decryptValue(string $value)
     {
-        // Se non è serializzabile = errore
+        $decryptedValue = $this->sensitiveDataManager->decrypt(
+            $value,
+            $this->decryptedAggregateKey
+        );
+
+        return $this->valueSerializer->deserialize($decryptedValue);
     }
 }

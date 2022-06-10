@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\ValueSerializer;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
 

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\ValueSerializer;
+namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
+use phpDocumentor\Reflection\Types\Scalar;
 
 class JsonDecodeValueSerializer implements ValueSerializer
 {
@@ -13,6 +14,9 @@ class JsonDecodeValueSerializer implements ValueSerializer
      */
     public function serialize($value): string
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         */
         if (is_object($value)) {
             throw new InvalidArgumentException('ValueSerializer::serialize() cannot accept objects');
         }
@@ -31,6 +35,7 @@ class JsonDecodeValueSerializer implements ValueSerializer
      */
     public function deserialize(string $value)
     {
+        /** @var null|array|scalar $decodedValue */
         $decodedValue = json_decode($value, true);
 
         if (JSON_ERROR_NONE !== ($lastError = json_last_error())) {
