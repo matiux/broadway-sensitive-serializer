@@ -33,19 +33,16 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
      */
     protected function generateSensitizedPayload(): array
     {
-        $toSensitizeKeys = $this->obtainToSensitizeKeysOrFail();
-
         $sensitizedKeys = [];
         $payload = $this->getPayload();
 
-        foreach ($toSensitizeKeys as $key) {
-            if (array_key_exists($key, $payload)) {
-                $sensitizedKeys[$key] = $this->encryptValue($payload[$key]);
+        foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
+            if (array_key_exists($toSensitizeKey, $payload)) {
+                $sensitizedKeys[$toSensitizeKey] = $this->encryptValue($payload[$toSensitizeKey]);
             }
         }
 
         $sensitizedPayload = $sensitizedKeys + $payload;
-
         ksort($sensitizedPayload);
 
         return $sensitizedPayload;
@@ -68,22 +65,18 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @param string $decryptedAggregateKey
-     *
      * @throws Exception|LogicException
      *
      * @return array
      */
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateDesensitizedPayload(): array
     {
-        $toSensitizeKeys = $this->obtainToSensitizeKeysOrFail();
-
         $desensitizedKeys = [];
         $payload = $this->getPayload();
 
-        foreach ($toSensitizeKeys as $key) {
-            if (array_key_exists($key, $payload) && is_string($payload[$key])) {
-                $desensitizedKeys[$key] = $this->decryptValue($payload[$key]);
+        foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
+            if (array_key_exists($toSensitizeKey, $payload) && is_string($payload[$toSensitizeKey])) {
+                $desensitizedKeys[$toSensitizeKey] = $this->decryptValue($payload[$toSensitizeKey]);
             }
         }
 

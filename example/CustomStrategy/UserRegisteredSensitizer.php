@@ -29,7 +29,7 @@ class UserRegisteredSensitizer extends PayloadSensitizer
     /**
      * @throws AssertionFailedException
      */
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateDesensitizedPayload(): array
     {
         $this->validatePayload($this->getPayload());
 
