@@ -27,6 +27,7 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -37,6 +38,7 @@ $dataManager = new AES256SensitiveDataManager();
 $keyGenerator = new OpenSSLKeyGenerator();
 $aggregateKeys = new InMemoryAggregateKeys();
 $aggregateKeyManager = new AggregateKeyManager($keyGenerator, $aggregateKeys, $dataManager, Key::AGGREGATE_MASTER_KEY);
+$valueSerializer = new JsonDecodeValueSerializer();
 $eventBus = new TraceableEventBus(new SimpleEventBus());
 $eventBus->trace();
 
@@ -44,7 +46,7 @@ $eventBus->trace();
  * Initialize specific dependencies.
  */
 $sensitizers = [
-    new UserRegisteredSensitizer($dataManager, $aggregateKeyManager, true),
+    new UserRegisteredSensitizer($dataManager, $aggregateKeyManager, $valueSerializer, true),
 ];
 
 $registry = new CustomPayloadSensitizerRegistry($sensitizers);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
-use phpDocumentor\Reflection\Types\Scalar;
 
 class JsonDecodeValueSerializer implements ValueSerializer
 {

@@ -12,15 +12,13 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 class UserRegisteredSensitizer extends PayloadSensitizer
 {
     /**
-     * {@inheritDoc}
-     *
      * @throws AssertionFailedException
      */
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateSensitizedPayload(): array
     {
         $this->validatePayload($this->getPayload());
 
-        $email = $this->getSensitiveDataManager()->encrypt($this->getPayload()['email'], $decryptedAggregateKey);
+        $email = $this->encryptValue($this->getPayload()['email']);
 
         $payload = $this->getPayload();
         $payload['email'] = $email;
@@ -35,7 +33,7 @@ class UserRegisteredSensitizer extends PayloadSensitizer
     {
         $this->validatePayload($this->getPayload());
 
-        $email = $this->getSensitiveDataManager()->decrypt($this->getPayload()['email'], $decryptedAggregateKey);
+        $email = $this->decryptValue($this->getPayload()['email']);
 
         $payload = $this->getPayload();
         $payload['email'] = $email;
