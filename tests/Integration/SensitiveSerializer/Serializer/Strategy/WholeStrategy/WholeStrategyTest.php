@@ -20,7 +20,8 @@ class WholeStrategyTest extends StrategyTest
 
         $this->wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
-            $this->getAggregateKeyManager()
+            $this->getAggregateKeyManager(),
+            $this->getValueSerializer()
         );
     }
 
@@ -62,7 +63,7 @@ class WholeStrategyTest extends StrategyTest
         $sensitizedOutgoingPayload = $wholeStrategy->sensitize($this->getIngoingPayload());
 
         $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
     }
 
     /**

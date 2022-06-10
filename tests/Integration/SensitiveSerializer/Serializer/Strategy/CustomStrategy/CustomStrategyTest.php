@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\CustomStrategy;
 
-use Assert\Assertion as Assert;
 use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
@@ -14,6 +13,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\Custo
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
 use Tests\Support\SensitiveSerializer\MyEvent;
+use Webmozart\Assert\Assert;
 
 class CustomStrategyTest extends StrategyTest
 {
@@ -73,15 +73,17 @@ class CustomStrategyTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $customPayloadSensitizerStrategy->sensitize($this->getIngoingPayload());
 
-        $payload = $sensitizedOutgoingPayload['payload'];
-
         /**
          * Finally we reveal the aggregate key and decrypt the sensitized data.
          */
         $decryptedAggregateKey = $this->getAggregateKeyManager()->revealAggregateKey($this->getAggregateId());
 
-        self::assertSame('Galacci', $this->getSensitiveDataManager()->decrypt($payload['surname'], $decryptedAggregateKey));
-        self::assertSame('m.galacci@gmail.com', $this->getSensitiveDataManager()->decrypt($payload['email'], $decryptedAggregateKey));
+        self::assertNotNull($decryptedAggregateKey);
+
+        $sensitizedPayload = $sensitizedOutgoingPayload['payload'];
+
+        self::assertSensitizedValueSame('Galacci', $sensitizedPayload['surname'], $decryptedAggregateKey);
+        self::assertSensitizedValueSame('m.galacci@gmail.com', $sensitizedPayload['email'], $decryptedAggregateKey);
     }
 
     /**
@@ -93,11 +95,15 @@ class CustomStrategyTest extends StrategyTest
         self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getAggregateId()));
 
         $registry = new CustomPayloadSensitizerRegistry([
-            new MyEventSensitizer($this->getSensitiveDataManager(), $this->getAggregateKeyManager(), false),
+            new MyEventSensitizer(
+                $this->getSensitiveDataManager(),
+                $this->getAggregateKeyManager(),
+                $this->getValueSerializer(),
+                false
+            ),
         ]);
 
-        $customPayloadSensitizerStrategy = new CustomStrategy($registry);
-        $customPayloadSensitizerStrategy->sensitize($this->getIngoingPayload());
+        (new CustomStrategy($registry))->sensitize($this->getIngoingPayload());
     }
 
     /**
@@ -113,11 +119,15 @@ class CustomStrategyTest extends StrategyTest
         $this->getAggregateKeys()->update($aggregateKey);
 
         $registry = new CustomPayloadSensitizerRegistry([
-            new MyEventSensitizer($this->getSensitiveDataManager(), $this->getAggregateKeyManager(), false),
+            new MyEventSensitizer(
+                $this->getSensitiveDataManager(),
+                $this->getAggregateKeyManager(),
+                $this->getValueSerializer(),
+                false
+            ),
         ]);
 
-        $customPayloadSensitizerStrategy = new CustomStrategy($registry);
-        $customPayloadSensitizerStrategy->sensitize($this->getIngoingPayload());
+        (new CustomStrategy($registry))->sensitize($this->getIngoingPayload());
     }
 
     /**
@@ -143,7 +153,11 @@ class CustomStrategyTest extends StrategyTest
     private function createRegistryWithSensitizer(): CustomPayloadSensitizerRegistry
     {
         return new CustomPayloadSensitizerRegistry([
-            new MyEventSensitizer($this->getSensitiveDataManager(), $this->getAggregateKeyManager()),
+            new MyEventSensitizer(
+                $this->getSensitiveDataManager(),
+                $this->getAggregateKeyManager(),
+                $this->getValueSerializer()
+            ),
         ]);
     }
 }
@@ -154,16 +168,14 @@ class CustomStrategyTest extends StrategyTest
 class MyEventSensitizer extends PayloadSensitizer
 {
     /**
-     * {@inheritDoc}
-     *
      * @throws AssertionFailedException
      */
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateSensitizedPayload(): array
     {
         $this->validatePayload($this->getPayload());
 
-        $surname = $this->getSensitiveDataManager()->encrypt((string) $this->getPayload()['surname'], $decryptedAggregateKey);
-        $email = $this->getSensitiveDataManager()->encrypt((string) $this->getPayload()['email'], $decryptedAggregateKey);
+        $surname = $this->encryptValue($this->getPayload()['surname']);
+        $email = $this->encryptValue($this->getPayload()['email']);
 
         $payload = $this->getPayload();
         $payload['surname'] = $surname;
@@ -183,28 +195,21 @@ class MyEventSensitizer extends PayloadSensitizer
     /**
      * @param string $decryptedAggregateKey
      *
-     * @throws AssertionFailedException
-     *
      * @return array
      */
     protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
     {
-        $this->validatePayload($this->getPayload());
-
-        $surname = $this->getSensitiveDataManager()->decrypt((string) $this->getPayload()['surname'], $decryptedAggregateKey);
-        $email = $this->getSensitiveDataManager()->decrypt((string) $this->getPayload()['email'], $decryptedAggregateKey);
-
         $payload = $this->getPayload();
-        $payload['surname'] = $surname;
-        $payload['email'] = $email;
+        $this->validatePayload($payload);
+
+        $payload['surname'] = $this->decryptValue($payload['surname']);
+        $payload['email'] = $this->decryptValue($payload['email']);
 
         return $payload;
     }
 
     /**
      * @psalm-assert MyEvent $payload
-     *
-     * @throws AssertionFailedException
      */
     protected function validatePayload(array $payload): void
     {

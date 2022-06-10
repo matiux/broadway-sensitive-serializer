@@ -10,6 +10,7 @@ use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 
 final class PartialPayloadSensitizer extends PayloadSensitizer
 {
@@ -18,21 +19,19 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
     public function __construct(
         SensitiveDataManager $sensitiveDataManager,
         AggregateKeyManager $aggregateKeyManager,
+        ValueSerializer $valueSerializer,
         PartialPayloadSensitizerRegistry $partialPayloadSensitizerRegistry,
         bool $automaticAggregateKeyCreation = true
     ) {
-        parent::__construct($sensitiveDataManager, $aggregateKeyManager, $automaticAggregateKeyCreation);
+        parent::__construct($sensitiveDataManager, $aggregateKeyManager, $valueSerializer, $automaticAggregateKeyCreation);
+
         $this->partialPayloadSensitizerRegistry = $partialPayloadSensitizerRegistry;
     }
 
     /**
-     * @param string $decryptedAggregateKey
-     *
      * @throws Exception|LogicException
-     *
-     * @return array
      */
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateSensitizedPayload(): array
     {
         $toSensitizeKeys = $this->obtainToSensitizeKeysOrFail();
 
@@ -41,7 +40,7 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
 
         foreach ($toSensitizeKeys as $key) {
             if (array_key_exists($key, $payload)) {
-                $sensitizedKeys[$key] = $this->getSensitiveDataManager()->encrypt((string) $payload[$key], $decryptedAggregateKey);
+                $sensitizedKeys[$key] = $this->encryptValue($payload[$key]);
             }
         }
 
@@ -83,8 +82,8 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
         $payload = $this->getPayload();
 
         foreach ($toSensitizeKeys as $key) {
-            if (array_key_exists($key, $payload)) {
-                $desensitizedKeys[$key] = $this->getSensitiveDataManager()->decrypt((string) $payload[$key], $decryptedAggregateKey);
+            if (array_key_exists($key, $payload) && is_string($payload[$key])) {
+                $desensitizedKeys[$key] = $this->decryptValue($payload[$key]);
             }
         }
 
