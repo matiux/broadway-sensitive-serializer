@@ -38,7 +38,9 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
 
         foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
             if (array_key_exists($toSensitizeKey, $payload)) {
-                $sensitizedKeys[$toSensitizeKey] = $this->encryptValue($payload[$toSensitizeKey]);
+                /** @var null|array<int, mixed>|scalar $value */
+                $value = $payload[$toSensitizeKey];
+                $sensitizedKeys[$toSensitizeKey] = $this->encryptValue($value);
             }
         }
 

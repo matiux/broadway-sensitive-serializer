@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\CustomStrategy;
 
-use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
@@ -167,15 +166,18 @@ class CustomStrategyTest extends StrategyTest
  */
 class MyEventSensitizer extends PayloadSensitizer
 {
-    /**
-     * @throws AssertionFailedException
-     */
     protected function generateSensitizedPayload(): array
     {
         $this->validatePayload($this->getPayload());
 
-        $surname = $this->encryptValue($this->getPayload()['surname']);
-        $email = $this->encryptValue($this->getPayload()['email']);
+        $surname = $this->getPayload()['surname'];
+        $email = $this->getPayload()['email'];
+
+        Assert::string($surname);
+        Assert::string($email);
+
+        $surname = $this->encryptValue($surname);
+        $email = $this->encryptValue($email);
 
         $payload = $this->getPayload();
         $payload['surname'] = $surname;

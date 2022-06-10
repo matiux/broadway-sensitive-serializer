@@ -6,12 +6,29 @@ namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
 
-class JsonDecodeValueSerializer implements ValueSerializer
+class JsonDecodeValueSerializer extends ValueSerializer
 {
     /**
      * {@inheritDoc}
      */
-    public function serialize($value): string
+    public function deserialize(string $value)
+    {
+        /** @var null|array<int, mixed>|scalar $decodedValue */
+        $decodedValue = json_decode($value, true);
+
+        if (JSON_ERROR_NONE !== ($lastError = json_last_error())) {
+            $msg = sprintf('Error: %s - %s', $lastError, json_last_error_msg());
+
+            throw new InvalidArgumentException($msg);
+        }
+
+        return $decodedValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doSerialize($value): string
     {
         /**
          * @psalm-suppress DocblockTypeContradiction
@@ -27,22 +44,5 @@ class JsonDecodeValueSerializer implements ValueSerializer
         }
 
         return $encodedValue;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deserialize(string $value)
-    {
-        /** @var null|array|scalar $decodedValue */
-        $decodedValue = json_decode($value, true);
-
-        if (JSON_ERROR_NONE !== ($lastError = json_last_error())) {
-            $msg = sprintf('Error: %s - %s', $lastError, json_last_error_msg());
-
-            throw new InvalidArgumentException($msg);
-        }
-
-        return $decodedValue;
     }
 }
