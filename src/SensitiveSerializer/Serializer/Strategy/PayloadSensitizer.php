@@ -161,7 +161,7 @@ abstract class PayloadSensitizer
     }
 
     /**
-     * @param null|array|scalar $value
+     * @param null|array<int, mixed>|scalar $value
      *
      * @return string
      */
@@ -176,7 +176,7 @@ abstract class PayloadSensitizer
     /**
      * @param string $value
      *
-     * @return null|array|scalar
+     * @return null|array<int, mixed>|scalar
      */
     protected function decryptValue(string $value)
     {

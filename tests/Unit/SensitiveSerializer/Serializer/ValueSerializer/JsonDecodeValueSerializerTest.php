@@ -19,6 +19,7 @@ class JsonDecodeValueSerializerTest extends TestCase
         return [
             [new stdClass(), 'ValueSerializer::serialize() cannot accept objects'],
             ["\xB1\x31", 'Malformed UTF-8 characters, possibly incorrectly encoded'],
+            [['a' => 'a', 'b' => 12, 'c' => 1.0], 'You cannot serialize an associative array'],
             // [['foo' => new stdClass()]], TODO
         ];
     }
@@ -51,7 +52,7 @@ class JsonDecodeValueSerializerTest extends TestCase
     }
 
     /**
-     * @return array<array{0: null|array|scalar, 1: string}>
+     * @return array<array{0: null|array<int, mixed>|scalar, 1: string}>
      */
     public function validValuesProvider(): array
     {
@@ -62,9 +63,8 @@ class JsonDecodeValueSerializerTest extends TestCase
             [0.5, '0.5'],
             [1.0, '1.0'],
             [null, 'null'],
-            [['foo' => 'bar'], '{"foo":"bar"}'],
-            [['foo' => ['bar' => 12.3]], '{"foo":{"bar":12.3}}'],
-            [false, 'false'],
+            [['foo', 1, 12.0, 12.5], '["foo",1,12.0,12.5]'],
+            [false, 'false', null],
         ];
     }
 
@@ -73,8 +73,8 @@ class JsonDecodeValueSerializerTest extends TestCase
      * @dataProvider validValuesProvider
      * @testdox It should serialize $nonSerializedValue that results in $expectedSerializedValue
      *
-     * @param null|array|scalar $nonSerializedValue
-     * @param string            $expectedSerializedValue
+     * @param null|array<int, mixed>|scalar $nonSerializedValue
+     * @param string                        $expectedSerializedValue
      */
     public function it_should_serialize_valid_values($nonSerializedValue, string $expectedSerializedValue): void
     {
