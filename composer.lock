@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "399cde2f53ecdde0a39a8ab468cafa01",
+    "content-hash": "451d660b7d929f9580dbb632cce0a3e9",
     "packages": [
+        {
+            "name": "adbario/php-dot-notation",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adbario/php-dot-notation.git",
+                "reference": "aca06bf775809808232b8c21ce1ca3a4fca70ace"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adbario/php-dot-notation/zipball/aca06bf775809808232b8c21ce1ca3a4fca70ace",
+                "reference": "aca06bf775809808232b8c21ce1ca3a4fca70ace",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.5",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Adbar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riku Särkinen",
+                    "email": "riku@adbar.io"
+                }
+            ],
+            "description": "PHP dot notation access to arrays",
+            "homepage": "https://github.com/adbario/php-dot-notation",
+            "keywords": [
+                "ArrayAccess",
+                "dotnotation"
+            ],
+            "support": {
+                "issues": "https://github.com/adbario/php-dot-notation/issues",
+                "source": "https://github.com/adbario/php-dot-notation/tree/3.1.1"
+            },
+            "time": "2022-03-28T01:09:30+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.9.3",
@@ -6163,8 +6217,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.4|^8",
-        "ext-openssl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-openssl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"

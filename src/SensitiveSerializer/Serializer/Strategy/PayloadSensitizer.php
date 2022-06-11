@@ -113,7 +113,7 @@ abstract class PayloadSensitizer
     abstract protected function generateSensitizedPayload(): array;
 
     /**
-     * @throws AggregateKeyNotFoundException|AssertionFailedException
+     * @throws AssertionFailedException
      */
     public function desensitize(array $serializedObject): array
     {
