@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
-use Assert\AssertionFailedException;
 use Exception;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 
 final class PartialStrategy implements SensitizerStrategy
 {
@@ -32,17 +31,16 @@ final class PartialStrategy implements SensitizerStrategy
      * @throws AggregateKeyNotFoundException
      * @throws DuplicatedAggregateKeyException
      * @throws Exception
-     * @throws AssertionFailedException
      *
      * @return array
      */
     public function sensitize(array $serializedObject): array
     {
-        Validator::validateSerializedObject($serializedObject);
+        Assert::isSerializedObject($serializedObject);
 
         if ($this->partialPayloadSensitizerRegistry->support($serializedObject['class'])) {
             $serializedObject = $this->partialPayloadSensitizer->sensitize($serializedObject);
-            Validator::validateSerializedObject($serializedObject);
+            Assert::isSerializedObject($serializedObject);
         }
 
         return $serializedObject;
@@ -51,15 +49,15 @@ final class PartialStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AssertionFailedException|Exception
+     * @throws Exception
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {
-        Validator::validateSerializedObject($sensitiveSerializedObject);
+        Assert::isSerializedObject($sensitiveSerializedObject);
 
         if ($this->partialPayloadSensitizerRegistry->support($sensitiveSerializedObject['class'])) {
             $sensitiveSerializedObject = $this->partialPayloadSensitizer->desensitize($sensitiveSerializedObject);
-            Validator::validateSerializedObject($sensitiveSerializedObject);
+            Assert::isSerializedObject($sensitiveSerializedObject);
         }
 
         return $sensitiveSerializedObject;

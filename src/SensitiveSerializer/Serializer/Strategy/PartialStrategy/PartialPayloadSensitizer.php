@@ -45,7 +45,7 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
             }
         }
 
-        $sensitizedPayload = $payload->merge($sensitizedKeys)->jsonSerialize();
+        $sensitizedPayload = $payload->mergeRecursiveDistinct($sensitizedKeys)->jsonSerialize();
         ksort($sensitizedPayload);
 
         return $sensitizedPayload;
@@ -74,16 +74,16 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
      */
     protected function generateDesensitizedPayload(): array
     {
-        $desensitizedKeys = [];
-        $payload = $this->getPayload();
+        $desensitizedKeys = new Dot([]);
+        $payload = new Dot($this->getPayload());
 
         foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
-            if (array_key_exists($toSensitizeKey, $payload) && is_string($payload[$toSensitizeKey])) {
-                $desensitizedKeys[$toSensitizeKey] = $this->decryptValue($payload[$toSensitizeKey]);
+            if ($payload->has($toSensitizeKey) && is_string($payload->get($toSensitizeKey))) {
+                $desensitizedKeys->set($toSensitizeKey, $this->decryptValue((string) $payload->get($toSensitizeKey)));
             }
         }
 
-        $desensitizedPayload = $desensitizedKeys + $payload;
+        $desensitizedPayload = $payload->mergeRecursiveDistinct($desensitizedKeys)->jsonSerialize();
         ksort($desensitizedPayload);
 
         return $desensitizedPayload;

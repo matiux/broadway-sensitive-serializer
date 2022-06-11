@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy;
 
-use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 use Ramsey\Uuid\Uuid;
 
 abstract class PayloadSensitizer
@@ -50,13 +49,13 @@ abstract class PayloadSensitizer
     /**
      * @param array $serializedObject
      *
-     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
      *
      * @return array
      */
     public function sensitize(array $serializedObject): array
     {
-        Validator::validateSerializedObject($serializedObject);
+        Assert::isSerializedObject($serializedObject);
 
         $this->payload = $serializedObject['payload'];
         $this->type = $serializedObject['class'];
@@ -112,12 +111,9 @@ abstract class PayloadSensitizer
 
     abstract protected function generateSensitizedPayload(): array;
 
-    /**
-     * @throws AssertionFailedException
-     */
     public function desensitize(array $serializedObject): array
     {
-        Validator::validateSerializedObject($serializedObject);
+        Assert::isSerializedObject($serializedObject);
 
         $this->payload = $serializedObject['payload'];
         $this->type = $serializedObject['class'];
@@ -167,6 +163,8 @@ abstract class PayloadSensitizer
      */
     protected function encryptValue($value): string
     {
+        Assert::isSerializable($value);
+
         return $this->sensitiveDataManager->encrypt(
             $this->valueSerializer->serialize($value),
             $this->decryptedAggregateKey

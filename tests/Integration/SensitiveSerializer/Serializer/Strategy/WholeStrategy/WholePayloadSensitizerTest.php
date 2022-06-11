@@ -64,8 +64,7 @@ class WholePayloadSensitizerTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
     }
 
     /**
@@ -86,7 +85,7 @@ class WholePayloadSensitizerTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
 
         $desensitizedOutgoingPayload = $wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
 
@@ -115,7 +114,7 @@ class WholePayloadSensitizerTest extends StrategyTest
 
         $excludedKeys = array_merge(['id'], $wholePayloadSensitizer->excludedKeys());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, $excludedKeys);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], $excludedKeys);
 
         self::assertFalse(SensitiveTool::isSensitized($sensitizedOutgoingPayload['payload']['name']));
 

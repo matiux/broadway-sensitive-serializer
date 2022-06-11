@@ -11,7 +11,6 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\Custo
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\MyEvent;
 use Webmozart\Assert\Assert;
 
 class CustomStrategyTest extends StrategyTest

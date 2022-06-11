@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 class DotTest extends TestCase
 {
     /**
+     * @psalm-suppress all
      * @test
      */
     public function dot_read(): void
@@ -37,6 +38,8 @@ class DotTest extends TestCase
         self::assertSame('Matteo', $dot->get('name'));
         self::assertTrue($dot->has('user_info.age'));
         self::assertFalse($dot->has('user_info.foo'));
+        self::assertIsString($dot->get('name'));
+        self::assertIsNotString($dot->get('user_info.age'));
     }
 
     /**
