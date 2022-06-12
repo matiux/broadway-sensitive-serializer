@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Util;
 
 abstract class ValueSerializer
 {
@@ -17,7 +18,7 @@ abstract class ValueSerializer
      */
     public function serialize($value): string
     {
-        if (is_array($value) && $this->isAssoc($value)) {
+        if (Util::isAssociativeArray($value)) {
             throw new InvalidArgumentException('You cannot serialize an associative array');
         }
 
@@ -41,11 +42,4 @@ abstract class ValueSerializer
      * @return null|array<int, mixed>|scalar
      */
     abstract public function deserialize(string $value);
-
-    private function isAssoc(array $array): bool
-    {
-        $keys = array_keys($array);
-
-        return $keys !== array_keys($keys);
-    }
 }

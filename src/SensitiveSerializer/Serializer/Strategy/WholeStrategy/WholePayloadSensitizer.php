@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
-use Assert\Assertion as Assert;
-use Assert\AssertionFailedException;
 use BadMethodCallException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Util;
 
 final class WholePayloadSensitizer extends PayloadSensitizer
 {
@@ -50,7 +50,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @throws AssertionFailedException
+     * @return array
      */
     protected function generateSensitizedPayload(): array
     {
@@ -58,22 +58,28 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
         $this->validatePayload($toSensitize);
         $this->removeNotSensitiveKeys($toSensitize);
-
-        /** @var array<array-key, string> $toSensitize */
-        foreach ($toSensitize as $key => $value) {
-            $toSensitize[$key] = $this->encryptValue($value);
-        }
+        $this->encryptPayloadRecursively($toSensitize);
 
         $sensitizedPayload = $toSensitize + $this->getPayload();
-
         ksort($sensitizedPayload);
 
         return $sensitizedPayload;
     }
 
+    private function encryptPayloadRecursively(array &$toSensitize): void
+    {
+        foreach ($toSensitize as &$value) {
+            if (!Util::isAssociativeArray($value)) {
+                Assert::isSerializable($value);
+                $value = $this->encryptValue($value);
+            } else {
+                Assert::isArray($value);
+                $this->encryptPayloadRecursively($value);
+            }
+        }
+    }
+
     /**
-     * @throws AssertionFailedException
-     *
      * @return array
      */
     protected function generateDesensitizedPayload(): array
@@ -81,19 +87,26 @@ final class WholePayloadSensitizer extends PayloadSensitizer
         $sensibleData = $this->getPayload();
 
         $this->validatePayload($sensibleData);
-
         $this->removeNotSensitiveKeys($sensibleData);
-
-        /** @var array<array-key, string> $sensibleData */
-        foreach ($sensibleData as $key => $value) {
-            $sensibleData[$key] = $this->decryptValue($value);
-        }
+        $this->decryptPayloadRecursively($sensibleData);
 
         $desensitizedPayload = $sensibleData + $this->getPayload();
-
         ksort($desensitizedPayload);
 
         return $desensitizedPayload;
+    }
+
+    private function decryptPayloadRecursively(array &$toDesensitize): void
+    {
+        foreach ($toDesensitize as &$value) {
+            if (!Util::isAssociativeArray($value)) {
+                Assert::string($value);
+                $value = $this->decryptValue($value);
+            } else {
+                Assert::isArray($value);
+                $this->decryptPayloadRecursively($value);
+            }
+        }
     }
 
     public function removeNotSensitiveKeys(array &$toSensitize): void
@@ -114,8 +127,6 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
     /**
      * @psalm-assert array{id: string} $payload
-     *
-     * @throws AssertionFailedException
      */
     private function validatePayload(array $payload): void
     {

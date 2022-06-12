@@ -8,7 +8,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeP
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeStrategy;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\MyEvent;
+use Tests\Support\SensitiveSerializer\UserCreated;
 
 class WholeStrategyTest extends StrategyTest
 {
@@ -51,7 +51,7 @@ class WholeStrategyTest extends StrategyTest
         $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
 
         $wholeStrategy = new WholeStrategy(
-            new WholePayloadSensitizerRegistry([MyEvent::class]),
+            new WholePayloadSensitizerRegistry([UserCreated::class]),
             $this->wholePayloadSensitizer
         );
 
@@ -62,8 +62,7 @@ class WholeStrategyTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholeStrategy->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
     }
 
     /**
@@ -77,7 +76,7 @@ class WholeStrategyTest extends StrategyTest
         $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
 
         $wholeStrategy = new WholeStrategy(
-            new WholePayloadSensitizerRegistry([MyEvent::class]),
+            new WholePayloadSensitizerRegistry([UserCreated::class]),
             $this->wholePayloadSensitizer
         );
 
@@ -88,7 +87,7 @@ class WholeStrategyTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholeStrategy->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
 
         $desensitizedOutgoingPayload = $wholeStrategy->desensitize($sensitizedOutgoingPayload);
 

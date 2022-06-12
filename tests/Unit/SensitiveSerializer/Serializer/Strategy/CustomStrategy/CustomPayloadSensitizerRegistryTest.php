@@ -8,7 +8,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\Custo
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Tests\Support\SensitiveSerializer\MyEventBuilder;
+use Tests\Support\SensitiveSerializer\UserCreatedBuilder;
 
 class CustomPayloadSensitizerRegistryTest extends TestCase
 {
@@ -17,7 +17,7 @@ class CustomPayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_return_null_if_no_sensitizer_found_for_a_subject(): void
     {
-        $event = MyEventBuilder::create()->build();
+        $event = UserCreatedBuilder::create()->build();
         $sensitizers = [];
 
         $registry = new CustomPayloadSensitizerRegistry($sensitizers);
@@ -31,7 +31,7 @@ class CustomPayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_return_sensitizer_if_subject_is_supported(): void
     {
-        $event = MyEventBuilder::create()->build();
+        $event = UserCreatedBuilder::create()->build();
         $sensitizer = Mockery::mock(PayloadSensitizer::class)
             ->shouldReceive('supports')->andReturn(true)
             ->getMock();

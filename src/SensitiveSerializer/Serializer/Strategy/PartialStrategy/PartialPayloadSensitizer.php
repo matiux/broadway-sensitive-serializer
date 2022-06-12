@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
+use Adbar\Dot;
 use BadMethodCallException;
 use Exception;
 use LogicException;
@@ -33,18 +34,18 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
      */
     protected function generateSensitizedPayload(): array
     {
-        $sensitizedKeys = [];
-        $payload = $this->getPayload();
+        $sensitizedKeys = new Dot([]);
+        $payload = new Dot($this->getPayload());
 
         foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
-            if (array_key_exists($toSensitizeKey, $payload)) {
+            if ($payload->has($toSensitizeKey)) {
                 /** @var null|array<int, mixed>|scalar $value */
-                $value = $payload[$toSensitizeKey];
-                $sensitizedKeys[$toSensitizeKey] = $this->encryptValue($value);
+                $value = $payload->get($toSensitizeKey);
+                $sensitizedKeys->set($toSensitizeKey, $this->encryptValue($value));
             }
         }
 
-        $sensitizedPayload = $sensitizedKeys + $payload;
+        $sensitizedPayload = $payload->mergeRecursiveDistinct($sensitizedKeys)->jsonSerialize();
         ksort($sensitizedPayload);
 
         return $sensitizedPayload;
@@ -73,16 +74,16 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
      */
     protected function generateDesensitizedPayload(): array
     {
-        $desensitizedKeys = [];
-        $payload = $this->getPayload();
+        $desensitizedKeys = new Dot([]);
+        $payload = new Dot($this->getPayload());
 
         foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
-            if (array_key_exists($toSensitizeKey, $payload) && is_string($payload[$toSensitizeKey])) {
-                $desensitizedKeys[$toSensitizeKey] = $this->decryptValue($payload[$toSensitizeKey]);
+            if ($payload->has($toSensitizeKey) && is_string($payload->get($toSensitizeKey))) {
+                $desensitizedKeys->set($toSensitizeKey, $this->decryptValue((string) $payload->get($toSensitizeKey)));
             }
         }
 
-        $desensitizedPayload = $desensitizedKeys + $payload;
+        $desensitizedPayload = $payload->mergeRecursiveDistinct($desensitizedKeys)->jsonSerialize();
         ksort($desensitizedPayload);
 
         return $desensitizedPayload;
