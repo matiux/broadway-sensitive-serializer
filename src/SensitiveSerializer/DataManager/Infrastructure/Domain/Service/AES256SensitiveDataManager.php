@@ -8,12 +8,11 @@ use Exception;
 use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 
-final class AES256SensitiveDataManager implements SensitiveDataManager
+final class AES256SensitiveDataManager extends SensitiveDataManager
 {
     private const IV_SEPARATOR = ':';
 
     public const CIPHER_METHOD = 'aes-256-cbc';
-    private ?string $secretKey;
     private string $iv;
     private bool $ivEncoding;
 
@@ -22,16 +21,18 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
         string $iv = null,
         bool $ivEncoding = true
     ) {
-        $this->secretKey = $secretKey;
+        parent::__construct($secretKey);
+
         $this->iv = $iv ?? openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
         $this->ivEncoding = $ivEncoding;
     }
 
-    public function encrypt(string $sensitiveData, string $secretKey = null): string
+    /**
+     * {@inheritDoc}
+     */
+    protected function doEncrypt(string $sensitiveData): string
     {
-        $key = $this->getKeyOrFail($secretKey);
-
-        $encrypted = openssl_encrypt($sensitiveData, self::CIPHER_METHOD, $key, 0, $this->iv);
+        $encrypted = openssl_encrypt($sensitiveData, self::CIPHER_METHOD, $this->secretKey(), 0, $this->iv);
 
         if (!$this->ivEncoding) {
             return $encrypted;
@@ -47,19 +48,13 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
     }
 
     /**
-     * @param string      $encryptedSensitiveData
-     * @param null|string $secretKey
-     *
-     * @throws Exception
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    public function decrypt(string $encryptedSensitiveData, string $secretKey = null): string
+    protected function doDecrypt(string $encryptedSensitiveData): string
     {
         $data = $this->prepareData($encryptedSensitiveData);
-        $key = $this->getKeyOrFail($secretKey);
 
-        if (!$decrypted = openssl_decrypt($data['encrypted_data'], self::CIPHER_METHOD, $key, 0, $data['iv'])) {
+        if (!$decrypted = openssl_decrypt($data['encrypted_data'], self::CIPHER_METHOD, $this->secretKey(), 0, $data['iv'])) {
             $errors = [];
 
             while ($msg = openssl_error_string()) {
@@ -103,21 +98,5 @@ final class AES256SensitiveDataManager implements SensitiveDataManager
     private function stripIsSensitizedIndicator(string $encryptedData): string
     {
         return (string) preg_replace('/^'.preg_quote(self::IS_SENSITIZED_INDICATOR, '/').'/', '', $encryptedData);
-    }
-
-    /**
-     * @param null|string $secretKey
-     *
-     * @throws LogicException
-     *
-     * @return string
-     */
-    private function getKeyOrFail(string $secretKey = null): string
-    {
-        if (!$key = $secretKey ?? $this->secretKey) {
-            throw new LogicException('Secret key not found');
-        }
-
-        return $key;
     }
 }

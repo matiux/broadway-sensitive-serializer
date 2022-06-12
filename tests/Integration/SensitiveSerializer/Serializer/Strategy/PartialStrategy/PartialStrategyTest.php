@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizerRegistry;
+use Ramsey\Uuid\Uuid;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\UserCreated;
 
 class PartialStrategyTest extends StrategyTest
 {
@@ -32,7 +33,7 @@ class PartialStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $partialStrategy = $this->buildPartialStrategy(new PartialPayloadSensitizerRegistry([UserCreated::class => ['surname', 'email', 'user_info.height']]));
 
@@ -55,7 +56,7 @@ class PartialStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $partialStrategy = $this->buildPartialStrategy(new PartialPayloadSensitizerRegistry([UserCreated::class => ['surname', 'email']]));
 

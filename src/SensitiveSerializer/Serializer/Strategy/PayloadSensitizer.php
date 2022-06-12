@@ -159,9 +159,9 @@ abstract class PayloadSensitizer
     /**
      * @param null|array<int, mixed>|scalar $value
      *
-     * @return string
+     * @return list<string>|string
      */
-    protected function encryptValue($value): string
+    protected function encryptValue($value)
     {
         Assert::isSerializable($value);
 
@@ -172,16 +172,13 @@ abstract class PayloadSensitizer
     }
 
     /**
-     * @param string $value
+     * @param list<string>|string $value
      *
-     * @return null|array<int, mixed>|scalar
+     * @return null|list<null|scalar>|scalar
      */
-    protected function decryptValue(string $value)
+    protected function decryptValue($value)
     {
-        $decryptedValue = $this->sensitiveDataManager->decrypt(
-            $value,
-            $this->decryptedAggregateKey
-        );
+        $decryptedValue = $this->sensitiveDataManager->decrypt($value, $this->decryptedAggregateKey);
 
         return $this->valueSerializer->deserialize($decryptedValue);
     }

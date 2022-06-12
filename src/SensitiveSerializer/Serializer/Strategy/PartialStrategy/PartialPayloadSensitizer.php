@@ -78,8 +78,10 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
         $payload = new Dot($this->getPayload());
 
         foreach ($this->obtainToSensitizeKeysOrFail() as $toSensitizeKey) {
-            if ($payload->has($toSensitizeKey) && is_string($payload->get($toSensitizeKey))) {
-                $desensitizedKeys->set($toSensitizeKey, $this->decryptValue((string) $payload->get($toSensitizeKey)));
+            if ($payload->has($toSensitizeKey)) {
+                /** @var list<string>|string $value */
+                $value = $payload->get($toSensitizeKey);
+                $desensitizedKeys->set($toSensitizeKey, $this->decryptValue($value));
             }
         }
 

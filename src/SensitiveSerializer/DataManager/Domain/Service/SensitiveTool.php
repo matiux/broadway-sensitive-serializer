@@ -10,12 +10,12 @@ final class SensitiveTool
      * Determines if a given string is sensitized checking if IS_SENSITIZED_INDICATOR constant is present in string.
      * It is useful in some validation check, for example, inside a value objects.
      *
-     * @param string $data
+     * @param mixed $data
      *
      * @return bool
      */
-    public static function isSensitized(string $data): bool
+    public static function isSensitized($data): bool
     {
-        return str_starts_with($data, SensitiveDataManager::IS_SENSITIZED_INDICATOR);
+        return is_string($data) && str_starts_with($data, SensitiveDataManager::IS_SENSITIZED_INDICATOR);
     }
 }

@@ -34,7 +34,7 @@ class WholePayloadSensitizerTest extends StrategyTest
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
         self::expectException(AggregateKeyNotFoundException::class);
-        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getAggregateId()));
+        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getUserId()));
 
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),

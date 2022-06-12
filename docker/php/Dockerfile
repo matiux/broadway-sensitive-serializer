@@ -2,6 +2,9 @@ FROM matiux/php:fpm-7.4-bullseye-dev
 
 USER root
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    jq
+
 ###> Dipendenze sviluppo
 RUN apt-get update \
     && apt-get -y upgrade \

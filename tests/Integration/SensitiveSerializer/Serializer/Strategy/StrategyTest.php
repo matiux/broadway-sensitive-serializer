@@ -12,31 +12,30 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
-use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Tests\Support\SensitiveSerializer\UserCreated;
 use Tests\Support\SensitiveSerializer\UserCreatedBuilder;
 
 abstract class StrategyTest extends TestCase
 {
-    private UuidInterface $aggregateId;
+    private UserId $userId;
     private array $ingoingPayload;
 
     private AES256SensitiveDataManager $sensitiveDataManager;
     private InMemoryAggregateKeys $aggregateKeys;
     private AggregateKeyManager $aggregateKeyManager;
-    private JsonDecodeValueSerializer $valueSerializer;
+    private JsonValueSerializer $valueSerializer;
 
     protected function setUp(): void
     {
-        $this->aggregateId = Uuid::uuid4();
+        $this->userId = UserId::create();
 
-        $event = UserCreatedBuilder::create((string) $this->aggregateId)->build()->serialize();
+        $event = UserCreatedBuilder::create($this->userId)->build()->serialize();
         ksort($event);
 
         $this->ingoingPayload = [
@@ -54,7 +53,7 @@ abstract class StrategyTest extends TestCase
             Key::AGGREGATE_MASTER_KEY
         );
 
-        $this->valueSerializer = new JsonDecodeValueSerializer();
+        $this->valueSerializer = new JsonValueSerializer();
     }
 
     protected function getSensitiveDataManager(): SensitiveDataManager
@@ -77,9 +76,9 @@ abstract class StrategyTest extends TestCase
         return $this->ingoingPayload;
     }
 
-    protected function getAggregateId(): UuidInterface
+    protected function getUserId(): UserId
     {
-        return $this->aggregateId;
+        return $this->userId;
     }
 
     protected function getAggregateKeys(): AggregateKeys
@@ -100,9 +99,12 @@ abstract class StrategyTest extends TestCase
 
         if (!empty($toSensitizeKeys)) {
             foreach ($toSensitizeKeys as $key) {
+                /** @var list<string>|string $sensitizedValue */
                 $sensitizedValue = $sensitizedPayload->get($key);
-                self::assertIsString($sensitizedValue);
-                self::assertTrue(SensitiveTool::isSensitized($sensitizedValue));
+
+                foreach ((array) $sensitizedValue as $item) {
+                    self::assertTrue(SensitiveTool::isSensitized($item));
+                }
             }
         } else {
             foreach ($sensitizedPayload->flatten() as $key => $value) {

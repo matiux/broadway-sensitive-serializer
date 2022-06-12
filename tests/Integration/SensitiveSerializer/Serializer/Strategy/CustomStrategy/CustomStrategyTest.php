@@ -10,6 +10,7 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
+use Ramsey\Uuid\Uuid;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
 use Webmozart\Assert\Assert;
 
@@ -44,7 +45,7 @@ class CustomStrategyTest extends StrategyTest
         /**
          * Remove aggregate key.
          */
-        $aggregateKey = $this->getAggregateKeyManager()->obtainAggregateKeyOrFail($this->getAggregateId());
+        $aggregateKey = $this->getAggregateKeyManager()->obtainAggregateKeyOrFail(Uuid::fromString((string) $this->getUserId()));
         $aggregateKey->delete();
         $this->getAggregateKeys()->update($aggregateKey);
 
@@ -74,7 +75,7 @@ class CustomStrategyTest extends StrategyTest
         /**
          * Finally we reveal the aggregate key and decrypt the sensitized data.
          */
-        $decryptedAggregateKey = $this->getAggregateKeyManager()->revealAggregateKey($this->getAggregateId());
+        $decryptedAggregateKey = $this->getAggregateKeyManager()->revealAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         self::assertNotNull($decryptedAggregateKey);
 
@@ -90,7 +91,7 @@ class CustomStrategyTest extends StrategyTest
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
         self::expectException(AggregateKeyNotFoundException::class);
-        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getAggregateId()));
+        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getUserId()));
 
         $registry = new CustomPayloadSensitizerRegistry([
             new MyEventSensitizer(
@@ -110,9 +111,9 @@ class CustomStrategyTest extends StrategyTest
     public function it_should_throw_exception_if_aggregate_key_does_not_have_the_key_during_encryption(): void
     {
         self::expectException(AggregateKeyEmptyException::class);
-        self::expectExceptionMessage(sprintf('Aggregate key is empty but it is required to encrypt data for aggregate %s', (string) $this->getAggregateId()));
+        self::expectExceptionMessage(sprintf('Aggregate key is empty but it is required to encrypt data for aggregate %s', (string) $this->getUserId()));
 
-        $aggregateKey = $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $aggregateKey = $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
         $aggregateKey->delete();
         $this->getAggregateKeys()->update($aggregateKey);
 

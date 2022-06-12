@@ -2,27 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Tests\Support\SensitiveSerializer;
+namespace Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event;
 
 use Broadway\Serializer\Serializable;
 use Exception;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 
 class UserCreated implements Serializable
 {
-    private string $id;
+    private UserId $id;
     private string $name;
     private string $surname;
-    private string $email;
+    private Email $email;
     private UserInfo $userInfo;
     private DateTimeRFC $occurredAt;
 
     public function __construct(
-        string $id,
+        UserId $id,
         string $name,
         string $surname,
-        string $email,
+        Email $email,
         UserInfo $userInfo,
         DateTimeRFC $occurredAt
     ) {
@@ -46,17 +48,16 @@ class UserCreated implements Serializable
     public static function deserialize(array $data): self
     {
         Assert::isArray($data['user_info']);
-        Assert::isArray($data['user_info']['characteristics']);
 
         return new self(
-            (string) $data['id'],
+            UserId::createFrom($data['id']),
             (string) $data['name'],
             (string) $data['surname'],
-            (string) $data['email'],
+            Email::createFromString($data['email']),
             UserInfo::create(
-                (int) $data['user_info']['age'],
-                (float) $data['user_info']['height'],
-                $data['user_info']['characteristics'],
+                $data['user_info']['age'],
+                $data['user_info']['height'],
+                (array) $data['user_info']['characteristics'],
             ),
             DateTimeRFC::createFrom((string) $data['occurred_at']),
         );
@@ -68,8 +69,8 @@ class UserCreated implements Serializable
     public function serialize(): array
     {
         return [
-            'email' => $this->email,
-            'id' => $this->id,
+            'email' => (string) $this->email,
+            'id' => (string) $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
             'user_info' => [
@@ -79,5 +80,30 @@ class UserCreated implements Serializable
             ],
             'occurred_at' => (string) $this->occurredAt,
         ];
+    }
+
+    public function aggregateId(): UserId
+    {
+        return $this->id;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function surname(): string
+    {
+        return $this->surname;
+    }
+
+    public function email(): Email
+    {
+        return $this->email;
+    }
+
+    public function userInfo(): UserInfo
+    {
+        return $this->userInfo;
     }
 }

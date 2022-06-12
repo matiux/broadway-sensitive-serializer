@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\SensitiveSerializer\Serializer\ValueSerializer;
 
 use InvalidArgumentException;
-use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class JsonDecodeValueSerializerTest extends TestCase
+class JsonValueSerializerTest extends TestCase
 {
     /**
      * @return array<array{0: mixed, 1: string}>
@@ -37,7 +37,7 @@ class JsonDecodeValueSerializerTest extends TestCase
         self::expectExceptionMessageMatches(sprintf('/%s/', preg_quote($errorMessage)));
 
         /** @psalm-suppress MixedArgument */
-        (new JsonDecodeValueSerializer())->serialize($value);
+        (new JsonValueSerializer())->serialize($value);
     }
 
     /**
@@ -48,11 +48,11 @@ class JsonDecodeValueSerializerTest extends TestCase
         self::expectException(InvalidArgumentException::class);
         self::expectExceptionMessage(sprintf('Error: %s - Syntax error', JSON_ERROR_SYNTAX));
 
-        (new JsonDecodeValueSerializer())->deserialize("{'foo': 'bar'}");
+        (new JsonValueSerializer())->deserialize("{'foo': 'bar'}");
     }
 
     /**
-     * @return array<array{0: null|array<int, mixed>|scalar, 1: string}>
+     * @return array<array{0: null|array<int, mixed>|scalar, 1: string|string[]}>
      */
     public function validValuesProvider(): array
     {
@@ -63,8 +63,8 @@ class JsonDecodeValueSerializerTest extends TestCase
             [0.5, '0.5'],
             [1.0, '1.0'],
             [null, 'null'],
-            [['foo', 1, 12.0, 12.5], '["foo",1,12.0,12.5]'],
-            [false, 'false', null],
+            [['foo', 1, 12.0, 12.5], ['"foo"', '1', '12.0', '12.5']],
+            [false, 'false'],
         ];
     }
 
@@ -74,15 +74,15 @@ class JsonDecodeValueSerializerTest extends TestCase
      * @testdox It should serialize $nonSerializedValue that results in $expectedSerializedValue
      *
      * @param null|array<int, mixed>|scalar $nonSerializedValue
-     * @param string                        $expectedSerializedValue
+     * @param array|string                  $expectedSerializedValue
      */
-    public function it_should_serialize_valid_values($nonSerializedValue, string $expectedSerializedValue): void
+    public function it_should_serialize_valid_values($nonSerializedValue, $expectedSerializedValue): void
     {
-        $serialized = (new JsonDecodeValueSerializer())->serialize($nonSerializedValue);
+        $serialized = (new JsonValueSerializer())->serialize($nonSerializedValue);
 
         self::assertSame($expectedSerializedValue, $serialized);
 
-        $deserialized = (new JsonDecodeValueSerializer())->deserialize($serialized);
+        $deserialized = (new JsonValueSerializer())->deserialize($serialized);
 
         self::assertSame($nonSerializedValue, $deserialized);
     }

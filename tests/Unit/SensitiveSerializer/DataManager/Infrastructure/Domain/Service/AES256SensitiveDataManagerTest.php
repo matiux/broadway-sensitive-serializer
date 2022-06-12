@@ -12,43 +12,56 @@ use PHPUnit\Framework\TestCase;
 
 class AES256SensitiveDataManagerTest extends TestCase
 {
-    private string $emailAddress;
-
-    protected function setUp(): void
+    /**
+     * @return list<list<list<string>|string>>
+     */
+    public function toEncryptValues(): array
     {
-        $this->emailAddress = 'm.galacci@gmail.com';
+        return [
+            ['m.galacci@gmail.com'],
+            ['85'],
+            ['null'],
+            ['false'],
+            [['"foo"', '1', '12.0', '12.5']],
+        ];
     }
 
     /**
+     * @dataProvider toEncryptValues
+     *
+     * @param list<string>|string $value
      * @test
      */
-    public function it_should_crypt_and_decrypt_sensible_data_without_making_explicit_the_iv(): void
+    public function it_should_crypt_and_decrypt_sensible_data_without_making_explicit_the_iv($value): void
     {
         $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY);
 
-        $encryptedEmailAddress = $sensitiveDataManager->encrypt($this->emailAddress);
+        $encryptedValue = $sensitiveDataManager->encrypt($value);
 
-        self::assertNotSame($encryptedEmailAddress, $this->emailAddress);
+        self::assertNotSame($encryptedValue, $value);
 
-        $decryptedEmailAddress = $sensitiveDataManager->decrypt($encryptedEmailAddress);
+        $decryptedValue = $sensitiveDataManager->decrypt($encryptedValue);
 
-        self::assertSame($this->emailAddress, $decryptedEmailAddress);
+        self::assertSame($value, $decryptedValue);
     }
 
     /**
+     * @dataProvider toEncryptValues
+     *
+     * @param list<string>|string $value
      * @test
      */
-    public function it_should_encrypt_and_decrypt_sensitive_data_without_encoding_iv(): void
+    public function it_should_encrypt_and_decrypt_sensitive_data_without_encoding_iv($value): void
     {
         $sensitiveDataManager = new AES256SensitiveDataManager(Key::AGGREGATE_MASTER_KEY, null, false);
 
-        $encryptedEmailAddress = $sensitiveDataManager->encrypt($this->emailAddress);
+        $encryptedValue = $sensitiveDataManager->encrypt($value);
 
-        self::assertNotSame($encryptedEmailAddress, $this->emailAddress);
+        self::assertNotSame($encryptedValue, $value);
 
-        $decryptedEmailAddress = $sensitiveDataManager->decrypt($encryptedEmailAddress);
+        $decryptedEmailValue = $sensitiveDataManager->decrypt($encryptedValue);
 
-        self::assertSame($this->emailAddress, $decryptedEmailAddress);
+        self::assertSame($value, $decryptedEmailValue);
     }
 
     /**
@@ -61,7 +74,7 @@ class AES256SensitiveDataManagerTest extends TestCase
 
         $sensitiveDataManager = new AES256SensitiveDataManager();
 
-        $sensitiveDataManager->encrypt($this->emailAddress);
+        $sensitiveDataManager->encrypt('m.galacci@gmail.com');
     }
 
     /**
@@ -74,7 +87,7 @@ class AES256SensitiveDataManagerTest extends TestCase
 
         $sensitiveDataManager = new AES256SensitiveDataManager();
 
-        $encryptedData = $sensitiveDataManager->encrypt($this->emailAddress, 'foo');
+        $encryptedData = $sensitiveDataManager->encrypt('m.galacci@gmail.com', 'foo');
         $sensitiveDataManager->decrypt($encryptedData, 'bar');
     }
 

@@ -6,6 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Example\CustomStrategy;
 
 require_once dirname(__DIR__).'/../vendor/autoload.php';
 
+use Adbar\Dot;
 use Broadway\EventHandling\SimpleEventBus;
 use Broadway\EventHandling\TraceableEventBus;
 use Broadway\EventStore\InMemoryEventStore;
@@ -19,7 +20,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Servic
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\User;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
-use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserRegistered;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserInfo;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\BroadwayUsers;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\SerializedInMemoryEventStore;
@@ -27,7 +29,7 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy;
-use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -38,7 +40,7 @@ $dataManager = new AES256SensitiveDataManager();
 $keyGenerator = new OpenSSLKeyGenerator();
 $aggregateKeys = new InMemoryAggregateKeys();
 $aggregateKeyManager = new AggregateKeyManager($keyGenerator, $aggregateKeys, $dataManager, Key::AGGREGATE_MASTER_KEY);
-$valueSerializer = new JsonDecodeValueSerializer();
+$valueSerializer = new JsonValueSerializer();
 $eventBus = new TraceableEventBus(new SimpleEventBus());
 $eventBus->trace();
 
@@ -76,6 +78,7 @@ $user = User::create(
     'Matteo',
     'Galacci',
     Email::createFromString('m.galacci@gmail.com'),
+    UserInfo::create(36, 1.75, ['blonde']),
     new DateTimeRFC()
 );
 
@@ -85,19 +88,27 @@ $users->add($user);
  * Let's take a look at Event Store.
  */
 
-/** @var UserRegistered $userRegistered */
-$userRegistered = current($inMemoryEventStore->getEvents());
+/** @var UserCreated $userCreatedEvent */
+$userCreatedEvent = current($inMemoryEventStore->getEvents());
 
 Assert::count($inMemoryEventStore->getEvents(), 1);
-Assert::isInstanceOf($userRegistered, UserRegistered::class);
+Assert::isInstanceOf($userCreatedEvent, UserCreated::class);
 
-$serialized = $userRegistered->serialize();
+echo json_encode($userCreatedEvent->serialize());
 
-Assert::true(SensitiveTool::isSensitized($serialized['email'])); // This is the only key encrypted, as indicated in UserRegisteredSensitizer.php
-Assert::false(SensitiveTool::isSensitized($serialized['name']));
-Assert::false(SensitiveTool::isSensitized($serialized['surname']));
-Assert::false(SensitiveTool::isSensitized($serialized['id']));
-Assert::false(SensitiveTool::isSensitized($serialized['occurred_at']));
+$serializedUserCreatedEvent = new Dot($userCreatedEvent->serialize());
+
+// Assert that some attributes are sensitized
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['email'])); // This is the only key encrypted, as indicated in UserRegisteredSensitizer.php
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.characteristics')[0]));
+
+// Assert that some attributes are not sensitized
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['name']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['surname']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['id']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['occurred_at']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.age')));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.height')));
 
 /**
  * And now let's take a look to the AggregateKeys repository.

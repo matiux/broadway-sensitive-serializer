@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
 use Exception;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Support\SensitiveSerializer\UserCreated;
 
 class WholePayloadSensitizerRegistryTest extends TestCase
 {

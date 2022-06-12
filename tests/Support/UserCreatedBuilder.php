@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace Tests\Support\SensitiveSerializer;
 
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserInfo;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 
 class UserCreatedBuilder
 {
-    private string $id;
+    private UserId $id;
     private string $name = 'Matteo';
     private string $surname = 'Galacci';
-    private string $email = 'm.galacci@gmail.com';
+    private Email $email;
     private int $age = 36;
     private float $height = 1.75;
     /** @var list<string> */
     private array $characteristics = ['blonde'];
     private DateTimeRFC $occurredAt;
 
-    private function __construct(?string $id = null)
+    private function __construct(?UserId $id = null)
     {
-        $this->id = $id ?? '31849ba6-d2c5-45e5-bd1c-fb97276a2295';
+        $this->id = $id ?? UserId::create();
+        $this->email = Email::createFromString('m.galacci@gmail.com');
         $this->occurredAt = new DateTimeRFC();
     }
 
-    public static function create(?string $id = null): self
+    public static function create(?UserId $id = null): self
     {
         return new self($id);
     }

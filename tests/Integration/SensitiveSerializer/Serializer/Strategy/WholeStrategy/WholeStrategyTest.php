@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeStrategy;
+use Ramsey\Uuid\Uuid;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\UserCreated;
 
 class WholeStrategyTest extends StrategyTest
 {
@@ -48,7 +49,7 @@ class WholeStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $wholeStrategy = new WholeStrategy(
             new WholePayloadSensitizerRegistry([UserCreated::class]),
@@ -73,7 +74,7 @@ class WholeStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $wholeStrategy = new WholeStrategy(
             new WholePayloadSensitizerRegistry([UserCreated::class]),

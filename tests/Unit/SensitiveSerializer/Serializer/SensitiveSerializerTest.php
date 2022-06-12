@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\SensitiveSerializer\Serializer;
 
 use Broadway\Serializer\SimpleInterfaceSerializer;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use PHPUnit\Framework\TestCase;
-use Tests\Support\SensitiveSerializer\UserCreated;
 use Tests\Support\SensitiveSerializer\UserCreatedBuilder;
 
 class SensitiveSerializerTest extends TestCase

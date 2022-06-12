@@ -7,10 +7,10 @@ namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialStrat
 use BadMethodCallException;
 use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizerRegistry;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\UserCreated;
 
 class PartialPayloadSensitizerTest extends StrategyTest
 {
@@ -34,7 +34,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
         self::expectException(AggregateKeyNotFoundException::class);
-        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getAggregateId()));
+        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getUserId()));
 
         $partialPayloadSensitizer = $this->buildPartialPayloadSensitizer(new PartialPayloadSensitizerRegistry([]), false);
 
