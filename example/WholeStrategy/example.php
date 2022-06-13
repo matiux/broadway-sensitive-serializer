@@ -6,6 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Example\WholeStrategy;
 
 require_once dirname(__DIR__).'/../vendor/autoload.php';
 
+use Adbar\Dot;
 use Broadway\EventHandling\SimpleEventBus;
 use Broadway\EventHandling\TraceableEventBus;
 use Broadway\EventStore\InMemoryEventStore;
@@ -19,7 +20,8 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Servic
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\Email;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\User;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
-use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserRegistered;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserInfo;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject\DateTimeRFC;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\BroadwayUsers;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Infrastructure\Domain\Broadway\SerializedInMemoryEventStore;
@@ -28,7 +30,7 @@ use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeStrategy;
-use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -39,15 +41,21 @@ $dataManager = new AES256SensitiveDataManager();
 $keyGenerator = new OpenSSLKeyGenerator();
 $aggregateKeys = new InMemoryAggregateKeys();
 $aggregateKeyManager = new AggregateKeyManager($keyGenerator, $aggregateKeys, $dataManager, Key::AGGREGATE_MASTER_KEY);
-$valueSerializer = new JsonDecodeValueSerializer();
+$valueSerializer = new JsonValueSerializer();
 $eventBus = new TraceableEventBus(new SimpleEventBus());
 $eventBus->trace();
 
 /**
  * Initialize specific dependencies.
  */
+
+/**
+ * This array represents list of which events need to be sensitized. If you want to exclude some keys,
+ * use fifth values of WholePayloadSensitizer class set to true
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#whole-strategy.
+ */
 $events = [
-    UserRegistered::class,
+    UserCreated::class,
 ];
 
 $registry = new WholePayloadSensitizerRegistry($events);
@@ -57,7 +65,7 @@ $wholePayloadSensitizer = new WholePayloadSensitizer(
     $aggregateKeyManager,
     $valueSerializer,
     true,
-    ['occurred_at'],
+    ['occurred_at', 'user_info.age'],
     'id'
 );
 
@@ -86,7 +94,8 @@ $user = User::create(
     'Matteo',
     'Galacci',
     Email::createFromString('m.galacci@gmail.com'),
-    new DateTimeRFC()
+    UserInfo::create(36, 1.75, ['blonde']),
+    new DateTimeRFC(),
 );
 
 $users->add($user);
@@ -95,24 +104,29 @@ $users->add($user);
  * Let's take a look at Event Store.
  */
 
-/** @var UserRegistered $userRegistered */
-$userRegistered = current($inMemoryEventStore->getEvents());
+/** @var UserCreated $userCreatedEvent */
+$userCreatedEvent = current($inMemoryEventStore->getEvents());
 
 Assert::count($inMemoryEventStore->getEvents(), 1);
-Assert::isInstanceOf($userRegistered, UserRegistered::class);
+Assert::isInstanceOf($userCreatedEvent, UserCreated::class);
 
-$serialized = $userRegistered->serialize();
+echo json_encode($userCreatedEvent->serialize());
+$serializedUserCreatedEvent = new Dot($userCreatedEvent->serialize());
 
-// All payload has been sensitized but `id` and `occurred_at`
-Assert::true(SensitiveTool::isSensitized($serialized['email']));
-Assert::true(SensitiveTool::isSensitized($serialized['name']));
-Assert::true(SensitiveTool::isSensitized($serialized['surname']));
-Assert::false(SensitiveTool::isSensitized($serialized['id']));
-Assert::false(SensitiveTool::isSensitized($serialized['occurred_at']));
+// All payload has been sensitized but `id`, `occurred_at` and `user_info.age`
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['email']));
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['name']));
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['surname']));
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.characteristics')[0]));
+
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['id']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['occurred_at']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.age')));
 
 /**
  * And now let's take a look to the AggregateKeys repository.
- * You will notice that model has been auto generated thanks third parameter of UserRegisteredSensitizer set to true.
+ * You will notice that model has been auto generated thanks fourth parameter of WholePayloadSensitizer set to true.
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#aggregatekeys.
  */
 $aggregateKey = $aggregateKeys->withAggregateId(Uuid::fromString((string) $userId));
 Assert::true($aggregateKey->exists());
@@ -134,4 +148,5 @@ $aggregateKeys->update($aggregateKey);
 
 $user = $users->load($userId);
 
+Assert::true(SensitiveTool::isSensitized($user->userInfo()->height())); // Age is encrypted
 Assert::true(SensitiveTool::isSensitized((string) $user->email())); // Email is encrypted

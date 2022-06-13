@@ -20,12 +20,16 @@
   ],
   "config": {
     "optimize-autoloader": true,
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
   },
   "require": {
     "php": "^7.4|^8",
-    "ext-openssl": "*",
     "ext-json": "*",
+    "ext-openssl": "*",
+    "adbario/php-dot-notation": "^3.1",
     "ramsey/uuid": "^4.2",
     "symfony/polyfill-php81": "^1.24"
   },
@@ -56,7 +60,8 @@
       "Tests\\Unit\\SensitiveSerializer\\": "tests/Unit/SensitiveSerializer/",
       "Tests\\Integration\\SensitiveSerializer\\": "tests/Integration/SensitiveSerializer/",
       "Tests\\Util\\SensitiveSerializer\\": "tests/Util/",
-      "Tests\\Support\\SensitiveSerializer\\": "tests/Support/"
+      "Tests\\Support\\SensitiveSerializer\\": "tests/Support/",
+      "Tests\\Learning\\SensitiveSerializer\\": "tests/Learning/"
     }
   }
 }

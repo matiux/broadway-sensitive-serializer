@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy;
 
-use Assert\AssertionFailedException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 
 final class CustomStrategy implements SensitizerStrategy
 {
@@ -26,18 +25,18 @@ final class CustomStrategy implements SensitizerStrategy
      *
      * @param array $serializedObject
      *
-     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|AssertionFailedException|DuplicatedAggregateKeyException
+     * @throws AggregateKeyEmptyException|AggregateKeyNotFoundException|DuplicatedAggregateKeyException
      *
      * @return array
      */
     public function sensitize(array $serializedObject): array
     {
-        Validator::validateSerializedObject($serializedObject);
+        Assert::isSerializedObject($serializedObject);
 
         /** @var PayloadSensitizer $sensitizer */
         if ($sensitizer = $this->customPayloadSensitizerRegistry->resolveItemFor($serializedObject)) {
             $serializedObject = $sensitizer->sensitize($serializedObject);
-            Validator::validateSerializedObject($serializedObject);
+            Assert::isSerializedObject($serializedObject);
         }
 
         return $serializedObject;
@@ -45,17 +44,15 @@ final class CustomStrategy implements SensitizerStrategy
 
     /**
      * {@inheritDoc}
-     *
-     * @throws AggregateKeyNotFoundException|AssertionFailedException
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {
-        Validator::validateSerializedObject($sensitiveSerializedObject);
+        Assert::isSerializedObject($sensitiveSerializedObject);
 
         /** @var PayloadSensitizer $sensitizer */
         if ($sensitizer = $this->customPayloadSensitizerRegistry->resolveItemFor($sensitiveSerializedObject)) {
             $sensitiveSerializedObject = $sensitizer->desensitize($sensitiveSerializedObject);
-            Validator::validateSerializedObject($sensitiveSerializedObject);
+            Assert::isSerializedObject($sensitiveSerializedObject);
         }
 
         return $sensitiveSerializedObject;

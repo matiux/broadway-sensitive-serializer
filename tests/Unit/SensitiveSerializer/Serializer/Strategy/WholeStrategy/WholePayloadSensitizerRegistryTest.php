@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
 use Exception;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Tests\Support\SensitiveSerializer\MyEvent;
 
 class WholePayloadSensitizerRegistryTest extends TestCase
 {
@@ -45,9 +45,9 @@ class WholePayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_tell_us_if_an_event_is_to_be_sensitized_or_not(): void
     {
-        $registry = new WholePayloadSensitizerRegistry([MyEvent::class]);
+        $registry = new WholePayloadSensitizerRegistry([UserCreated::class]);
 
-        self::assertTrue($registry->supports(MyEvent::class));
+        self::assertTrue($registry->supports(UserCreated::class));
         self::assertFalse($registry->supports(stdClass::class));
     }
 }

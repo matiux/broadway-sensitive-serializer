@@ -8,6 +8,7 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKe
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 use Ramsey\Uuid\UuidInterface;
 
 final class AggregateKeyManager
@@ -43,15 +44,12 @@ final class AggregateKeyManager
     {
         $this->ensureDoesNotExist($aggregateId);
 
-        // $encryptedKeyForAggregate represents encrypted encryption key for Aggregate (AGGREGATE_KEY)
-        // encrypted with the AGGREGATE_MASTER_KEY
-        $encryptedKeyForAggregate = $this->sensitiveDataManager->encrypt(
-            $this->keyGenerator->generate(),
-            $this->aggregateMasterKey
+        // AggregateKey model
+        $aggregateKey = AggregateKey::create(
+            $aggregateId,
+            $this->generateEncryptedKeyForAggregate()
         );
 
-        // AggregateKey model
-        $aggregateKey = AggregateKey::create($aggregateId, $encryptedKeyForAggregate);
         $this->aggregateKeys->add($aggregateKey);
 
         return $aggregateKey;
@@ -73,6 +71,20 @@ final class AggregateKeyManager
         }
     }
 
+    private function generateEncryptedKeyForAggregate(): string
+    {
+        // $encryptedKeyForAggregate represents encrypted encryption key for Aggregate (AGGREGATE_KEY),
+        // encrypted with the AGGREGATE_MASTER_KEY
+        $encryptedKeyForAggregate = $this->sensitiveDataManager->encrypt(
+            $this->keyGenerator->generate(),
+            $this->aggregateMasterKey
+        );
+
+        Assert::string($encryptedKeyForAggregate);
+
+        return $encryptedKeyForAggregate;
+    }
+
     /**
      * Reveals the decrypted aggregate_key.
      *
@@ -86,11 +98,14 @@ final class AggregateKeyManager
     {
         $aggregateKey = $this->obtainAggregateKeyOrFail($aggregateId);
 
-        if ($aggregateKey->exists()) {
-            return $this->sensitiveDataManager->decrypt((string) $aggregateKey, $this->aggregateMasterKey);
+        if (!$aggregateKey->exists()) {
+            return null;
         }
 
-        return null;
+        $key = $this->sensitiveDataManager->decrypt((string) $aggregateKey, $this->aggregateMasterKey);
+        Assert::string($key);
+
+        return $key;
     }
 
     /**

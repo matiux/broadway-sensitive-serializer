@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
-use Assert\AssertionFailedException;
 use Exception;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Validator;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 
 final class WholeStrategy implements SensitizerStrategy
 {
@@ -26,15 +25,15 @@ final class WholeStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AggregateKeyEmptyException|AssertionFailedException|Exception
+     * @throws AggregateKeyEmptyException|Exception
      */
     public function sensitize(array $serializedObject): array
     {
-        Validator::validateSerializedObject($serializedObject);
+        Assert::isSerializedObject($serializedObject);
 
         if ($this->wholePayloadSensitizerRegistry->supports($serializedObject['class'])) {
             $serializedObject = $this->wholePayloadSensitizer->sensitize($serializedObject);
-            Validator::validateSerializedObject($serializedObject);
+            Assert::isSerializedObject($serializedObject);
         }
 
         return $serializedObject;
@@ -43,15 +42,15 @@ final class WholeStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AssertionFailedException|Exception
+     * @throws Exception
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {
-        Validator::validateSerializedObject($sensitiveSerializedObject);
+        Assert::isSerializedObject($sensitiveSerializedObject);
 
         if ($this->wholePayloadSensitizerRegistry->supports($sensitiveSerializedObject['class'])) {
             $sensitiveSerializedObject = $this->wholePayloadSensitizer->desensitize($sensitiveSerializedObject);
-            Validator::validateSerializedObject($sensitiveSerializedObject);
+            Assert::isSerializedObject($sensitiveSerializedObject);
         }
 
         return $sensitiveSerializedObject;

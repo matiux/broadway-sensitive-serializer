@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\ValueObject;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Exception;
 
 /**
@@ -13,9 +12,16 @@ use Exception;
  */
 class DateTimeRFC extends DateTimeImmutable
 {
+    /**
+     * Based on DateTimeInterface::RFC3339_EXTENDED = Y-m-d\TH:i:s.vP
+     * v = Milliseconds
+     * u = Microseconds
+     */
+    public const FORMAT = 'Y-m-d\TH:i:s.uP';
+
     public function __toString(): string
     {
-        return $this->format(DateTimeInterface::RFC3339_EXTENDED);
+        return $this->format(self::FORMAT);
     }
 
     /**
@@ -29,8 +35,8 @@ class DateTimeRFC extends DateTimeImmutable
      */
     public static function createFrom(string $dateTime): DateTimeRFC
     {
-        $date = self::createFromFormat(DateTimeInterface::RFC3339_EXTENDED, $dateTime);
+        $date = self::createFromFormat(self::FORMAT, $dateTime);
 
-        return new self($date->format(DateTimeInterface::RFC3339_EXTENDED));
+        return new self($date->format(self::FORMAT));
     }
 }

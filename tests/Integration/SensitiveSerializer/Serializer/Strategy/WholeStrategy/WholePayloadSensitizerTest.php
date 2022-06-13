@@ -34,7 +34,7 @@ class WholePayloadSensitizerTest extends StrategyTest
     public function it_should_throw_exception_if_aggregate_key_id_missing_during_encryption(): void
     {
         self::expectException(AggregateKeyNotFoundException::class);
-        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getAggregateId()));
+        self::expectExceptionMessage(sprintf('AggregateKey not found for aggregate %s', (string) $this->getUserId()));
 
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),
@@ -64,8 +64,7 @@ class WholePayloadSensitizerTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
     }
 
     /**
@@ -86,7 +85,7 @@ class WholePayloadSensitizerTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholePayloadSensitizer->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
 
         $desensitizedOutgoingPayload = $wholePayloadSensitizer->desensitize($sensitizedOutgoingPayload);
 
@@ -115,7 +114,7 @@ class WholePayloadSensitizerTest extends StrategyTest
 
         $excludedKeys = array_merge(['id'], $wholePayloadSensitizer->excludedKeys());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, $excludedKeys);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], $excludedKeys);
 
         self::assertFalse(SensitiveTool::isSensitized($sensitizedOutgoingPayload['payload']['name']));
 

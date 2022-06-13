@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeStrategy;
+use Ramsey\Uuid\Uuid;
 use Tests\Integration\SensitiveSerializer\Serializer\Strategy\StrategyTest;
-use Tests\Support\SensitiveSerializer\MyEvent;
 
 class WholeStrategyTest extends StrategyTest
 {
@@ -48,10 +49,10 @@ class WholeStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $wholeStrategy = new WholeStrategy(
-            new WholePayloadSensitizerRegistry([MyEvent::class]),
+            new WholePayloadSensitizerRegistry([UserCreated::class]),
             $this->wholePayloadSensitizer
         );
 
@@ -62,8 +63,7 @@ class WholeStrategyTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholeStrategy->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
-        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
     }
 
     /**
@@ -74,10 +74,10 @@ class WholeStrategyTest extends StrategyTest
         /**
          * First let's create an AggregateKey for specific Aggregate.
          */
-        $this->getAggregateKeyManager()->createAggregateKey($this->getAggregateId());
+        $this->getAggregateKeyManager()->createAggregateKey(Uuid::fromString((string) $this->getUserId()));
 
         $wholeStrategy = new WholeStrategy(
-            new WholePayloadSensitizerRegistry([MyEvent::class]),
+            new WholePayloadSensitizerRegistry([UserCreated::class]),
             $this->wholePayloadSensitizer
         );
 
@@ -88,7 +88,7 @@ class WholeStrategyTest extends StrategyTest
          */
         $sensitizedOutgoingPayload = $wholeStrategy->sensitize($this->getIngoingPayload());
 
-        $this->assertObjectIsSensitized($sensitizedOutgoingPayload);
+        $this->assertObjectIsSensitized($sensitizedOutgoingPayload, [], ['id', 'occurred_at']);
 
         $desensitizedOutgoingPayload = $wholeStrategy->desensitize($sensitizedOutgoingPayload);
 

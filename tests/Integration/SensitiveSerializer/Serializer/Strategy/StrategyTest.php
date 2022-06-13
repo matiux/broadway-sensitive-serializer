@@ -4,40 +4,43 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy;
 
+use Adbar\Dot;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;
-use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Aggregate\UserId;
+use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
-use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\ValueSerializer;
+use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Tests\Support\SensitiveSerializer\MyEvent;
-use Tests\Support\SensitiveSerializer\MyEventBuilder;
+use Tests\Support\SensitiveSerializer\UserCreatedBuilder;
 
 abstract class StrategyTest extends TestCase
 {
-    private UuidInterface $aggregateId;
+    private UserId $userId;
     private array $ingoingPayload;
 
     private AES256SensitiveDataManager $sensitiveDataManager;
     private InMemoryAggregateKeys $aggregateKeys;
     private AggregateKeyManager $aggregateKeyManager;
-    private JsonDecodeValueSerializer $valueSerializer;
+    private JsonValueSerializer $valueSerializer;
 
     protected function setUp(): void
     {
-        $this->aggregateId = Uuid::uuid4();
+        $this->userId = UserId::create();
+
+        $event = UserCreatedBuilder::create($this->userId)->build()->serialize();
+        ksort($event);
 
         $this->ingoingPayload = [
-            'class' => MyEvent::class,
-            'payload' => MyEventBuilder::create((string) $this->aggregateId)->build()->serialize(),
+            'class' => UserCreated::class,
+            'payload' => $event,
         ];
 
         $this->sensitiveDataManager = new AES256SensitiveDataManager();
@@ -50,7 +53,7 @@ abstract class StrategyTest extends TestCase
             Key::AGGREGATE_MASTER_KEY
         );
 
-        $this->valueSerializer = new JsonDecodeValueSerializer();
+        $this->valueSerializer = new JsonValueSerializer();
     }
 
     protected function getSensitiveDataManager(): SensitiveDataManager
@@ -73,9 +76,9 @@ abstract class StrategyTest extends TestCase
         return $this->ingoingPayload;
     }
 
-    protected function getAggregateId(): UuidInterface
+    protected function getUserId(): UserId
     {
-        return $this->aggregateId;
+        return $this->userId;
     }
 
     protected function getAggregateKeys(): AggregateKeys
@@ -84,41 +87,33 @@ abstract class StrategyTest extends TestCase
     }
 
     /**
-     * @param array{class: class-string, payload: array{id: string}} $sensitizedOutgoingPayload
-     * @param string[]                                               $excludedKeys
+     * @param array    $sensitizedOutgoingPayload
+     * @param string[] $toSensitizeKeys
+     * @param string[] $toExcludeKeys
      */
-    protected function assertObjectIsSensitized(array $sensitizedOutgoingPayload, array $excludedKeys = ['id']): void
+    protected function assertObjectIsSensitized(array $sensitizedOutgoingPayload, array $toSensitizeKeys = [], array $toExcludeKeys = []): void
     {
-        self::assertArrayHasKey('class', $sensitizedOutgoingPayload);
-        self::assertArrayHasKey('payload', $sensitizedOutgoingPayload);
-        self::assertArrayHasKey('id', $sensitizedOutgoingPayload['payload']);
+        Assert::isSerializedObject($sensitizedOutgoingPayload);
 
-        $sensitizedData = $sensitizedOutgoingPayload['payload'];
+        $sensitizedPayload = new Dot($sensitizedOutgoingPayload['payload']);
 
-        foreach ($excludedKeys as $excludedKey) {
-            unset($sensitizedData[$excludedKey]);
+        if (!empty($toSensitizeKeys)) {
+            foreach ($toSensitizeKeys as $key) {
+                /** @var list<string>|string $sensitizedValue */
+                $sensitizedValue = $sensitizedPayload->get($key);
+
+                foreach ((array) $sensitizedValue as $item) {
+                    self::assertTrue(SensitiveTool::isSensitized($item));
+                }
+            }
+        } else {
+            foreach ($sensitizedPayload->flatten() as $key => $value) {
+                if (!in_array($key, $toExcludeKeys)) {
+                    self::assertIsString($value);
+                    self::assertTrue(SensitiveTool::isSensitized($value));
+                }
+            }
         }
-
-        foreach ($sensitizedData as $sensitizedValue) {
-            self::assertTrue(SensitiveTool::isSensitized($sensitizedValue));
-        }
-    }
-
-    /**
-     * @param array $sensitizedOutgoingPayload
-     * @param array $excludedKeys
-     *
-     * @throws AggregateKeyNotFoundException
-     */
-    protected function assertSensitizedPayloadEqualToExpected(array $sensitizedOutgoingPayload, array $excludedKeys = ['id']): void
-    {
-        $decryptedAggregateKey = $this->aggregateKeyManager->revealAggregateKey($this->aggregateId);
-
-        self::assertNotNull($decryptedAggregateKey);
-
-        $expectedPayload = $this->buildExpectedPayload($excludedKeys, $decryptedAggregateKey, $sensitizedOutgoingPayload);
-
-        self::assertSame($expectedPayload, $sensitizedOutgoingPayload);
     }
 
     protected function assertSensitizedValueSame(string $expected, string $sensitizedValue, string $decryptedAggregateKey): void
