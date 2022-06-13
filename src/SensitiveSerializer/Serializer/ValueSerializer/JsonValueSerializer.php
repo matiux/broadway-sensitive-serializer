@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
-use InvalidArgumentException;
+use JsonException;
 
 class JsonValueSerializer extends ValueSerializer
 {
@@ -13,26 +13,22 @@ class JsonValueSerializer extends ValueSerializer
      */
     protected function doSerialize($value): string
     {
-        $encodedValue = json_encode($value, JSON_PRESERVE_ZERO_FRACTION);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new InvalidArgumentException(json_last_error_msg());
+        try {
+            return json_encode($value, JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw ValueSerializerException::createFrom($e);
         }
-
-        return $encodedValue;
     }
 
     protected function doDeserialize(string $value)
     {
-        /** @var null|scalar $decodedValue */
-        $decodedValue = json_decode($value, true);
+        try {
+            /** @var null|scalar $decodedValue */
+            $decodedValue = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
-        if (JSON_ERROR_NONE !== ($lastError = json_last_error())) {
-            $msg = sprintf('Error: %s - %s', $lastError, json_last_error_msg());
-
-            throw new InvalidArgumentException($msg);
+            return $decodedValue;
+        } catch (JsonException $e) {
+            throw ValueSerializerException::createFrom($e);
         }
-
-        return $decodedValue;
     }
 }

@@ -46,7 +46,7 @@ class JsonValueSerializerTest extends TestCase
     public function it_should_throw_exception_if_value_to_deserialize_is_invalid(): void
     {
         self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage(sprintf('Error: %s - Syntax error', JSON_ERROR_SYNTAX));
+        self::expectExceptionMessage('Syntax error');
 
         (new JsonValueSerializer())->deserialize("{'foo': 'bar'}");
     }
