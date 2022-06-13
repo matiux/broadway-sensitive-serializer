@@ -48,6 +48,11 @@ $eventBus->trace();
 /**
  * Initialize specific dependencies.
  */
+
+/**
+ * This array represents map of which keys of the event need to be sensitized
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#partial-strategy.
+ */
 $events = [
     UserCreated::class => ['surname', 'email', 'user_info.age', 'user_info.characteristics'],
 ];
@@ -69,6 +74,9 @@ $serializer = new SensitiveSerializer(new SimpleInterfaceSerializer(), $partialS
 $inMemoryEventStore = new TraceableEventStore(new InMemoryEventStore());
 $inMemoryEventStore->trace();
 
+/**
+ * User aggregate repository.
+ */
 $users = new BroadwayUsers(
     new SerializedInMemoryEventStore($inMemoryEventStore, $serializer),
     $eventBus
@@ -107,7 +115,6 @@ $serializedUserCreatedEvent = new Dot($userCreatedEvent->serialize());
 // Assert that some attributes are sensitized
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['surname']));
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['email']));
-Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.characteristics')));
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.characteristics')[0]));
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.age')));
 
@@ -120,6 +127,7 @@ Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user
 /**
  * And now let's take a look to the AggregateKeys repository.
  * You will notice that model has been auto generated thanks fifth parameter of PartialPayloadSensitizer set to true.
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#aggregatekeys.
  */
 $aggregateKey = $aggregateKeys->withAggregateId(Uuid::fromString((string) $userId));
 Assert::true($aggregateKey->exists());

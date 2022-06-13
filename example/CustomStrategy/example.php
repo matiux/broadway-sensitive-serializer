@@ -29,6 +29,7 @@ use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
@@ -47,22 +48,30 @@ $eventBus->trace();
 /**
  * Initialize specific dependencies.
  */
+
+/**
+ * This is a custom Sensitizer defined in the same directory o this example file.
+ * It extends `PayloadSensitizer` abstract class. You need to create one custom sensitizer
+ * for each event you need to handle. Check out the documentation here:
+ * https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#custom-strategy.
+ */
 $sensitizers = [
     new UserRegisteredSensitizer($dataManager, $aggregateKeyManager, $valueSerializer, true),
 ];
 
-$registry = new CustomPayloadSensitizerRegistry($sensitizers);
-
-$customSensitizerStrategy = new CustomStrategy($registry);
-
 $serializer = new SensitiveSerializer(
     new SimpleInterfaceSerializer(),
-    $customSensitizerStrategy
+    new CustomStrategy(
+        new CustomPayloadSensitizerRegistry($sensitizers)
+    )
 );
 
 $inMemoryEventStore = new TraceableEventStore(new InMemoryEventStore());
 $inMemoryEventStore->trace();
 
+/**
+ * User aggregate repository.
+ */
 $users = new BroadwayUsers(
     new SerializedInMemoryEventStore($inMemoryEventStore, $serializer),
     $eventBus
@@ -112,7 +121,8 @@ Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user
 
 /**
  * And now let's take a look to the AggregateKeys repository.
- * You will notice that model has been auto generated thanks third parameter of UserRegisteredSensitizer set to true.
+ * You will notice that model has been auto generated thanks fourth parameter of UserRegisteredSensitizer set to true.
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#aggregatekeys.
  */
 $aggregateKey = $aggregateKeys->withAggregateId(Uuid::fromString((string) $userId));
 Assert::true($aggregateKey->exists());
@@ -125,7 +135,7 @@ $user = $users->load($userId);
 Assert::false(SensitiveTool::isSensitized((string) $user->email())); // Now the email is in clear
 
 /**
- * If the key does not exist, the decryption will not work.
+ * If the key does not exist, decryption will not work.
  */
 $aggregateKey = $aggregateKeys->withAggregateId(Uuid::fromString((string) $userId));
 $aggregateKey->delete();
@@ -135,3 +145,4 @@ $aggregateKeys->update($aggregateKey);
 $user = $users->load($userId);
 
 Assert::true(SensitiveTool::isSensitized((string) $user->email())); // Email is encrypted
+Assert::true(SensitiveTool::isSensitized($user->userInfo()->characteristics()[0]));

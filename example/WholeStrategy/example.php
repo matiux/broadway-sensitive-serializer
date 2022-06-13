@@ -48,6 +48,12 @@ $eventBus->trace();
 /**
  * Initialize specific dependencies.
  */
+
+/**
+ * This array represents list of which events need to be sensitized. If you want to exclude some keys,
+ * use fifth values of WholePayloadSensitizer class set to true
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#whole-strategy.
+ */
 $events = [
     UserCreated::class,
 ];
@@ -111,15 +117,16 @@ $serializedUserCreatedEvent = new Dot($userCreatedEvent->serialize());
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['email']));
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['name']));
 Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['surname']));
-Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent['surname']));
-Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.age')));
+Assert::true(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.characteristics')[0]));
 
 Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['id']));
 Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent['occurred_at']));
+Assert::false(SensitiveTool::isSensitized($serializedUserCreatedEvent->get('user_info.age')));
 
 /**
  * And now let's take a look to the AggregateKeys repository.
- * You will notice that model has been auto generated thanks third parameter of UserCreatedSensitizer set to true.
+ * You will notice that model has been auto generated thanks fourth parameter of WholePayloadSensitizer set to true.
+ * Check out documentation here: https://github.com/matiux/broadway-sensitive-serializer/wiki/03.Modules#aggregatekeys.
  */
 $aggregateKey = $aggregateKeys->withAggregateId(Uuid::fromString((string) $userId));
 Assert::true($aggregateKey->exists());
@@ -141,5 +148,5 @@ $aggregateKeys->update($aggregateKey);
 
 $user = $users->load($userId);
 
-Assert::true(SensitiveTool::isSensitized($user->userInfo()->age())); // Age is encrypted
+Assert::true(SensitiveTool::isSensitized($user->userInfo()->height())); // Age is encrypted
 Assert::true(SensitiveTool::isSensitized((string) $user->email())); // Email is encrypted
