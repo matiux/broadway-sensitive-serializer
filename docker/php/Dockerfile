@@ -12,6 +12,19 @@ RUN apt-get update \
     graphviz #Per deptrac
 ###> Fine dipendenze sviluppo
 
+###> Read The Docs
+RUN apt-get install -y --no-install-recommends \
+    python3-pip \
+    python3-sphinx
+
+RUN pip install \
+    sphinx-tabs \
+    sphinx_rtd_theme \
+    sphinxcontrib-phpdomain \
+    sphinx-autobuild \
+    sphinx-hoverxref
+###> Fine Read The Docs
+
 COPY conf/xdebug-starter.sh /usr/local/bin/xdebug-starter
 RUN chmod +x /usr/local/bin/xdebug-starter
 RUN /usr/local/bin/xdebug-starter

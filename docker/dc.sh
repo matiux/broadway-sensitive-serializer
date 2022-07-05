@@ -37,6 +37,7 @@ elif [[ "$1" == "phpunit" ]]; then shift 1;                             ${DC_EXE
 elif [[ "$1" == "psalm" ]]; then shift 1;                               ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL psalm "$@"
 elif [[ "$1" == "psalm-no-pseudo-tty" ]]; then shift 1;                 ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL psalm "$@"
 elif [[ "$1" == "deptrac-all" ]]; then shift 1;                         ${DC_EXEC_PHP} $PROJECT_TOOL deptrac-all
+elif [[ "$1" == "build-docs" ]]; then shift 1;                          ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL build-docs
 elif [[ "$1" == "project" ]]; then shift 1;                             ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL "$@"
 
 elif [[ "$1" == "php-run" ]]; then shift 1;                             ${DC_EXEC_PHP_NO_PSEUDO_TTY} "$@"
