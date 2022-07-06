@@ -68,6 +68,16 @@ coding_standard_fix() {
 #  return $STATUS
 }
 
+sphinx_build() {
+
+    sphinx-build -b linkcheck -a docs/source ./tmp/mydocs
+    STATUS=$?
+
+    if [[ "$STATUS" -eq 0 ]]; then
+      sphinx-build -a docs/source ./tmp/mydocs
+    fi
+}
+
 while :; do
   case $CMD in
   install_dependencies)
@@ -134,6 +144,10 @@ while :; do
     coding_standard_fix --dry-run ./src ./tests
     exit $?
     ;;
+  build-docs)
+    sphinx_build
+    exit $?
+    ;;
   shortlist)
     echo \
       install_dependencies \
@@ -150,7 +164,8 @@ while :; do
       coding-standard-fix-all \
       coding-standard-fix-staged \
       coding-standard-check-staged \
-      coding-standard-check-all
+      coding-standard-check-all \
+      build-docs
     break
     ;;
   esac

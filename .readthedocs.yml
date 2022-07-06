@@ -1,0 +1,26 @@
+version: 2
+
+formats: all
+
+sphinx:
+  configuration: docs/source/conf.py
+
+python:
+  install:
+    - requirements: docs/source/requirements/docs.txt
+
+build:
+  os: ubuntu-20.04
+  tools:
+    python: "3.8"
+
+search:
+  ranking:
+    # Deprecated content
+    api/v1.html: -1
+    config-file/v1.html: -5
+
+    # Useful content, but not something we want most users finding
+    changelog.html: -6
+  ignore:
+    - dmca/archive/*

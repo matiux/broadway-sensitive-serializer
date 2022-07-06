@@ -9,6 +9,7 @@ Sensitization support for [broadway/broadway](https://github.com/broadway/broadw
 ![security analysis status](https://github.com/matiux/broadway-sensitive-serializer/actions/workflows/security-analysis.yml/badge.svg)
 ![coding standards status](https://github.com/matiux/broadway-sensitive-serializer/actions/workflows/coding-standards.yml/badge.svg)
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/matiux/broadway-sensitive-serializer?color=blue)
+![Read the Docs (version)](https://img.shields.io/readthedocs/broadway-sensitive-serializer/latest)
 
 The idea behind this project is to make a CQRS + ES system compliant, specifically implemented through
 the [Broadway](https://github.com/broadway/broadway) library, with the General Data Protection Regulation (GDPR),
@@ -46,6 +47,7 @@ Some uses:
 ./dc psalm
 ./dc coding-standard-fix-staged
 ./dc build php --no-cache
+./dc build-docs
 ```
 Check out [here](./docker/dc.sh) for all the options.
 
