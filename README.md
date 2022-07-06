@@ -11,11 +11,41 @@ Sensitization support for [broadway/broadway](https://github.com/broadway/broadw
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/matiux/broadway-sensitive-serializer?color=blue)
 ![Read the Docs (version)](https://img.shields.io/readthedocs/broadway-sensitive-serializer/latest)
 
-The idea behind this project is to make a CQRS + ES system compliant, specifically implemented through
+The idea behind this project is to make a CQRS+ES system compliant, specifically implemented through
 the [Broadway](https://github.com/broadway/broadway) library, with the General Data Protection Regulation (GDPR),
 in particular with the right to be forgotten.
 
-Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki) for more information.
+Normal Broadway event payload
+```json
+{
+    "class": "SensitiveUser\\User\\Domain\\Event\\UserRegistered",
+    "payload": {
+        "id": "b0fce205-d816-46ac-886f-06de19236750",
+        "name": "Matteo",
+        "surname": "Galacci",
+        "email": "m.galacci@gmail.com",
+        "occurred_at": "2022-01-08T14:22:38.065+00:00"
+    }
+}
+```
+
+Example of a payload with the extension active
+```json
+{
+  "class": "SensitiveUser\\User\\Domain\\Event\\UserRegistered",
+  "payload": {
+    "id": "b0fce205-d816-46ac-886f-06de19236750",
+    "name": "Matteo",
+    "surname": "#-#2Iuofg4NKKPLAG2kdJrbmQ==:bxQo+zXfjUgrD0jHuht0mQ==",
+    "email": "#-#OFLfN9XDKtWrmCmUb6mhY0Iz2V6wtam0pcqs6vDJFRU=:bxQo+zXfjUgrD0jHuht0mQ==",
+    "occurred_at": "2022-01-08T14:22:38.065+00:00"
+  }
+}
+```
+
+The symfony bundle exists to simplify integration with the framework [here](https://github.com/matiux/broadway-sensitive-serializer-bundle)
+
+Read the [doc](https://broadway-sensitive-serializer.readthedocs.io/en/latest/) for more information.
 
 ## Install
 ```shell
@@ -29,7 +59,7 @@ cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
 
-This repository uses github actions to perform some checks. If you want to test the actions locally you can use [act](https://github.com/nektos/act).
+This repository uses GitHub actions to perform some checks. If you want to test the actions locally you can use [act](https://github.com/nektos/act).
 For example if you want to check the action for static analysis
 ```
 act -P ubuntu-latest=shivammathur/node:latest --job static-analysis
@@ -66,4 +96,4 @@ project phpunit
 ```
 
 ## Example code
-Read the [wiki](https://github.com/matiux/broadway-sensitive-serializer/wiki/04.Examples)
+Read the [examples section](https://broadway-sensitive-serializer.readthedocs.io/en/latest/examples.html)
