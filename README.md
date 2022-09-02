@@ -76,23 +76,23 @@ make enter
 make phpunit
 make psalm
 make coding-standard-fix-staged
-make build-php
+make build-php ARG="--no-cache"
 make build-docs
 ```
 Check out [here](./makefile) for all the options.
 
 ### Install dependencies to run test or execute examples
 ```shell
+make build-php ARG="--no-cache"
 make upd
-make enter
-composer install
+make composer ARG="install"
 ```
 
 ### Run test
 ```shell
+make build-php ARG="--no-cache"
 make upd
-make enter
-project phpunit
+make phpunit
 ```
 
 ## Example code
