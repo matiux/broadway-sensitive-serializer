@@ -23,6 +23,7 @@ Whole sensitization example
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter
@@ -37,6 +38,7 @@ Partial sensitization example
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter
@@ -51,6 +53,7 @@ Custom sensitization example
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter

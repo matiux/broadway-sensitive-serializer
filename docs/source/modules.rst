@@ -111,6 +111,7 @@ attribute.
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter
@@ -139,6 +140,7 @@ which is dependent on the ``PartialPayloadSensitizerRegistry`` and `PartialPaylo
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter
@@ -163,6 +165,7 @@ which is solely dependent on the ``CustomPayloadSensitizerRegistry``. An example
 
 .. code-block:: shell
 
+    make build-php ARG="--no-cache"
     make upd
     make composer ARG="install"
     make enter
