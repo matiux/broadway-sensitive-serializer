@@ -10,6 +10,6 @@ secrets:
 
 services:
 
-  php_broadway_sensitive_serializer:
+  broadway-sensitive-serializer-php:
     environment:
       - AGGREGATE_MASTER_KEY="SS3kr3tK31"

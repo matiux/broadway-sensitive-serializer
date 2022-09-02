@@ -70,11 +70,11 @@ coding_standard_fix() {
 
 sphinx_build() {
 
-    sphinx-build -b linkcheck -a docs/source ./tmp/mydocs
+    sphinx-build -b linkcheck -a docs/source ./var/tmp/mydocs
     STATUS=$?
 
     if [[ "$STATUS" -eq 0 ]]; then
-      sphinx-build -a docs/source ./tmp/mydocs
+      sphinx-build -a docs/source ./var/tmp/mydocs
     fi
 }
 
