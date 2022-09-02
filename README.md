@@ -67,31 +67,31 @@ act -P ubuntu-latest=shivammathur/node:latest --job static-analysis
 
 
 ### Interact with the PHP container
-This is a bash script that wrap major docker-compose function. You can find it [here](./docker/dc.sh) and there is a symbolic link in project root.
+You can interact with the PHP container through the [makefile](./makefile)
 
 Some uses:
 ```shell
-./dc up -d
-./dc enter
-./dc phpunit
-./dc psalm
-./dc coding-standard-fix-staged
-./dc build php --no-cache
-./dc build-docs
+make upd
+make enter
+make phpunit
+make psalm
+make coding-standard-fix-staged
+make build-php
+make build-docs
 ```
-Check out [here](./docker/dc.sh) for all the options.
+Check out [here](./makefile) for all the options.
 
 ### Install dependencies to run test or execute examples
 ```shell
-./dc up -d
-./dc enter
+make upd
+make enter
 composer install
 ```
 
 ### Run test
 ```shell
-./dc up -d
-./dc enter
+make upd
+make enter
 project phpunit
 ```
 

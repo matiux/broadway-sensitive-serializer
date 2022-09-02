@@ -111,9 +111,9 @@ attribute.
 
 .. code-block:: shell
 
-    ./dc up -d
-    ./dc enter
-    composer install
+    make upd
+    make composer ARG="install"
+    make enter
     php example/WholeStrategy/example.php
 
 Partial strategy
@@ -139,9 +139,9 @@ which is dependent on the ``PartialPayloadSensitizerRegistry`` and `PartialPaylo
 
 .. code-block:: shell
 
-    ./dc up -d
-    ./dc enter
-    composer install
+    make upd
+    make composer ARG="install"
+    make enter
     php example/PartialStrategy/example.php
 
 Custom strategy
@@ -163,9 +163,9 @@ which is solely dependent on the ``CustomPayloadSensitizerRegistry``. An example
 
 .. code-block:: shell
 
-    ./dc up -d
-    ./dc enter
-    composer install
+    make upd
+    make composer ARG="install"
+    make enter
     php example/CustomStrategy/example.php
 
 Strategy summary
