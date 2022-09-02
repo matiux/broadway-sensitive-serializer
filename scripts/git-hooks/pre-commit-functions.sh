@@ -3,7 +3,7 @@
 check_code_style() {
 
   # Formattazione del codice con PHP CS Fixer
-  ./dc coding-standard-check-staged
+  make coding-standard-check-staged
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then
@@ -22,11 +22,11 @@ check_code_style() {
       return 0
       ;;
     [Nn]*)
-      echo "Run './dc coding-standard-fix-staged' to fix"
+      echo "Run 'make coding-standard-fix-staged' to fix"
       return 1
       ;;
     [Ff]*)
-      ./dc coding-standard-fix-staged
+      make coding-standard-fix-staged
       return $?
       ;;
     *) echo "Please answer y, n or f." ;;
@@ -37,7 +37,7 @@ check_code_style() {
 check_psalm() {
 
   # Analisi statica del codice con Psalm
-  ./dc psalm-no-pseudo-tty --no-cache
+  make psalm
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then
@@ -62,7 +62,7 @@ check_psalm() {
 check_phpunit() {
 
   # Esecuzione dei test con phpunit
-  ./dc phpunit
+  make phpunit
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then
