@@ -24,7 +24,7 @@ jobs:
           extensions: bcmath, mbstring, intl, sodium, json
 
       - name: Install dependencies
-        run: ./tools/bin/project install_dependencies
+        run: composer install --prefer-dist --no-progress
 
       - name: "coding-standard-check"
-        run: ./tools/bin/project coding-standard-fix-all
+        run: ./tools/bin/project/project coding-standard-fix-all

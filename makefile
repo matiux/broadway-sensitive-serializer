@@ -7,7 +7,7 @@ NODEJS_IMAGE=$(PROJECT_PREFIX)-nodejs
 PROJECT_NAME=$(shell basename $$(pwd) | tr '[:upper:]' '[:lower:]')
 PHP_USER=utente
 WORKDIR=/var/www/app
-PROJECT_TOOL=$(WORKDIR)/tools/bin/project
+PROJECT_TOOL=$(WORKDIR)/tools/bin/project/project
 
 # Docker conf ——————————————————————————————————————————————————————————————————————————————————————————————————————————
 PHP_DOCKERFILE=./docker/php/Dockerfile

@@ -38,10 +38,7 @@ jobs:
         uses: "actions/checkout@v2"
 
       - name: Install dependencies
-        run: ./tools/bin/project install_dependencies
-
-      - name: Create Schema
-        run: ./tools/bin/project schema-create
+        run: composer install --prefer-dist --no-progress
 
       - name: "Run unit tests (PHPUnit)"
         env:
@@ -51,7 +48,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SQS_QUEUE_NAME: ${{ secrets.AWS_SQS_QUEUE_NAME }}
           AWS_SNS_TOPIC_ARN: ${{ secrets.AWS_SNS_TOPIC_ARN }}
-        run: ./tools/bin/project coverage
+        run: ./tools/bin/project/project coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
