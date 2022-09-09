@@ -26,10 +26,10 @@ jobs:
           extensions: bcmath, mbstring, intl, sodium, json
 
       - name: Install dependencies
-        run: ./tools/bin/project install_dependencies
+        run: composer install --prefer-dist --no-progress
 
       - name: "running static analysis"
-        run: ./tools/bin/project psalm
+        run: ./tools/bin/project/project psalm
 
       - name: "calculating type coverage"
-        run: ./tools/bin/project type-coverage
+        run: ./tools/bin/project/project type-coverage
