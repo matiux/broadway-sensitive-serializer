@@ -46,6 +46,7 @@ class CustomPayloadSensitizerRegistryTest extends TestCase
 
     /**
      * @test
+     *
      * @psalm-suppress InvalidArgument
      */
     public function it_should_throw_exception_if_items_passed_to_registry_is_invalid(): void

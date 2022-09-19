@@ -13,6 +13,7 @@ class AssertTest extends TestCase
 {
     /**
      * @psalm-suppress all
+     *
      * @test
      */
     public function it_should_throw_exception_if_value_invalid(): void

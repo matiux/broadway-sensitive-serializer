@@ -26,6 +26,7 @@ class JsonValueSerializerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidValuesProvider
      *
      * @param mixed  $value
@@ -70,7 +71,9 @@ class JsonValueSerializerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider validValuesProvider
+     *
      * @testdox It should serialize $nonSerializedValue that results in $expectedSerializedValue
      *
      * @param null|array<int, mixed>|scalar $nonSerializedValue
