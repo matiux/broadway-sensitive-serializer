@@ -15,5 +15,7 @@ source ./scripts/git-hooks/pre-commit-functions.sh
 
 if ! check_code_style; then exit 1; fi
 if ! check_psalm; then exit 1; fi;
+if ! check_psalm_taint_analysis; then exit 1; fi;
 if ! check_phpunit; then exit 1; fi;
-##if ! check_deptrac; then exit 1; fi;
+if ! check_dependencies_vulnerabilities; then exit 1; fi;
+#if ! check_deptrac; then exit 1; fi;

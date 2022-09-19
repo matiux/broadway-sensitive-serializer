@@ -35,3 +35,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+
+      - name: Check dependency vulnerabilities
+        run: ./tools/bin/project/project check-deps-vulnerabilities
