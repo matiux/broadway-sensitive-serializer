@@ -43,6 +43,7 @@ final class PartialPayloadSensitizerRegistry
 
     /**
      * @param string[] $toSensitizeKeysList
+     *
      * @psalm-suppress RedundantConditionGivenDocblockType
      */
     private function isValidToSensitizeKeysList(array $toSensitizeKeysList): void

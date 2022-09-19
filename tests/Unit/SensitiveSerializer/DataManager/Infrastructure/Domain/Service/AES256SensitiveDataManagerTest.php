@@ -30,6 +30,7 @@ class AES256SensitiveDataManagerTest extends TestCase
      * @dataProvider toEncryptValues
      *
      * @param list<string>|string $value
+     *
      * @test
      */
     public function it_should_crypt_and_decrypt_sensible_data_without_making_explicit_the_iv($value): void
@@ -49,6 +50,7 @@ class AES256SensitiveDataManagerTest extends TestCase
      * @dataProvider toEncryptValues
      *
      * @param list<string>|string $value
+     *
      * @test
      */
     public function it_should_encrypt_and_decrypt_sensitive_data_without_encoding_iv($value): void

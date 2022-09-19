@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Shared\Tools;
 
 use InvalidArgumentException;
-use function sprintf;
 
 class Assert extends \Webmozart\Assert\Assert
 {
@@ -29,6 +28,7 @@ class Assert extends \Webmozart\Assert\Assert
 
     /**
      * @psalm-type SerializedObject = array{class: class-string, payload: array{id: string}}
+     *
      * @psalm-assert SerializedObject $value
      *
      * @param array $value

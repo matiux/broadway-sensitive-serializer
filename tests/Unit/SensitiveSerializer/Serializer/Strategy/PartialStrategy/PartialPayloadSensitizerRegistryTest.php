@@ -23,9 +23,11 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
 
     /**
      * @test
+     *
      * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @param array $toSensitizeKeysList
+     *
      * @dataProvider invalidClassStringProvider
      */
     public function it_should_throw_exception_over_an_invalid_class_string(array $toSensitizeKeysList): void
@@ -70,7 +72,9 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
 
     /**
      * @test
+     *
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
      * @dataProvider invalidListOfKeys
      *
      * @param array  $toSensitize

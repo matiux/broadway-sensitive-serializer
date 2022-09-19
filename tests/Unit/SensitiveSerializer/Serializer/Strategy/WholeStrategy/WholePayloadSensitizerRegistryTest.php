@@ -27,6 +27,7 @@ class WholePayloadSensitizerRegistryTest extends TestCase
      * @test
      *
      * @param string $classString
+     *
      * @dataProvider invalidClassStringProvider
      */
     public function it_should_throw_exception_over_an_invalid_class_string(string $classString): void

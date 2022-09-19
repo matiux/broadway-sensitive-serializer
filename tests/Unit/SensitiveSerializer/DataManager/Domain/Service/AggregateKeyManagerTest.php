@@ -42,6 +42,7 @@ class AggregateKeyManagerTest extends TestCase
 
     /**
      * @psalm-suppress UndefinedInterfaceMethod, MixedMethodCall
+     *
      * @test
      */
     public function it_should_create_an_encrypted_aggregate_key(): void

@@ -11,6 +11,7 @@ class DotTest extends TestCase
 {
     /**
      * @psalm-suppress all
+     *
      * @test
      */
     public function dot_read(): void

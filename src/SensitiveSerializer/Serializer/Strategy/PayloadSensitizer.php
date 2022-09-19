@@ -26,6 +26,7 @@ abstract class PayloadSensitizer
 
     /**
      * @var class-string
+     *
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private string $type;
