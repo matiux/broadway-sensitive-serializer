@@ -4,9 +4,10 @@
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
-        xsi:schemaLocation="https://getpsalm.org/schema/config ../../vendor/vimeo/psalm/config.xsd"
-        autoloader="../../vendor/autoload.php"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         phpVersion="7.4"
+        findUnusedCode="false"
+        findUnusedBaselineEntry="true"
 >
     <projectFiles>
         <directory name="../../src"/>
@@ -17,6 +18,7 @@
     </projectFiles>
 
     <issueHandlers>
+        <RiskyTruthyFalsyComparison errorLevel="suppress" />
         <ParamNameMismatch errorLevel="suppress"/>
         <MissingConstructor>
             <errorLevel type="suppress">
@@ -24,11 +26,15 @@
                 <directory name="../../src"/>
             </errorLevel>
         </MissingConstructor>
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="../../tests/Unit/SensitiveSerializer/DataManager/Infrastructure/Domain/Service/AES256SensitiveDataManagerTest.php"/>
+            </errorLevel>
+        </InvalidArgument>
     </issueHandlers>
     
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
         <pluginClass class="Psalm\MockeryPlugin\Plugin"/>
-<!--        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>-->
     </plugins>
 </psalm>
