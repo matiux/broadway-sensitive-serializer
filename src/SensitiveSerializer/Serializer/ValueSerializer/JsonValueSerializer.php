@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
-use JsonException;
-
 class JsonValueSerializer extends ValueSerializer
 {
     /**
@@ -15,7 +13,7 @@ class JsonValueSerializer extends ValueSerializer
     {
         try {
             return json_encode($value, JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw ValueSerializerException::createFrom($e);
         }
     }
@@ -27,7 +25,7 @@ class JsonValueSerializer extends ValueSerializer
             $decodedValue = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
             return $decodedValue;
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw ValueSerializerException::createFrom($e);
         }
     }

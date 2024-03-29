@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
-use Exception;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\SensitizerStrategy;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
@@ -25,7 +24,7 @@ final class WholeStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws AggregateKeyEmptyException|Exception
+     * @throws AggregateKeyEmptyException|\Exception
      */
     public function sensitize(array $serializedObject): array
     {
@@ -42,7 +41,7 @@ final class WholeStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {

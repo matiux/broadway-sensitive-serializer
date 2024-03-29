@@ -40,6 +40,7 @@ $rules = [
     'multiline_whitespace_before_semicolons' => true,
     'phpdoc_annotation_without_dot' => true,
     'no_unused_imports' => true,
+    'fully_qualified_strict_types' => false
 ];
 
 return $config->setRules($rules)

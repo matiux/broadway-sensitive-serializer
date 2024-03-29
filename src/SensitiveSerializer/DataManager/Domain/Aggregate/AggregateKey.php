@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate;
 
 use Broadway\Domain\DateTime;
-use DateTimeImmutable;
-use Exception;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -15,7 +13,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 final class AggregateKey
 {
-    private ?DateTimeImmutable  $cancellationDate = null;
+    private ?\DateTimeImmutable $cancellationDate = null;
     private UuidInterface $aggregateId;
     private string $aggregateKey;
 
@@ -40,10 +38,10 @@ final class AggregateKey
     public function delete(): void
     {
         $this->aggregateKey = '';
-        $this->cancellationDate = new DateTimeImmutable();
+        $this->cancellationDate = new \DateTimeImmutable();
     }
 
-    public function cancellationDate(): ?DateTimeImmutable
+    public function cancellationDate(): ?\DateTimeImmutable
     {
         return $this->cancellationDate;
     }
@@ -76,7 +74,7 @@ final class AggregateKey
     /**
      * @param SerializedAKey $data
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return self
      */
@@ -89,7 +87,7 @@ final class AggregateKey
 
         $aggregateKey->cancellationDate = is_null($data['cancellation_date'])
             ? null
-            : new DateTimeImmutable($data['cancellation_date']);
+            : new \DateTimeImmutable($data['cancellation_date']);
 
         return $aggregateKey;
     }

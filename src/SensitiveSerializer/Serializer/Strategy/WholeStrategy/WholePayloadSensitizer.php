@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
 use Adbar\Dot;
-use BadMethodCallException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
@@ -132,7 +131,7 @@ final class WholePayloadSensitizer extends PayloadSensitizer
 
     public function supports($subject): bool
     {
-        throw new BadMethodCallException();
+        throw new \BadMethodCallException();
     }
 
     /**

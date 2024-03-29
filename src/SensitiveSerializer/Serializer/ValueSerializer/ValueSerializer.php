@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer;
 
-use InvalidArgumentException;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Util;
 use phpDocumentor\Reflection\Types\Scalar;
 
@@ -13,7 +12,7 @@ abstract class ValueSerializer
     /**
      * @param null|array<int, mixed>|scalar $value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return list<string>|string
      */
@@ -36,7 +35,7 @@ abstract class ValueSerializer
     private function serializeArray(array $value): array
     {
         $encodedValue = [];
-        /** @var scalar $item */
+        /** @var null|array<int, mixed>|scalar $item */
         foreach ($value as $item) {
             $encodedValue[] = $this->doSerialize($item);
         }
@@ -45,9 +44,9 @@ abstract class ValueSerializer
     }
 
     /**
-     * @param null|scalar $value
+     * @param null|array<int, mixed>|scalar $value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return string
      */
@@ -56,7 +55,7 @@ abstract class ValueSerializer
     /**
      * @param list<string>|string $value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return null|list<null|scalar>|scalar
      */
@@ -100,14 +99,14 @@ abstract class ValueSerializer
     private function validate($value): void
     {
         if (Util::isAssociativeArray($value)) {
-            throw new InvalidArgumentException('You cannot serialize an associative array');
+            throw new \InvalidArgumentException('You cannot serialize an associative array');
         }
 
         /**
          * @psalm-suppress DocblockTypeContradiction
          */
         if (is_object($value)) {
-            throw new InvalidArgumentException('ValueSerializer::serialize() cannot accept objects');
+            throw new \InvalidArgumentException('ValueSerializer::serialize() cannot accept objects');
         }
     }
 }

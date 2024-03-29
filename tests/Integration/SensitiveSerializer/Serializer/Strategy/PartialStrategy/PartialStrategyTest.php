@@ -45,7 +45,7 @@ class PartialStrategyTest extends StrategyTest
         $sensitizedOutgoingPayload = $partialStrategy->sensitize($this->getIngoingPayload());
 
         $this->assertObjectIsSensitized($sensitizedOutgoingPayload, ['surname', 'email', 'user_info.height']);
-//        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload, ['id', 'name', 'occurred_at']);
+        //        $this->assertSensitizedPayloadEqualToExpected($sensitizedOutgoingPayload, ['id', 'name', 'occurred_at']);
     }
 
     /**

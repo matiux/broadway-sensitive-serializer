@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Shared\Tools;
 
-use InvalidArgumentException;
-
 class Assert extends \Webmozart\Assert\Assert
 {
     /**
@@ -14,7 +12,7 @@ class Assert extends \Webmozart\Assert\Assert
      * @param mixed  $value
      * @param string $message
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function isSerializable($value, string $message = ''): void
     {
@@ -33,7 +31,7 @@ class Assert extends \Webmozart\Assert\Assert
      *
      * @param array $value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function isSerializedObject(array $value): void
     {

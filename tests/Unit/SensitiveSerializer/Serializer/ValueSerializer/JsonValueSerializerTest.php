@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Serializer\ValueSerializer;
 
-use InvalidArgumentException;
 use Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -17,7 +16,7 @@ class JsonValueSerializerTest extends TestCase
     public function invalidValuesProvider(): array
     {
         return [
-            [new stdClass(), 'ValueSerializer::serialize() cannot accept objects'],
+            [new \stdClass(), 'ValueSerializer::serialize() cannot accept objects'],
             ["\xB1\x31", 'Malformed UTF-8 characters, possibly incorrectly encoded'],
             [['a' => 'a', 'b' => 12, 'c' => 1.0], 'You cannot serialize an associative array'],
             // [['foo' => new stdClass()]], TODO
@@ -34,7 +33,7 @@ class JsonValueSerializerTest extends TestCase
      */
     public function it_should_throw_exception_if_value_to_serialize_is_invalid($value, string $errorMessage): void
     {
-        self::expectException(InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessageMatches(sprintf('/%s/', preg_quote($errorMessage)));
 
         /** @psalm-suppress MixedArgument */
@@ -46,7 +45,7 @@ class JsonValueSerializerTest extends TestCase
      */
     public function it_should_throw_exception_if_value_to_deserialize_is_invalid(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Syntax error');
 
         (new JsonValueSerializer())->deserialize("{'foo': 'bar'}");

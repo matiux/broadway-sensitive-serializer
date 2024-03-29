@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Shared\Tools;
 
-use InvalidArgumentException;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Assert;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class AssertTest extends TestCase
 {
@@ -18,9 +16,9 @@ class AssertTest extends TestCase
      */
     public function it_should_throw_exception_if_value_invalid(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        self::expectException(\InvalidArgumentException::class);
 
-        $a = new stdClass();
+        $a = new \stdClass();
         Assert::isSerializable($a);
     }
 }
