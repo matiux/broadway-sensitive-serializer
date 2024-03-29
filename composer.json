@@ -40,11 +40,11 @@
     "matiux/php-project-autopilot": "dev-master",
     "mockery/mockery": "^1.5",
     "phpunit/phpunit": "^9.5",
-    "psalm/plugin-mockery": "^0.9.0",
-    "psalm/plugin-phpunit": "^0.16.1",
+    "psalm/plugin-mockery": "^1.0",
+    "psalm/plugin-phpunit": "^0.19",
     "roave/security-advisories": "dev-latest",
     "symfony/var-dumper": "^5.3|^6.0",
-    "vimeo/psalm": "^4.19"
+    "vimeo/psalm": "^5.0"
   },
   "suggest": {
     "broadway/broadway-bundle": "Symfony bundle for broadway/broadway",
