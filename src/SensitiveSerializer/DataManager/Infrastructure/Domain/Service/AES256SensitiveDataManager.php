@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service;
 
-use Exception;
-use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 
 final class AES256SensitiveDataManager extends SensitiveDataManager
@@ -18,7 +16,7 @@ final class AES256SensitiveDataManager extends SensitiveDataManager
 
     public function __construct(
         ?string $secretKey = null,
-        string $iv = null,
+        ?string $iv = null,
         bool $ivEncoding = true
     ) {
         parent::__construct($secretKey);
@@ -61,7 +59,7 @@ final class AES256SensitiveDataManager extends SensitiveDataManager
                 $errors[] = $msg;
             }
 
-            throw new Exception('Decrypt error: '.implode(' + ', $errors));
+            throw new \Exception('Decrypt error: '.implode(' + ', $errors));
         }
 
         return $decrypted;
@@ -91,7 +89,7 @@ final class AES256SensitiveDataManager extends SensitiveDataManager
                 ];
             default:
                 // TODO
-                throw new LogicException('Problems in IV recognizing');
+                throw new \LogicException('Problems in IV recognizing');
         }
     }
 

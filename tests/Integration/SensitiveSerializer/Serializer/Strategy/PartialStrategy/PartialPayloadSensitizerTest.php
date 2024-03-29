@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
-use BadMethodCallException;
-use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizer;
@@ -21,7 +19,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
      */
     public function it_should_throw_exception_if_support_method_called(): void
     {
-        self::expectException(BadMethodCallException::class);
+        self::expectException(\BadMethodCallException::class);
 
         $partialPayloadSensitizer = $this->buildPartialPayloadSensitizer(new PartialPayloadSensitizerRegistry([]));
 
@@ -96,7 +94,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
      */
     public function it_should_throw_exception_if_registry_does_not_resolve(): void
     {
-        self::expectException(LogicException::class);
+        self::expectException(\LogicException::class);
         self::expectExceptionMessage(sprintf('If you are here, the strategy should have identified correct event in registry: %s', UserCreated::class));
 
         $sensitizer = new PartialPayloadSensitizer(
@@ -114,7 +112,7 @@ class PartialPayloadSensitizerTest extends StrategyTest
      */
     public function it_should_throw_exception_if_try_to_serialize_associative_array(): void
     {
-        self::expectException(LogicException::class);
+        self::expectException(\LogicException::class);
         self::expectExceptionMessage('Expected a array<int, mixed>|scalar|null. Got: array');
 
         $events = [

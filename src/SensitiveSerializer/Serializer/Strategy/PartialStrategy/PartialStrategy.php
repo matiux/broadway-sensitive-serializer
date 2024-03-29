@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
-use Exception;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyEmptyException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\DuplicatedAggregateKeyException;
@@ -30,7 +29,7 @@ final class PartialStrategy implements SensitizerStrategy
      * @throws AggregateKeyEmptyException
      * @throws AggregateKeyNotFoundException
      * @throws DuplicatedAggregateKeyException
-     * @throws Exception
+     * @throws \Exception
      *
      * @return array
      */
@@ -49,7 +48,7 @@ final class PartialStrategy implements SensitizerStrategy
     /**
      * {@inheritDoc}
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function desensitize(array $sensitiveSerializedObject): array
     {

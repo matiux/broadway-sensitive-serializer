@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\DataManager\Infrastructure\Domain\Service;
 
-use Exception;
-use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use PHPUnit\Framework\TestCase;
@@ -71,7 +69,7 @@ class AES256SensitiveDataManagerTest extends TestCase
      */
     public function it_should_throw_exception_if_key_does_not_exist(): void
     {
-        self::expectException(LogicException::class);
+        self::expectException(\LogicException::class);
         self::expectExceptionMessage('Secret key not found');
 
         $sensitiveDataManager = new AES256SensitiveDataManager();
@@ -84,7 +82,7 @@ class AES256SensitiveDataManagerTest extends TestCase
      */
     public function it_should_throw_exception_if_different_key(): void
     {
-        self::expectException(Exception::class);
+        self::expectException(\Exception::class);
         self::expectExceptionMessage('Decrypt error');
 
         $sensitiveDataManager = new AES256SensitiveDataManager();
@@ -98,7 +96,7 @@ class AES256SensitiveDataManagerTest extends TestCase
      */
     public function it_should_throw_exception_if_iv_is_invalid(): void
     {
-        self::expectException(LogicException::class);
+        self::expectException(\LogicException::class);
         self::expectExceptionMessage('Problems in IV recognizing');
 
         $sensitiveDataManager = new AES256SensitiveDataManager();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
-use BadMethodCallException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Exception\AggregateKeyNotFoundException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveTool;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizer;
@@ -17,7 +16,7 @@ class WholePayloadSensitizerTest extends StrategyTest
      */
     public function it_should_throw_exception_if_support_method_called(): void
     {
-        self::expectException(BadMethodCallException::class);
+        self::expectException(\BadMethodCallException::class);
 
         $wholePayloadSensitizer = new WholePayloadSensitizer(
             $this->getSensitiveDataManager(),

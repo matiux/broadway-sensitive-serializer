@@ -11,24 +11,23 @@ use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyM
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\KeyGenerator;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 class AggregateKeyManagerTest extends TestCase
 {
     private AggregateKeyManager $aggregateKeyManager;
-    private AggregateKeys  $aggregateKeys;
+    private AggregateKeys $aggregateKeys;
 
     protected function setUp(): void
     {
-        $keyGenerator = Mockery::mock(KeyGenerator::class)
+        $keyGenerator = \Mockery::mock(KeyGenerator::class)
             ->shouldReceive('generate')->andReturn(Key::AGGREGATE_KEY)
             ->getMock();
 
-        $this->aggregateKeys = Mockery::spy(AggregateKeys::class);
+        $this->aggregateKeys = \Mockery::spy(AggregateKeys::class);
 
-        $sensitiveDataManager = Mockery::mock(SensitiveDataManager::class)
+        $sensitiveDataManager = \Mockery::mock(SensitiveDataManager::class)
             ->shouldReceive('encrypt')->with(Key::AGGREGATE_KEY, Key::AGGREGATE_MASTER_KEY)->andReturn(Key::ENCRYPTED_AGGREGATE_KEY)
             ->getMock();
 

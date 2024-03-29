@@ -35,7 +35,7 @@ jobs:
           php-version: '8.1'
 
       - name: Checkout code
-        uses: "actions/checkout@v2"
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
@@ -51,7 +51,7 @@ jobs:
         run: ./tools/bin/project/project coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./.coverage/coverage-clover.xml

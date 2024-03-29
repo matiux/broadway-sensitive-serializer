@@ -26,11 +26,10 @@ services:
       - source: known_hosts
         target: /home/utente/.ssh/known_hosts
 
-  broadway-sensitive-serializer-nodejs:
-    image: broadway-sensitive-serializer-nodejs
+  conventional-commit-nodejs:
+    image: conventional-commit-nodejs
     build: nodejs
     working_dir: /var/www/app
-    #command: "commitlint -e --from=HEAD"
     volumes:
       - ../:/var/www/app
     networks:

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\DataManager\Domain\Aggregate;
 
-use DateTimeImmutable;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKey;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Key;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +32,7 @@ class AggregateKeyTest extends TestCase
         $aggregateKey->delete();
         self::assertFalse($aggregateKey->exists());
         self::assertNotNull($aggregateKey->cancellationDate());
-        self::assertGreaterThan($aggregateKey->cancellationDate(), new DateTimeImmutable());
+        self::assertGreaterThan($aggregateKey->cancellationDate(), new \DateTimeImmutable());
     }
 
     /**

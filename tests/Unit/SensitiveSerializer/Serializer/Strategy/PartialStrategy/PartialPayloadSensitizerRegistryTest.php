@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
-use Exception;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +31,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_throw_exception_over_an_invalid_class_string(array $toSensitizeKeysList): void
     {
-        self::expectException(Exception::class);
+        self::expectException(\Exception::class);
         self::expectExceptionMessage(sprintf('Invalid class string: %s', (string) array_key_first($toSensitizeKeysList)));
 
         new PartialPayloadSensitizerRegistry($toSensitizeKeysList);
@@ -43,7 +42,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_throw_exception_when_list_of_keys_to_sensitize_is_empty(): void
     {
-        self::expectException(Exception::class);
+        self::expectException(\Exception::class);
         self::expectExceptionMessage('List of keys to sensitize cannot be empty');
 
         $toSensitizeKeysList = [
@@ -82,7 +81,7 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_throw_exception_when_list_of_keys_to_sensitize_is_invalid(array $toSensitize, string $errorMessage): void
     {
-        self::expectException(Exception::class);
+        self::expectException(\Exception::class);
         self::expectExceptionMessage($errorMessage);
 
         new PartialPayloadSensitizerRegistry($toSensitize);
@@ -117,9 +116,5 @@ class PartialPayloadSensitizerRegistryTest extends TestCase
     }
 }
 
-class EventOne
-{
-}
-class EventTwo
-{
-}
+class EventOne {}
+class EventTwo {}

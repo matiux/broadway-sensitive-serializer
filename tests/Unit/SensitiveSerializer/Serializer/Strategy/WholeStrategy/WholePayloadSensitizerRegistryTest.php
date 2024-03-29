@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\WholeStrategy;
 
-use Exception;
 use Matiux\Broadway\SensitiveSerializer\Example\Shared\Domain\Event\UserCreated;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizerRegistry;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class WholePayloadSensitizerRegistryTest extends TestCase
 {
@@ -32,7 +30,7 @@ class WholePayloadSensitizerRegistryTest extends TestCase
      */
     public function it_should_throw_exception_over_an_invalid_class_string(string $classString): void
     {
-        self::expectException(Exception::class);
+        self::expectException(\Exception::class);
         self::expectExceptionMessage(sprintf('Invalid class string: %s', $classString));
 
         /** @var class-string[] $eventToSensitize */
@@ -49,6 +47,6 @@ class WholePayloadSensitizerRegistryTest extends TestCase
         $registry = new WholePayloadSensitizerRegistry([UserCreated::class]);
 
         self::assertTrue($registry->supports(UserCreated::class));
-        self::assertFalse($registry->supports(stdClass::class));
+        self::assertFalse($registry->supports(\stdClass::class));
     }
 }

@@ -6,7 +6,6 @@ namespace Tests\Unit\SensitiveSerializer\Serializer\Strategy\CustomStrategy;
 
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\SensitiveSerializer\UserCreatedBuilder;
 
@@ -32,7 +31,7 @@ class CustomPayloadSensitizerRegistryTest extends TestCase
     public function it_should_return_sensitizer_if_subject_is_supported(): void
     {
         $event = UserCreatedBuilder::create()->build();
-        $sensitizer = Mockery::mock(PayloadSensitizer::class)
+        $sensitizer = \Mockery::mock(PayloadSensitizer::class)
             ->shouldReceive('supports')->andReturn(true)
             ->getMock();
 

@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy;
 
 use Adbar\Dot;
-use BadMethodCallException;
-use Exception;
-use LogicException;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager;
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
@@ -30,7 +27,7 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @throws Exception|LogicException
+     * @throws \Exception|\LogicException
      */
     protected function generateSensitizedPayload(): array
     {
@@ -52,14 +49,14 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @throws Exception|LogicException
+     * @throws \Exception|\LogicException
      *
      * @return string[]
      */
     private function obtainToSensitizeKeysOrFail(): array
     {
         if (!$toSensitizeKeys = $this->partialPayloadSensitizerRegistry->resolveItemFor($this->getType())) {
-            throw new LogicException(
+            throw new \LogicException(
                 sprintf('If you are here, the strategy should have identified correct event in registry: %s', $this->getType())
             );
         }
@@ -68,7 +65,7 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
     }
 
     /**
-     * @throws Exception|LogicException
+     * @throws \Exception|\LogicException
      *
      * @return array
      */
@@ -93,6 +90,6 @@ final class PartialPayloadSensitizer extends PayloadSensitizer
 
     public function supports($subject): bool
     {
-        throw new BadMethodCallException();
+        throw new \BadMethodCallException();
     }
 }

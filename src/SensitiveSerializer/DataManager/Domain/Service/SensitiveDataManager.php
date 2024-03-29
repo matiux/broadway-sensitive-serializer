@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service;
 
-use InvalidArgumentException;
-use LogicException;
 use Matiux\Broadway\SensitiveSerializer\Shared\Tools\Util;
 
 abstract class SensitiveDataManager
@@ -67,7 +65,7 @@ abstract class SensitiveDataManager
      *
      * @return list<string>|string
      */
-    public function decrypt($encryptedSensitiveData, string $secretKey = null)
+    public function decrypt($encryptedSensitiveData, ?string $secretKey = null)
     {
         !$secretKey ?: $this->secretKey = $secretKey;
 
@@ -111,14 +109,14 @@ abstract class SensitiveDataManager
     private function validate($value): void
     {
         if (Util::isAssociativeArray($value)) {
-            throw new InvalidArgumentException('You cannot serialize an associative array');
+            throw new \InvalidArgumentException('You cannot serialize an associative array');
         }
 
         /**
          * @psalm-suppress DocblockTypeContradiction
          */
         if (is_object($value)) {
-            throw new InvalidArgumentException('ValueSerializer::serialize() cannot accept objects');
+            throw new \InvalidArgumentException('ValueSerializer::serialize() cannot accept objects');
         }
     }
 
@@ -129,14 +127,14 @@ abstract class SensitiveDataManager
         }
 
         if (!$this->secretKey) {
-            throw new LogicException('Secret key not found');
+            throw new \LogicException('Secret key not found');
         }
     }
 
     protected function secretKey(): string
     {
         if (!$this->secretKey) {
-            throw new LogicException('Secret key not found');
+            throw new \LogicException('Secret key not found');
         }
 
         return $this->secretKey;
